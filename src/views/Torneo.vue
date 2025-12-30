@@ -39,7 +39,7 @@ const tab = ref('fixture');
                                 <IconSearch />
                             </div>
                             <input
-                                class="block w-full rounded-xl border-none bg-white py-4 pl-12 pr-4 text-[#111218] shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] ring-1 ring-inset ring-gray-200 dark:ring-gray-700 placeholder:text-[#9ca3af] focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 transition-all"
+                                class="block w-full rounded-xl border-none bg-white py-4 pl-12 pr-4 text-[#111218] shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] ring-1 ring-inset ring-gray-200 dark:ring-gray-700 placeholder:text-[#9ca3af] focus:ring-2 focus:ring-inset focus:ring-[#0d7ff2] sm:text-sm sm:leading-6 transition-all"
                                 id="search-tournament" placeholder="Buscar torneo por nombre o ID (ej. #8821)..."
                                 type="search" />
                             <div class="absolute inset-y-0 right-2 flex items-center">
@@ -78,7 +78,7 @@ const tab = ref('fixture');
                                 </div>
                                 <div class="flex gap-3 w-full md:w-auto">
                                     <button
-                                        class="flex-1 md:flex-none items-center justify-center gap-2 rounded-lg bg-primary/10 hover:bg-primary/20 px-4 py-2.5 text-sm font-semibold text-primary transition-colors">
+                                        class="flex-1 md:flex-none items-center justify-center gap-2 rounded-lg bg-[#0d7ff2]/10 hover:bg-[#0d7ff2]/20 px-4 py-2.5 text-sm font-semibold text-[#0d7ff2] transition-colors">
                                         <IconSettings />
                                         <span>Configurar</span>
                                     </button>
@@ -138,7 +138,7 @@ const tab = ref('fixture');
                         <div class="space-y-4">
                             <!-- Match Item: Played -->
                             <div
-                                class="bg-white  rounded-xl p-4 shadow-sm border border-gray-100  flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8 hover:border-primary/30 transition-colors cursor-pointer group">
+                                class="bg-white  rounded-xl p-4 shadow-sm border border-gray-100  flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8 hover:border-[#0d7ff2]/30 transition-colors cursor-pointer group">
                                 <div
                                     class="flex items-center gap-3 text-gray-500 dark:text-gray-400 text-xs font-medium min-w-[140px]">
                                     <div
@@ -183,7 +183,7 @@ const tab = ref('fixture');
                             </div>
                             <!-- Match Item: Scheduled -->
                             <div
-                                class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8 hover:border-primary/30 transition-colors cursor-pointer group">
+                                class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8 hover:border-[#0d7ff2]/30 transition-colors cursor-pointer group">
                                 <div class="flex items-center gap-3 text-gray-500 text-xs font-medium min-w-[140px]">
                                     <div
                                         class="flex flex-col items-center justify-center bg-gray-50 rounded px-2 py-1 text-center w-12">
@@ -191,7 +191,7 @@ const tab = ref('fixture');
                                         <span class="block text-sm font-bold text-gray-900">13</span>
                                     </div>
                                     <div class="flex flex-col">
-                                        <span class="text-primary font-bold">Programado</span>
+                                        <span class="text-[#0d7ff2] font-bold">Programado</span>
                                         <span>20:00 HS</span>
                                         <span class="truncate max-w-[100px]">Cancha Norte</span>
                                     </div>
@@ -235,7 +235,7 @@ const tab = ref('fixture');
                                 <IconLineDashed />
                                 Tabla de Posiciones
                             </h3>
-                            <button class="text-sm text-primary font-medium hover:underline">Ver Reglas</button>
+                            <button class="text-sm text-[#0d7ff2] font-medium hover:underline">Ver Reglas</button>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm text-left">
@@ -253,7 +253,7 @@ const tab = ref('fixture');
                                         </th>
                                         <th class="px-4 py-3 text-center" title="Diferencia de Gol">DG</th>
                                         <th
-                                            class="px-4 py-3 text-center font-bold text-primary bg-blue-50/50 dark:bg-blue-900/10">
+                                            class="px-4 py-3 text-center font-bold text-[#0d7ff2] bg-blue-50/50 dark:bg-blue-900/10">
                                             Pts</th>
                                     </tr>
                                 </thead>
@@ -272,7 +272,7 @@ const tab = ref('fixture');
                                         <td class="px-4 py-3 text-center hidden sm:table-cell text-gray-500">3</td>
                                         <td class="px-4 py-3 text-center text-green-600 font-medium">+9</td>
                                         <td
-                                            class="px-4 py-3 text-center font-bold text-primary bg-blue-50/30 dark:bg-blue-900/10">
+                                            class="px-4 py-3 text-center font-bold text-[#0d7ff2] bg-blue-50/30 dark:bg-blue-900/10">
                                             13</td>
                                     </tr>
                                     <!-- Row 2 -->
@@ -289,7 +289,7 @@ const tab = ref('fixture');
                                         <td class="px-4 py-3 text-center hidden sm:table-cell text-gray-500">5</td>
                                         <td class="px-4 py-3 text-center text-green-600 font-medium">+5</td>
                                         <td
-                                            class="px-4 py-3 text-center font-bold text-primary bg-blue-50/30 dark:bg-blue-900/10">
+                                            class="px-4 py-3 text-center font-bold text-[#0d7ff2] bg-blue-50/30 dark:bg-blue-900/10">
                                             10</td>
                                     </tr>
                                     <!-- Row 3 -->
@@ -308,7 +308,7 @@ const tab = ref('fixture');
                                         <td class="px-4 py-3 text-center hidden sm:table-cell text-gray-500">6</td>
                                         <td class="px-4 py-3 text-center text-green-600 font-medium">+2</td>
                                         <td
-                                            class="px-4 py-3 text-center font-bold text-primary bg-blue-50/30 dark:bg-blue-900/10">
+                                            class="px-4 py-3 text-center font-bold text-[#0d7ff2] bg-blue-50/30 dark:bg-blue-900/10">
                                             8</td>
                                     </tr>
                                 </tbody>
@@ -319,7 +319,7 @@ const tab = ref('fixture');
                     <div v-if="tab ==='programar'" class="bg-gray-50 rounded-xl shadow-[0_4px_20px_-2px_rgba(0,0,0,0.1)] border border-gray-200 dark:border-gray-700 p-6 md:p-8"
                         id="programar-content">
                         <div class="flex items-center gap-3 mb-6">
-                            <div class="bg-primary/10 text-primary p-2 rounded-lg">
+                            <div class="bg-[#0d7ff2]/10 text-[#0d7ff2] p-2 rounded-lg">
                                 <IconPlus />
                             </div>
                             <h3 class="text-xl font-bold text-[#111218]">Programar Nuevo Encuentro</h3>
@@ -330,7 +330,7 @@ const tab = ref('fixture');
                                 <label class="text-sm font-semibold text-gray-700">Equipo
                                     Local</label>
                                 <select
-                                    class="w-full h-12 rounded-lg border bg-white focus:ring-primary focus:border-primary">
+                                    class="w-full h-12 rounded-lg border bg-white focus:ring-[#0d7ff2] focus:border-[#0d7ff2]">
                                     <option disabled selected value="">Seleccionar equipo...</option>
                                     <option value="1">Real Madrid FC</option>
                                     <option value="2">Atlético Sur</option>
@@ -340,7 +340,7 @@ const tab = ref('fixture');
                                 <label class="text-sm font-semibold text-gray-700">Equipo
                                     Visitante</label>
                                 <select
-                                    class="w-full h-12 rounded-lg border bg-white focus:ring-primary focus:border-primary">
+                                    class="w-full h-12 rounded-lg border bg-white focus:ring-[#0d7ff2] focus:border-[#0d7ff2]">
                                     <option disabled selected value="">Seleccionar equipo...</option>
                                     <option value="1">Dep. Libertad</option>
                                     <option value="2">Los Pumas</option>
@@ -352,7 +352,7 @@ const tab = ref('fixture');
                                     Partido</label>
                                 <div class="relative">
                                     <input
-                                        class="w-full h-12 rounded-lg border bg-white focus:ring-primary focus:border-primaryfocus:border-primary pl-4"
+                                        class="w-full h-12 rounded-lg border bg-white focus:ring-[#0d7ff2] focus:border-[#0d7ff2]focus:border-[#0d7ff2] pl-4"
                                         type="date" />
                                 </div>
                             </div>
@@ -361,7 +361,7 @@ const tab = ref('fixture');
                                     Inicio</label>
                                 <div class="relative">
                                     <input
-                                        class="w-full h-12 rounded-lg border bg-white focus:ring-primary focus:border-primary focus:border-primary pl-4"
+                                        class="w-full h-12 rounded-lg border bg-white focus:ring-[#0d7ff2] focus:border-[#0d7ff2] focus:border-[#0d7ff2] pl-4"
                                         type="time" />
                                 </div>
                             </div>
@@ -374,7 +374,7 @@ const tab = ref('fixture');
                                         <IconStadium />
                                     </span>
                                     <input
-                                        class="w-full h-12 rounded-lg border bg-white focus:ring-primary focus:border-primaryfocus:border-primary pl-10"
+                                        class="w-full h-12 rounded-lg border bg-white focus:ring-[#0d7ff2] focus:border-[#0d7ff2]focus:border-[#0d7ff2] pl-10"
                                         placeholder="Ej. Estadio Municipal, Cancha 4..." type="text" />
                                 </div>
                             </div>

@@ -4,7 +4,7 @@ import { IconUser } from '@tabler/icons-vue';
 import { IconBan } from '@tabler/icons-vue';
 import { IconTrophy } from '@tabler/icons-vue';
 import { IconCalendar } from '@tabler/icons-vue';
-import { IconLayoutDashboard,IconBell, IconSearch } from '@tabler/icons-vue';
+import { IconLayoutDashboard, IconBell, IconSearch } from '@tabler/icons-vue';
 
 </script>
 
@@ -23,36 +23,38 @@ import { IconLayoutDashboard,IconBell, IconSearch } from '@tabler/icons-vue';
                 </div>
             </div>
             <nav class="hidden lg:flex items-center gap-2">
-                <a class="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-[#1c1c0d]" href="#">
+                <a class="flex items-center gap-2 px-4 py-2 rounded-full text-[#1c1c0d]" href="#">
                     <IconLayoutDashboard />
                     <span class="text-sm font-bold">Dashboard</span>
                 </a>
-                <RouterLink to="/torneo" class="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-[#f4f4e6] :hover:bg-[#3a3928] transition-colors text-[#1c1c0d] :text-white"
+                <RouterLink to="/torneo"
+                    class="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-[#f4f4e6] :hover:bg-[#3a3928] transition-colors text-[#1c1c0d] :text-white"
                     href="#">
                     <IconTrophy />
                     <span class="text-sm font-medium">Torneos</span>
                 </RouterLink>
-                <a class="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-[#f4f4e6] :hover:bg-[#3a3928] transition-colors text-[#1c1c0d] :text-white"
+                <RouterLink to="/clubes"
+                    class="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-[#f4f4e6] :hover:bg-[#3a3928] transition-colors text-[#1c1c0d] :text-white"
                     href="#">
                     <IconUsersGroup />
-                    <span class="text-sm font-medium">Equipos</span>
-                </a>
-                <a class="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-[#f4f4e6] :hover:bg-[#3a3928] transition-colors text-[#1c1c0d] :text-white"
-                    href="#">
+                    <span class="text-sm font-medium">Clubes</span>
+                </RouterLink>
+                <RouterLink to="/arbitros"
+                    class="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-[#f4f4e6] :hover:bg-[#3a3928] transition-colors text-[#1c1c0d] :text-white">
                     <IconUser />
                     <span class="text-sm font-medium">Arbitros</span>
-                </a>
-                <a class="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-[#f4f4e6] :hover:bg-[#3a3928] transition-colors text-[#1c1c0d] :text-white"
-                    href="#">
+                </RouterLink>
+                <RouterLink to="/sanciones"
+                    class="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-[#f4f4e6] :hover:bg-[#3a3928] transition-colors text-[#1c1c0d] :text-white">
                     <IconBan />
                     <span class="text-sm font-medium">Sanciones</span>
-                </a>
+                </RouterLink>
             </nav>
         </div>
         <div class="flex items-center gap-6">
             <label class="hidden md:flex flex-col w-full max-w-xs h-10">
                 <div
-                    class="flex w-full flex-1 items-stretch rounded-full h-full border border-[#e9e8ce] :border-[#3a3928] bg-white :bg-[#1a1a0b] overflow-hidden focus-within:ring-2 focus-within:ring-primary/50 transition-shadow">
+                    class="flex w-full flex-1 items-stretch rounded-full h-full border border-[#e9e8ce] :border-[#3a3928] bg-white :bg-[#1a1a0b] overflow-hidden focus-within:ring-2 focus-within:ring-[#0d7ff2]/50 transition-shadow">
                     <div class="text-[#9e9d47] flex items-center justify-center pl-3 bg-transparent">
                         <IconSearch />
                     </div>

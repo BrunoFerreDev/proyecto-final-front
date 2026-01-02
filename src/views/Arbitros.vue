@@ -1,15 +1,19 @@
-<script setup lang="ts">
+<script setup>
 import { IconMail } from '@tabler/icons-vue';
 import { IconPhone } from '@tabler/icons-vue';
 import { IconLayoutNavbarExpand } from '@tabler/icons-vue';
 import { IconSearch } from '@tabler/icons-vue';
 import TableArbitros from '../components/tables/TableArbitros.vue';
 import { IconPlus } from '@tabler/icons-vue';
-
+import { useRouter } from 'vue-router';
+const router = useRouter();
+const navigateTo = (path) => {
+    router.push(path);
+}
 </script>
 
 <template>
-    <main class="flex-1 flex flex-col items-center py-8 px-4 md:px-10">
+    <main class=" flex flex-col items-center py-8 px-4 md:px-10">
         <div class="max-w-[1200px] w-full flex flex-col gap-6">
             <!-- Breadcrumbs -->
             <nav class="flex flex-wrap gap-2 items-center text-sm">
@@ -30,6 +34,7 @@ import { IconPlus } from '@tabler/icons-vue';
                     </p>
                 </div>
                 <button
+                    @click.prevent="navigateTo('/nueva-persona')"
                     class="flex shrink-0 items-center justify-center gap-2 rounded-lg h-10 px-5 bg-[#0d7ff2] hover:bg-blue-600 text-slate-50 text-sm font-bold leading-normal transition-colors shadow-sm shadow-blue-500/20">
                     <IconPlus />
                     <span>Añadir Árbitro</span>

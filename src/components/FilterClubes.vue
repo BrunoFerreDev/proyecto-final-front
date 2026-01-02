@@ -3,7 +3,7 @@
     <div
         class="flex flex-col lg:flex-row gap-4 justify-between items-center bg-white  p-4 rounded-xl border border-slate-200  shadow-sm">
         <!-- Search -->
-        <div class="w-full lg:w-auto flex-1 max-w-md">
+        <div class="w-full max-w-xl">
             <label class="relative block">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
                     <IconSearch />

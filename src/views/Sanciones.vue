@@ -1,14 +1,30 @@
+<script setup>
+import {
+    IconCheck,
+    IconAlertSquareRounded,
+    IconChevronDown,
+    IconSearch,
+    IconPlus,
+    IconCalendar,
+    IconShieldCheckeredFilled,
+    IconEye,
+    IconUsersGroup,
+    IconUser
+} from '@tabler/icons-vue';
+
+</script>
+
 <template>
-    <main class="flex-1 flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
+    <main class=" flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
         <div class="w-full max-w-7xl flex flex-col gap-6">
             <!-- Breadcrumbs -->
             <div class="flex flex-wrap gap-2 px-4">
-                <a class="text-slate-500 hover:text-primary text-sm font-medium leading-normal flex items-center gap-1"
+                <a class="text-slate-500 hover:text-[#0d7ff2] text-sm font-medium leading-normal flex items-center gap-1"
                     href="#">
-                    <span class="material-symbols-outlined text-lg">home</span> Inicio
+                    Inicio
                 </a>
                 <span class="text-slate-400 text-sm font-medium leading-normal">/</span>
-                <a class="text-slate-500 hover:text-primary text-sm font-medium leading-normal" href="#">Sanciones</a>
+                <a class="text-slate-500 hover:text-[#0d7ff2] text-sm font-medium leading-normal" href="#">Sanciones</a>
                 <span class="text-slate-400 text-sm font-medium leading-normal">/</span>
                 <span class="text-slate-800 text-sm font-medium leading-normal">Historial</span>
             </div>
@@ -20,32 +36,31 @@
                     <p class="text-slate-500 text-base font-normal leading-normal">Consulta el
                         registro disciplinario detallado y el estado actual de sanciones.</p>
                 </div>
-                <button
-                    class="flex items-center gap-2 bg-primary hover:bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-all">
-                    <span class="material-symbols-outlined text-lg">add</span>
+                <RouterLink to="/nueva-sancion"
+                    class="flex items-center gap-2 bg-[#0d7ff2] hover:bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-all">
+                    <IconPlus />
                     Nueva Sanción
-                </button>
+                </RouterLink>
             </div>
             <!-- Filters & Search Section -->
-            <div
-                class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 mx-4">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 mx-4">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
                     <!-- Segmented Control -->
                     <div class="lg:col-span-3 flex flex-col gap-2">
                         <span class="text-sm font-semibold text-slate-700">Buscar por</span>
-                        <div
-                            class="flex h-12 w-full items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 p-1">
+                        <div class="flex h-12 w-full items-center justify-center rounded-lg bg-slate-100  p-1">
                             <label
-                                class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-600 has-[:checked]:shadow-sm has-[:checked]:text-primary transition-all text-slate-500 text-sm font-medium leading-normal">
-                                <span class="flex items-center gap-2"><span
-                                        class="material-symbols-outlined text-lg">person</span> Jugador</span>
-                                <input checked class="invisible w-0" name="search_type" type="radio"
-                                    value="Jugador" />
+                                class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 transition-all text-slate-500 text-sm font-medium leading-normal">
+                                <span class="flex items-center gap-2">
+                                    <IconUser /> Jugador
+                                </span>
+                                <input checked class="invisible w-0" name="search_type" type="radio" value="Jugador" />
                             </label>
                             <label
-                                class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-600 has-[:checked]:shadow-sm has-[:checked]:text-primary transition-all text-slate-500 text-sm font-medium leading-normal">
-                                <span class="flex items-center gap-2"><span
-                                        class="material-symbols-outlined text-lg">groups</span> Equipo</span>
+                                class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 transition-all text-slate-500 text-sm font-medium leading-normal">
+                                <span class="flex items-center gap-2">
+                                    <IconUsersGroup /> Equipo
+                                </span>
                                 <input class="invisible w-0" name="search_type" type="radio" value="Equipo" />
                             </label>
                         </div>
@@ -55,11 +70,11 @@
                         <span class="text-sm font-semibold text-slate-700">Entidad</span>
                         <div class="relative">
                             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                                <span class="material-symbols-outlined">search</span>
+                                <IconSearch />
                             </span>
                             <input
-                                class="w-full h-12 pl-11 pr-4 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-800  placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                                placeholder="Buscar jugador por nombre o ID..." value="Carlos Mendoza" />
+                                class="w-full h-12 pl-11 pr-4 rounded-lg border border-slate-200  bg-slate-50  text-slate-800  placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
+                                placeholder="Buscar jugador por nombre o ID..." value="" />
                         </div>
                     </div>
                     <!-- Filter Dropdown -->
@@ -67,26 +82,25 @@
                         <span class="text-sm font-semibold text-slate-700">Temporada</span>
                         <div class="relative">
                             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                                <span class="material-symbols-outlined">calendar_month</span>
+                                <IconCalendar />
                             </span>
                             <select
-                                class="w-full h-12 pl-11 pr-10 appearance-none rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-800  focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all cursor-pointer">
+                                class="w-full h-12 pl-11 pr-10 appearance-none rounded-lg border border-slate-200 bg-slate-50  text-slate-800  focus:outline-none focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all cursor-pointer">
                                 <option>2023 - 2024</option>
                                 <option>2022 - 2023</option>
                                 <option>2021 - 2022</option>
                             </select>
                             <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                                <span class="material-symbols-outlined">expand_more</span>
+                                <IconChevronDown />
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- Entity Summary Card -->
-            <div
-                class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mx-4">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mx-4">
                 <div
-                    class="bg-primary/5 border-b border-primary/10 px-6 py-4 flex flex-col sm:flex-row items-center sm:justify-between gap-4">
+                    class="bg-[#0d7ff2]/5 border-b border-[#0d7ff2]/10 px-6 py-4 flex flex-col sm:flex-row items-center sm:justify-between gap-4">
                     <div class="flex items-center gap-4">
                         <div class="size-16 rounded-full bg-cover bg-center border-2 border-white shadow-sm"
                             data-alt="Portrait of soccer player"
@@ -95,7 +109,7 @@
                         <div>
                             <h3 class="text-xl font-bold text-slate-900 ">Carlos Mendoza</h3>
                             <p class="text-slate-500 text-sm flex items-center gap-1">
-                                <span class="material-symbols-outlined text-base">shield</span> Delantero | ID: #88321
+                                <IconShieldCheckeredFilled /> Delantero | ID: #88321
                             </p>
                         </div>
                     </div>
@@ -109,7 +123,7 @@
                             <p class="text-xs uppercase tracking-wide text-slate-500 font-semibold">Sanciones Activas
                             </p>
                             <p class="font-bold text-red-600 flex items-center justify-end gap-1">
-                                <span class="material-symbols-outlined text-lg">warning</span> 1
+                                <IconAlertSquareRounded /> 1
                             </p>
                         </div>
                     </div>
@@ -118,7 +132,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200">
+                            <tr class="bg-slate-50  border-b border-slate-200">
                                 <th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-slate-500">
                                     Fecha</th>
                                 <th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-slate-500">
@@ -136,11 +150,10 @@
                                     Acciones</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+                        <tbody class="divide-y divide-slate-100 ">
                             <!-- Row 1: Active Sanction -->
-                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group">
-                                <td
-                                    class="py-4 px-6 text-sm font-medium text-slate-900  whitespace-nowrap">
+                            <tr class="hover:bg-slate-50  transition-colors group">
+                                <td class="py-4 px-6 text-sm font-medium text-slate-900  whitespace-nowrap">
                                     12 May 2024</td>
                                 <td class="py-4 px-6 text-sm text-slate-600">
                                     <div class="flex flex-col">
@@ -161,21 +174,20 @@
                                 <td class="py-4 px-6 text-sm font-medium text-slate-900 ">3 Partidos</td>
                                 <td class="py-4 px-6">
                                     <span
-                                        class="inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-600 border border-red-100 dark:bg-red-900/30 dark:text-red-400 dark:border-red-900/50">
-                                        <span class="size-1.5 rounded-full bg-red-600 dark:bg-red-400"></span> Pendiente
+                                        class="inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-600 border border-red-100 ">
+                                        <span class="size-1.5 rounded-full bg-red-600 "></span> Pendiente
                                     </span>
                                 </td>
                                 <td class="py-4 px-6 text-right">
                                     <button
-                                        class="text-slate-400 hover:text-primary transition-colors p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
-                                        <span class="material-symbols-outlined">visibility</span>
+                                        class="text-slate-400 hover:text-[#0d7ff2] transition-colors p-2 rounded-full hover:bg-slate-100 ">
+                                        <IconEye />
                                     </button>
                                 </td>
                             </tr>
                             <!-- Row 2: Served Sanction (Yellow Accumulation) -->
-                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group">
-                                <td
-                                    class="py-4 px-6 text-sm font-medium text-slate-900  whitespace-nowrap">
+                            <tr class="hover:bg-slate-50  transition-colors group">
+                                <td class="py-4 px-6 text-sm font-medium text-slate-900  whitespace-nowrap">
                                     03 Mar 2024</td>
                                 <td class="py-4 px-6 text-sm text-slate-600">
                                     <div class="flex flex-col">
@@ -196,21 +208,20 @@
                                 <td class="py-4 px-6 text-sm font-medium text-slate-900 ">1 Partido</td>
                                 <td class="py-4 px-6">
                                     <span
-                                        class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2.5 py-1 text-xs font-semibold text-green-600 border border-green-100 dark:bg-green-900/30 dark:text-green-400 dark:border-green-900/50">
-                                        <span class="material-symbols-outlined text-[14px]">check</span> Cumplida
+                                        class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2.5 py-1 text-xs font-semibold text-green-600 border border-green-100">
+                                        <IconCheck /> Cumplida
                                     </span>
                                 </td>
                                 <td class="py-4 px-6 text-right">
                                     <button
-                                        class="text-slate-400 hover:text-primary transition-colors p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
-                                        <span class="material-symbols-outlined">visibility</span>
+                                        class="text-slate-400 hover:text-[#0d7ff2] transition-colors p-2 rounded-full hover:bg-slate-100 ">
+                                        <IconEye />
                                     </button>
                                 </td>
                             </tr>
                             <!-- Row 3: Served Sanction (Double Yellow) -->
-                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group">
-                                <td
-                                    class="py-4 px-6 text-sm font-medium text-slate-900  whitespace-nowrap">
+                            <tr class="hover:bg-slate-50  transition-colors group">
+                                <td class="py-4 px-6 text-sm font-medium text-slate-900  whitespace-nowrap">
                                     15 Nov 2023</td>
                                 <td class="py-4 px-6 text-sm text-slate-600">
                                     <div class="flex flex-col">
@@ -237,14 +248,14 @@
                                 <td class="py-4 px-6 text-sm font-medium text-slate-900 ">1 Partido</td>
                                 <td class="py-4 px-6">
                                     <span
-                                        class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2.5 py-1 text-xs font-semibold text-green-600 border border-green-100 dark:bg-green-900/30 dark:text-green-400 dark:border-green-900/50">
-                                        <span class="material-symbols-outlined text-[14px]">check</span> Cumplida
+                                        class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2.5 py-1 text-xs font-semibold text-green-600 border border-green-100">
+                                        <IconCheck /> Cumplida
                                     </span>
                                 </td>
                                 <td class="py-4 px-6 text-right">
                                     <button
-                                        class="text-slate-400 hover:text-primary transition-colors p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
-                                        <span class="material-symbols-outlined">visibility</span>
+                                        class="text-slate-400 hover:text-[#0d7ff2] transition-colors p-2 rounded-full hover:bg-slate-100 ">
+                                        <IconEye />
                                     </button>
                                 </td>
                             </tr>
@@ -252,19 +263,17 @@
                     </table>
                 </div>
                 <!-- Pagination -->
-                <div
-                    class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
-                    <p class="text-sm text-slate-500">Mostrando <span
-                            class="font-semibold text-slate-900 ">1-3</span> de <span
-                            class="font-semibold text-slate-900 ">12</span> resultados</p>
+                <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+                    <p class="text-sm text-slate-500">Mostrando <span class="font-semibold text-slate-900 ">1-3</span>
+                        de <span class="font-semibold text-slate-900 ">12</span> resultados</p>
                     <div class="flex gap-2">
                         <button
-                            class="px-3 py-1 rounded-md border border-slate-300 dark:border-slate-600 text-slate-500 text-sm hover:bg-white dark:hover:bg-slate-700 disabled:opacity-50">Anterior</button>
-                        <button class="px-3 py-1 rounded-md bg-primary text-white text-sm shadow-sm">1</button>
+                            class="px-3 py-1 rounded-md border border-slate-300 text-slate-500 text-sm hover:bg-white disabled:opacity-50">Anterior</button>
+                        <button class="px-3 py-1 rounded-md bg-[#0d7ff2] text-white text-sm shadow-sm">1</button>
                         <button
-                            class="px-3 py-1 rounded-md border border-slate-300 dark:border-slate-600 text-slate-500 text-sm hover:bg-white dark:hover:bg-slate-700">2</button>
+                            class="px-3 py-1 rounded-md border border-slate-300 text-slate-500 text-sm hover:bg-white ">2</button>
                         <button
-                            class="px-3 py-1 rounded-md border border-slate-300 dark:border-slate-600 text-slate-500 text-sm hover:bg-white dark:hover:bg-slate-700">Siguiente</button>
+                            class="px-3 py-1 rounded-md border border-slate-300 text-slate-500 text-sm hover:bg-white ">Siguiente</button>
                     </div>
                 </div>
             </div>

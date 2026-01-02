@@ -21,7 +21,7 @@ const tab = ref('fixture');
 
 <template>
     <div class="layout-container flex h-full grow flex-col">
-        <div class="flex flex-1 justify-center py-8 px-4 sm:px-6 lg:px-8">
+        <div class="flex  justify-center py-8 px-4 sm:px-6 lg:px-8">
             <div class="layout-content-container flex flex-col w-full max-w-[1024px] gap-8">
                 <!-- Search & Title Section -->
                 <section class="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -43,8 +43,6 @@ const tab = ref('fixture');
                                 id="search-tournament" placeholder="Buscar torneo por nombre o ID (ej. #8821)..."
                                 type="search" />
                             <div class="absolute inset-y-0 right-2 flex items-center">
-                                <kbd
-                                    class="hidden sm:inline-flex items-center gap-1 rounded border border-gray-200  bg-gray-50 px-2 py-0.5 text-xs text-gray-400 font-sans">⌘K</kbd>
                             </div>
                         </div>
                     </div>
@@ -62,7 +60,7 @@ const tab = ref('fixture');
                             </div>
                         </div>
                         <!-- Tournament Info -->
-                        <div class="flex flex-1 flex-col justify-center gap-4 p-4 md:py-6 md:pr-6">
+                        <div class="flex  flex-col justify-center gap-4 p-4 md:py-6 md:pr-6">
                             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                                 <div>
                                     <div class="flex items-center gap-3 mb-1">
@@ -78,12 +76,12 @@ const tab = ref('fixture');
                                 </div>
                                 <div class="flex gap-3 w-full md:w-auto">
                                     <button
-                                        class="flex-1 md:flex-none items-center justify-center gap-2 rounded-lg bg-[#0d7ff2]/10 hover:bg-[#0d7ff2]/20 px-4 py-2.5 text-sm font-semibold text-[#0d7ff2] transition-colors">
+                                        class="inline-flex  md:flex-none items-center justify-center gap-2 rounded-lg bg-[#0d7ff2]/10 hover:bg-[#0d7ff2]/20 px-4 py-2.5 text-sm font-semibold text-[#0d7ff2] transition-colors">
                                         <IconSettings />
                                         <span>Configurar</span>
                                     </button>
                                     <button
-                                        class="flex-1 md:flex-none items-center justify-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors">
+                                        class="inline-flex  md:flex-none items-center justify-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors">
                                         <IconShare />
                                         <span>Compartir</span>
                                     </button>
@@ -152,8 +150,8 @@ const tab = ref('fixture');
                                         <span class="truncate max-w-[100px]">Estadio Central</span>
                                     </div>
                                 </div>
-                                <div class="flex flex-1 items-center justify-center gap-4 md:gap-8 w-full">
-                                    <div class="flex items-center gap-3 flex-1 justify-end text-right">
+                                <div class="flex  items-center justify-center gap-4 md:gap-8 w-full">
+                                    <div class="flex items-center gap-3  justify-end text-right">
                                         <span class="font-bold text-gray-900 text-sm md:text-base">Real
                                             Madrid FC</span>
                                         <div class="size-8 md:size-10 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden"
@@ -167,7 +165,7 @@ const tab = ref('fixture');
                                         <span class="text-xl md:text-2xl font-black text-gray-900 tracking-widest">3
                                             - 1</span>
                                     </div>
-                                    <div class="flex items-center gap-3 flex-1 justify-start text-left">
+                                    <div class="flex items-center gap-3  justify-start text-left">
                                         <div class="size-8 md:size-10 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden"
                                             data-alt="Team logo shield red">
                                             <img alt="ATL Logo" class="w-full h-full object-cover"
@@ -196,8 +194,8 @@ const tab = ref('fixture');
                                         <span class="truncate max-w-[100px]">Cancha Norte</span>
                                     </div>
                                 </div>
-                                <div class="flex flex-1 items-center justify-center gap-4 md:gap-8 w-full">
-                                    <div class="flex items-center gap-3 flex-1 justify-end text-right">
+                                <div class="flex  items-center justify-center gap-4 md:gap-8 w-full">
+                                    <div class="flex items-center gap-3  justify-end text-right">
                                         <span class="font-bold text-gray-900 text-sm md:text-base">Los
                                             Pumas</span>
                                         <div class="size-8 md:size-10 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden"
@@ -210,7 +208,7 @@ const tab = ref('fixture');
                                         <span
                                             class="text-sm font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded">VS</span>
                                     </div>
-                                    <div class="flex items-center gap-3 flex-1 justify-start text-left">
+                                    <div class="flex items-center gap-3  justify-start text-left">
                                         <div class="size-8 md:size-10 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden"
                                             data-alt="Team logo shield green">
                                             <img alt="DL Logo" class="w-full h-full object-cover"

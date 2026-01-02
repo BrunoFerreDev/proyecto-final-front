@@ -1,5 +1,5 @@
 <template>
-    <main class="flex-1 w-full overflow-y-auto bg-[#f8f8f5] ">
+    <main class=" w-full overflow-y-auto bg-[#f8f8f5] ">
         <div class="max-w-4xl mx-auto flex flex-col gap-8 py-4">
             <div class="flex flex-col gap-6">
                 <div class="flex flex-col gap-2 pb-2">

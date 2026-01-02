@@ -5,7 +5,7 @@ import Header from './components/Header.vue';
 
 <template>
   <Header />
-  <main class="w-full overflow-y-auto bg-[#f8f8f5] min-h-[90dvh]">
+  <main class="w-full overflow-y-auto ">
     <RouterView />
   </main>
 </template>

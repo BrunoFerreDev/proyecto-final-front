@@ -14,8 +14,8 @@ import { IconUser } from '@tabler/icons-vue';
 </script>
 
 <template>
-    <div class="flex-1 flex flex-col h-full overflow-y-auto bg-background-light relative">
-        <div class="max-w-[1200px] w-full mx-auto px-6 py-8 md:px-12 flex flex-col flex-1">
+    <div class=" flex flex-col h-full overflow-y-auto bg-background-light relative">
+        <div class="max-w-[1200px] w-full mx-auto px-6 py-8 md:px-12 flex flex-col ">
             <!-- Page Heading -->
             <div class="flex flex-col gap-2 mb-8">
                 <h1 class="text-[#0d141c]  text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em]">
@@ -30,7 +30,7 @@ import { IconUser } from '@tabler/icons-vue';
                 <div class="border-b border-[#cedbe8] px-6">
                     <div class="flex gap-8 overflow-x-auto">
                         <button
-                            class="group flex flex-col items-center justify-center border-b-[3px] border-primary text-[#0d141c]  gap-2 pb-3 pt-4 px-2 focus:outline-none min-w-[80px]">
+                            class="group flex flex-col items-center justify-center border-b-[3px] border-[#0d7ff2] text-[#0d141c]  gap-2 pb-3 pt-4 px-2 focus:outline-none min-w-[80px]">
                             <IconUser />
                             <span class="text-sm font-bold tracking-wide">Jugador</span>
                         </button>
@@ -59,7 +59,7 @@ import { IconUser } from '@tabler/icons-vue';
                             <span class="text-[#0d141c] text-sm font-semibold">Buscar Jugador</span>
                             <div class="relative group">
                                 <input
-                                    class="w-full bg-[#f8fafc] text-[#0d141c]  border border-[#cedbe8] rounded-lg pl-4 pr-12 h-12 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-[#49739c]"
+                                    class="w-full bg-[#f8fafc] text-[#0d141c]  border border-[#cedbe8] rounded-lg pl-4 pr-12 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all placeholder:text-[#49739c]"
                                     placeholder="Nombre, apellido o ID..." type="text" />
                                 <div
                                     class="absolute right-0 top-0 h-full w-12 flex items-center justify-center text-[#49739c]">
@@ -90,7 +90,7 @@ import { IconUser } from '@tabler/icons-vue';
                                 Incidente</span>
                             <div class="relative">
                                 <input
-                                    class="w-full bg-[#f8fafc] text-[#0d141c]  border border-[#cedbe8] rounded-lg px-4 h-12 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm"
+                                    class="w-full bg-[#f8fafc] text-[#0d141c]  border border-[#cedbe8] rounded-lg px-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all text-sm"
                                     type="date" />
                             </div>
                         </label>
@@ -99,7 +99,7 @@ import { IconUser } from '@tabler/icons-vue';
                                 Infracción</span>
                             <div class="relative">
                                 <select
-                                    class="w-full bg-[#f8fafc] text-[#0d141c]  border border-[#cedbe8] rounded-lg px-4 h-12 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all appearance-none">
+                                    class="w-full bg-[#f8fafc] text-[#0d141c]  border border-[#cedbe8] rounded-lg px-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all appearance-none">
                                     <option disabled selected value="--">Seleccionar motivo...</option>
                                     <option value="yellow">Acumulación Amarillas</option>
                                     <option value="red_direct">Roja Directa</option>
@@ -118,7 +118,7 @@ import { IconUser } from '@tabler/icons-vue';
                                 (Partidos)</span>
                             <div class="relative">
                                 <input
-                                    class="w-full bg-[#f8fafc] text-[#0d141c]  border border-[#cedbe8] rounded-lg px-4 h-12 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                                    class="w-full bg-[#f8fafc] text-[#0d141c]  border border-[#cedbe8] rounded-lg px-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
                                     min="0" placeholder="0" type="number" />
                             </div>
                         </label>
@@ -133,7 +133,7 @@ import { IconUser } from '@tabler/icons-vue';
                                     <IconCurrencyDollar />
                                 </div>
                                 <input
-                                    class="w-full bg-[#f8fafc] text-[#0d141c]  border border-[#cedbe8] rounded-lg pl-10 pr-4 h-12 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                                    class="w-full bg-[#f8fafc] text-[#0d141c]  border border-[#cedbe8] rounded-lg pl-10 pr-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
                                     placeholder="0.00" type="number" />
                             </div>
                         </label>
@@ -146,7 +146,7 @@ import { IconUser } from '@tabler/icons-vue';
                                     <IconHash />
                                 </div>
                                 <input
-                                    class="w-full bg-[#f8fafc] text-[#0d141c]  border border-[#cedbe8] rounded-lg pl-10 pr-4 h-12 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                                    class="w-full bg-[#f8fafc] text-[#0d141c]  border border-[#cedbe8] rounded-lg pl-10 pr-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
                                     placeholder="#12345" type="text" />
                             </div>
                         </label>
@@ -156,7 +156,7 @@ import { IconUser } from '@tabler/icons-vue';
                         <span class="text-[#0d141c] text-sm font-semibold">Descripción /
                             Observaciones</span>
                         <textarea
-                            class="w-full bg-[#f8fafc] text-[#0d141c]  border border-[#cedbe8] rounded-lg p-4 h-32 resize-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm leading-relaxed"
+                            class="w-full bg-[#f8fafc] text-[#0d141c]  border border-[#cedbe8] rounded-lg p-4 h-32 resize-none focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all text-sm leading-relaxed"
                             placeholder="Describa los detalles del incidente para el informe oficial..."></textarea>
                     </label>
                     <!-- Action Buttons -->

@@ -7,16 +7,12 @@ const router = createRouter({
       component: () => import("./views/Home.vue"),
     },
     {
-      path: "/nuevo-torneo",
-      component: () => import("./views/CreateTorneo.vue"),
+      path: "/clubes",
+      component: () => import("./views/Clubes.vue"),
     },
     {
       path: "/torneo",
       component: () => import("./views/Torneo.vue"),
-    },
-    {
-      path: "/clubes",
-      component: () => import("./views/Clubes.vue"),
     },
     {
       path: "/arbitros",
@@ -27,12 +23,20 @@ const router = createRouter({
       component: () => import("./views/Sanciones.vue"),
     },
     {
-      path: "/nueva-sancion",
-      component: () => import("./views/NuevaSanciones.vue"),
-    },
-    {
       path: "/partido",
       component: () => import("./views/Partido.vue"),
+    },
+    {
+      path: "/competencia",
+      component: () => import("./views/Competencia.vue"),
+    },
+    {
+      path: "/nuevo-torneo",
+      component: () => import("./views/CreateTorneo.vue"),
+    },
+    {
+      path: "/nueva-sancion",
+      component: () => import("./views/NuevaSanciones.vue"),
     },
     {
       path: "/nueva-persona",
@@ -43,8 +47,8 @@ const router = createRouter({
       component: () => import("./views/NuevoClub.vue"),
     },
     {
-      path: "/competencia",
-      component: () => import("./views/Competencia.vue"),
+      path: "/nueva-competencia",
+      component: () => import("./views/CrearCompetencia.vue"),
     },
   ],
 });

@@ -7,7 +7,11 @@ import { IconCalendarCheck } from '@tabler/icons-vue';
 import { IconPlus } from '@tabler/icons-vue';
 import { IconTrophy } from '@tabler/icons-vue';
 import { IconSearch } from '@tabler/icons-vue';
-
+import { useRouter } from 'vue-router';
+const router = useRouter();
+const navigateTo = (path) => {
+    router.push(path);
+}
 </script>
 
 <template>
@@ -86,7 +90,7 @@ import { IconSearch } from '@tabler/icons-vue';
                                     <IconEdit />
                                     Editar
                                 </button>
-                                <button
+                                <button @click.prevent="navigateTo('/nuevo-torneo')"
                                     class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-900  text-white  hover:bg-slate-800 font-medium text-sm transition-colors">
                                     <IconPlus />
                                     Nuevo Torneo
@@ -244,7 +248,7 @@ import { IconSearch } from '@tabler/icons-vue';
                             <p class="text-sm text-slate-500">Puedes crear una nueva desde el panel de administración.
                             </p>
                         </div>
-                        <button
+                        <button type="button" @click.prevent="navigateTo('/nueva-competencia')"
                             class="text-slate-900 font-bold text-sm underline decoration-[#0ea5e9] decoration-2 underline-offset-4 hover:text-[#0ea5e9] transition-colors">Crear
                             Nueva</button>
                     </div>

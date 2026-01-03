@@ -1,10 +1,6 @@
 <script setup>
-import { IconUsersGroup } from '@tabler/icons-vue';
-import { IconUser } from '@tabler/icons-vue';
-import { IconBan } from '@tabler/icons-vue';
-import { IconTrophy } from '@tabler/icons-vue';
-import { IconCalendar } from '@tabler/icons-vue';
-import { IconLayoutDashboard, IconBell, IconSearch } from '@tabler/icons-vue';
+
+import { IconSearch } from '@tabler/icons-vue';
 import { RouterLink } from 'vue-router';
 
 </script>
@@ -30,7 +26,6 @@ import { RouterLink } from 'vue-router';
                             ? 'bg-[#0d7ff2] text-white'
                             : 'text-[#1c1c0d] hover:bg-[#0d7ff2] hover:text-white'
                     ]">
-                        <IconLayoutDashboard />
                         <span class="text-sm font-bold">Dashboard</span>
                     </a>
                 </RouterLink>
@@ -41,7 +36,6 @@ import { RouterLink } from 'vue-router';
                             ? 'bg-[#0d7ff2] text-white'
                             : 'text-[#1c1c0d] hover:bg-[#0d7ff2] hover:text-white'
                     ]">
-                        <IconTrophy />
                         <span class="text-sm font-medium">Torneos</span>
                     </a>
                 </RouterLink>
@@ -52,7 +46,6 @@ import { RouterLink } from 'vue-router';
                             ? 'bg-[#0d7ff2] text-white'
                             : 'text-[#1c1c0d] hover:bg-[#0d7ff2] hover:text-white'
                     ]">
-                        <IconUsersGroup />
                         <span class="text-sm font-medium">Clubes</span>
                     </a>
                 </RouterLink>
@@ -63,7 +56,6 @@ import { RouterLink } from 'vue-router';
                             ? 'bg-[#0d7ff2] text-white'
                             : 'text-[#1c1c0d] hover:bg-[#0d7ff2] hover:text-white'
                     ]">
-                        <IconUser />
                         <span class="text-sm font-medium">Árbitros</span>
                     </a>
                 </RouterLink>
@@ -74,7 +66,6 @@ import { RouterLink } from 'vue-router';
                             ? 'bg-[#0d7ff2] text-white'
                             : 'text-[#1c1c0d] hover:bg-[#0d7ff2] hover:text-white'
                     ]">
-                        <IconBan />
                         <span class="text-sm font-medium">Sanciones</span>
                     </a>
                 </RouterLink>
@@ -85,7 +76,6 @@ import { RouterLink } from 'vue-router';
                             ? 'bg-[#0d7ff2] text-white'
                             : 'text-[#1c1c0d] hover:bg-[#0d7ff2] hover:text-white'
                     ]">
-                        <IconSearch />
                         <span class="text-sm font-medium">Competencias</span>
                     </a>
                 </RouterLink>

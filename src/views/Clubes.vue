@@ -4,11 +4,36 @@ import FilterClubes from '../components/FilterClubes.vue';
 import TableClubes from '../components/tables/TableClubes.vue';
 import { IconPlus } from '@tabler/icons-vue';
 import { useRouter } from 'vue-router';
-
+import { storeToRefs } from 'pinia';
+import { useClubStore } from '../stores/clubStore.js';
+import { onMounted } from 'vue';
 const router = useRouter();
+
+const clubStore = useClubStore();
+const {
+    clubes,
+    loading,
+    // FALTABAN ESTOS:
+    page,
+    totalPages,
+    totalElements,
+    size
+} = storeToRefs(clubStore);
+const { fetchClubes, nextPage, prevPage } = clubStore;
+
 const navigateTo = (path) => {
-  router.push(path);
+    router.push(path);
 }
+onMounted(() => {
+    fetchClubes();
+})
+
+
+// Función que maneja el cambio de página
+const handlePageChange = (newPage) => {
+    console.log("¡Click recibido en el padre! Pagina:", newPage);
+    clubStore.setPage(newPage);
+};
 </script>
 
 <template>
@@ -29,8 +54,7 @@ const navigateTo = (path) => {
                     <p class="text-slate-500  text-base font-normal">Administra los Clubes
                         inscritos, plantillas y estados para la Primera División.</p>
                 </div>
-                <button
-                @click.prevent="navigateTo('/nuevo-club')"
+                <button @click.prevent="navigateTo('/nuevo-club')"
                     class="flex items-center gap-2 bg-[#4871bd] hover:bg-blue-600 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 font-bold text-sm">
                     <IconPlus />
                     <span>Añadir Nuevo Equipo</span>
@@ -38,7 +62,8 @@ const navigateTo = (path) => {
             </div>
             <FilterClubes />
             <!-- Table Container -->
-            <TableClubes />
+            <TableClubes :clubs="clubes" :page="page" :total-pages="totalPages" :total-elements="totalElements"
+                :size="size" @page-change="handlePageChange" />
         </div>
     </main>
 </template>

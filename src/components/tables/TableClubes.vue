@@ -1,10 +1,3 @@
-<script setup lang="ts">
-import { IconTrash } from '@tabler/icons-vue';
-import { IconEdit } from '@tabler/icons-vue';
-import { IconUsersGroup } from '@tabler/icons-vue';
-
-</script>
-
 <template>
     <div class="bg-white  border border-slate-200  rounded-xl overflow-hidden shadow-sm">
         <div class="overflow-x-auto custom-scrollbar">
@@ -16,7 +9,7 @@ import { IconUsersGroup } from '@tabler/icons-vue';
                         <th class="px-6 py-4 text-xs font-bold text-slate-500  uppercase tracking-wider min-w-[200px]">
                             Equipo</th>
                         <th class="px-6 py-4 text-xs font-bold text-slate-500  uppercase tracking-wider min-w-[200px]">
-                            Director Técnico</th>
+                            Ciudad</th>
                         <th class="px-6 py-4 text-xs font-bold text-slate-500  uppercase tracking-wider min-w-[180px]">
                             Jugadores</th>
                         <th class="px-6 py-4 text-xs font-bold text-slate-500  uppercase tracking-wider w-32">
@@ -26,7 +19,8 @@ import { IconUsersGroup } from '@tabler/icons-vue';
                             Acciones</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 ">
+                <tbody class="divide-y divide-slate-100" v-if="clubs.length > 0" v-for="club in clubs"
+                    :key="club.idClub">
                     <!-- Row 1 -->
                     <tr class="hover:bg-slate-50  transition-colors group">
                         <td class="px-6 py-4">
@@ -40,9 +34,8 @@ import { IconUsersGroup } from '@tabler/icons-vue';
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex flex-col">
-                                <span class="text-sm font-bold text-slate-900 ">Atlético
-                                    Central</span>
-                                <span class="text-xs text-slate-400">ID: TM-001</span>
+                                <span class="text-sm font-bold text-slate-900 ">{{ club.nombre }}</span>
+                                <span class="text-xs text-slate-400">ID: {{ club.idClub }}</span>
                             </div>
                         </td>
                         <td class="px-6 py-4">
@@ -51,7 +44,7 @@ import { IconUsersGroup } from '@tabler/icons-vue';
                                     data-alt="Portrait of manager Juan Perez"
                                     style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCaPki45_TNOnxsN26zmYRcuAOSwUpC2vD4KWih5i6dVGWTDwztnIsXBpUsiUzqnaqAGBL7U7dkcEby2NugShFSCjq1J2cfzvclaYR9Ldc-UpDNWAsP2UQ0q4hi1OiXOjNA-heRk9cO_Z-jTetA7Rvfh6XiUdEHUUp2PP68v0HFqcOCz_FlRbpWGvlpb5jt-lr3Zy3_SDuQAM-7GpCC52gwLYuwdvZqdMcd6g0OfQx35MIJns89sGYo--YIL1_sxJufAM4ODKcHtns')">
                                 </div>
-                                <span class="text-sm text-slate-600 ">Juan Pérez</span>
+                                <span class="text-sm text-slate-600 ">{{ club.ciudad }}</span>
                             </div>
                         </td>
                         <td class="px-6 py-4">
@@ -68,7 +61,7 @@ import { IconUsersGroup } from '@tabler/icons-vue';
                         <td class="px-6 py-4">
                             <span
                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800   border border-emerald-200 ">
-                                Inscrito
+                                {{ club.isActivo ? 'Activo' : 'Inactivo' }}
                             </span>
                         </td>
                         <td class="px-6 py-4 text-right">
@@ -94,36 +87,122 @@ import { IconUsersGroup } from '@tabler/icons-vue';
                     </tr>
 
                 </tbody>
+                <tbody class="divide-y divide-gray-100 dark:divide-gray-700" v-else>
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4 text-center" colspan="7">
+                            <span class="text-sm text-slate-500 ">No se encontraron resultados</span>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
         <!-- Pagination -->
-        <div class="flex items-center justify-between px-6 py-4 bg-white  border-t border-slate-200 ">
-            <span class="text-sm text-slate-500 ">
-                Mostrando <span class="font-bold text-slate-900 ">1-5</span> de <span
-                    class="font-bold text-slate-900 ">24</span> Clubes
+        <div class="flex items-center justify-between px-6 py-4 bg-white border-t border-slate-200">
+
+            <span class="text-sm text-slate-500">
+                Mostrando
+                <span class="font-bold text-slate-900">{{ rangeStart }}-{{ rangeEnd }}</span>
+                de
+                <span class="font-bold text-slate-900">{{ totalElements }}</span>
+                Clubes
             </span>
+
             <div class="flex gap-2">
-                <button
-                    class="flex items-center justify-center px-3 py-1.5 text-sm font-medium text-slate-600  bg-white  border border-slate-300  rounded-lg hover:bg-slate-50  disabled:opacity-50 disabled:cursor-not-allowed">
+                <button @click="$emit('page-change', page - 1)" :disabled="page === 0"
+                    class="flex items-center justify-center px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
                     Anterior
                 </button>
-                <button
-                    class="flex items-center justify-center px-3 py-1.5 text-sm font-medium text-white bg-[#0d7ff2] border border-[#0d7ff2] rounded-lg hover:bg-blue-600">
-                    1
-                </button>
-                <button
-                    class="flex items-center justify-center px-3 py-1.5 text-sm font-medium text-slate-600  bg-white  border border-slate-300  rounded-lg hover:bg-slate-50 ">
-                    2
-                </button>
-                <button
-                    class="flex items-center justify-center px-3 py-1.5 text-sm font-medium text-slate-600  bg-white  border border-slate-300  rounded-lg hover:bg-slate-50 ">
-                    3
-                </button>
-                <button
-                    class="flex items-center justify-center px-3 py-1.5 text-sm font-medium text-slate-600  bg-white  border border-slate-300  rounded-lg hover:bg-slate-50 ">
+
+                <template v-for="(p, index) in visiblePages" :key="index">
+
+                    <button v-if="p !== '...'" @click="$emit('page-change', p)"
+                        class="flex items-center justify-center px-3 py-1.5 text-sm font-medium border rounded-lg transition-colors"
+                        :class="[
+                            p === page
+                                ? 'text-white bg-[#0d7ff2] border-[#0d7ff2] hover:bg-blue-600'
+                                : 'text-slate-600 bg-white border-slate-300 hover:bg-slate-50'
+                        ]">
+                        {{ p + 1 }}
+                    </button>
+
+                    <span v-else class="flex items-center justify-center px-2 py-1.5 text-sm text-slate-400">
+                        ...
+                    </span>
+
+                </template>
+
+                <button @click="$emit('page-change', page + 1)" :disabled="page >= totalPages - 1"
+                    class="flex items-center justify-center px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
                     Siguiente
                 </button>
             </div>
         </div>
     </div>
 </template>
+<script setup>
+import { IconTrash } from '@tabler/icons-vue';
+import { IconEdit } from '@tabler/icons-vue';
+import { IconUsersGroup } from '@tabler/icons-vue';
+import { computed } from 'vue';
+const props = defineProps({
+    clubs: {
+        type: Array,
+        required: true,
+    },
+    // Nuevas props para paginación
+    page: { type: Number, default: 0 },         // Página actual (0-indexed)
+    totalPages: { type: Number, default: 0 },   // Total de páginas
+    totalElements: { type: Number, default: 0 },// Total de items
+    size: { type: Number, default: 10 }         // Items por página
+});
+// Definimos el evento para avisar al padre
+const emit = defineEmits(['page-change']);
+
+// Cálculos visuales para "Mostrando 1-10 de 50"
+const rangeStart = computed(() => {
+    if (props.totalElements === 0) return 0;
+    return (props.page * props.size) + 1;
+});
+
+const rangeEnd = computed(() => {
+    const end = (props.page + 1) * props.size;
+    return end > props.totalElements ? props.totalElements : end;
+});
+
+// Lógica inteligente para mostrar botones limitados
+const visiblePages = computed(() => {
+    const total = props.totalPages;
+    const current = props.page;
+    const delta = 1; // Cuántos botones mostrar a los lados del actual
+    const range = [];
+    const rangeWithDots = [];
+    let l;
+
+    for (let i = 0; i < total; i++) {
+        // Siempre mostramos:
+        // 1. La primera página (0)
+        // 2. La última página (total - 1)
+        // 3. El rango alrededor de la página actual (current - delta a current + delta)
+        if (i === 0 || i === total - 1 || (i >= current - delta && i <= current + delta)) {
+            range.push(i);
+        }
+    }
+
+    // Insertar los puntos suspensivos (...) donde haya huecos
+    range.forEach(i => {
+        if (l) {
+            if (i - l === 2) {
+                // Si el hueco es de 1 solo número (ej: 1 y 3), metemos el 2 en vez de puntos
+                rangeWithDots.push(l + 1);
+            } else if (i - l !== 1) {
+                // Si el hueco es grande, metemos el marcador de puntos
+                rangeWithDots.push('...');
+            }
+        }
+        rangeWithDots.push(i);
+        l = i;
+    });
+
+    return rangeWithDots;
+});
+</script>

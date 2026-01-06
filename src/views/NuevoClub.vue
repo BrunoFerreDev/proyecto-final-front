@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import { IconClipboardData } from '@tabler/icons-vue';
 import { IconSearch } from '@tabler/icons-vue';
 import { IconDeviceFloppy } from '@tabler/icons-vue';

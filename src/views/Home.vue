@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import { IconBallFootball } from '@tabler/icons-vue';
 import { IconEye } from '@tabler/icons-vue';
 import { IconCalendar } from '@tabler/icons-vue';
@@ -8,7 +8,23 @@ import { IconPlus } from '@tabler/icons-vue';
 import { IconUser } from '@tabler/icons-vue';
 import { IconUsersGroup } from '@tabler/icons-vue';
 import { IconTrophyFilled } from '@tabler/icons-vue';
+import { usePersonaStore } from "../stores/personaStore.js"
+import { useClubStore } from "../stores/clubStore.js"
+import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
 
+const personaStore = usePersonaStore();
+const { personas, totalElements, tipo } = storeToRefs(personaStore);
+const { fetchPersonas } = personaStore;
+onMounted(() => {
+    tipo.value = 1
+    fetchPersonas();
+    fetchClubes();
+})
+
+const clubStore = useClubStore();
+const { clubes, totalClubes } = storeToRefs(clubStore);
+const { fetchClubes } = clubStore;
 </script>
 
 <template>
@@ -41,7 +57,7 @@ import { IconTrophyFilled } from '@tabler/icons-vue';
                             </div>
                             <div class="flex items-end gap-2 mt-2">
                                 <p class="text-[#1c1c0d]  tracking-tight text-3xl font-bold leading-tight">
-                                    144</p>
+                                    {{ totalClubes }}</p>
                                 <p
                                     class="text-[#078816] text-sm font-bold mb-1 bg-[#078816]/10 px-2 py-0.5 rounded-full">
                                     +5%</p>
@@ -71,7 +87,7 @@ import { IconTrophyFilled } from '@tabler/icons-vue';
                             </div>
                             <div class="flex items-end gap-2 mt-2">
                                 <p class="text-[#1c1c0d]  tracking-tight text-3xl font-bold leading-tight">
-                                    3,240</p>
+                                    {{ totalElements }}</p>
                                 <p
                                     class="text-[#078816] text-sm font-bold mb-1 bg-[#078816]/10 px-2 py-0.5 rounded-full">
                                     +8%</p>
@@ -202,7 +218,7 @@ import { IconTrophyFilled } from '@tabler/icons-vue';
                                                 contrario sin disputa del balón"</p>
                                         </div>
                                     </div>
-                                 
+
                                     <button
                                         class="mt-auto w-full py-3 text-center text-sm font-bold text-black hover:text-[#1c1c0d] transition-colors border-t border-[#f4f4e6] ">
                                         Ver acta completa

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { IconEdit } from '@tabler/icons-vue';
 import { IconCheck } from '@tabler/icons-vue';
 import { IconPhoto } from '@tabler/icons-vue';
@@ -8,6 +8,10 @@ import { IconUser } from '@tabler/icons-vue';
 import { IconPlayFootball } from '@tabler/icons-vue';
 import { IconFileDownload } from '@tabler/icons-vue';
 import { IconChevronRight } from '@tabler/icons-vue';
+import { computed, ref, watch } from 'vue';
+const activePersona = ref('JUGADOR')
+const selectedTipo = ref('')
+
 
 </script>
 
@@ -60,9 +64,9 @@ import { IconChevronRight } from '@tabler/icons-vue';
                 <div class="bg-surface-light p-6 rounded-lg border  shadow-sm">
                     <h3 class="text-lg font-bold mb-4">Tipo de Registro</h3>
                     <div class="flex flex-col gap-2">
-                        <label
+                        <label @click="() => { activePersona = 'JUGADOR', selectedTipo = 'JUGADOR' }"
                             class="relative flex items-center p-3 rounded-xl border  cursor-pointer has-[:checked]:bg-[#1f44f9]/10 has-[:checked]:border-[#1f44f9] transition-colors group">
-                            <input checked class="peer sr-only" name="role" type="radio" value="jugador" />
+                            <input checked class="peer sr-only" name="role" type="radio" value="JUGADOR" />
                             <div
                                 class="size-10 rounded-full bg-background-light flex items-center justify-center text--white peer-checked:bg-[#1f44f9] peer-checked:text-[#1c1c0d] mr-3 transition-colors">
                                 <IconPlayFootball />
@@ -75,7 +79,7 @@ import { IconChevronRight } from '@tabler/icons-vue';
                                 <IconCheck />
                             </div>
                         </label>
-                        <label
+                        <label @click="() => { activePersona = 'ARBITRO', selectedTipo = 'ARBITRO' }"
                             class="relative flex items-center p-3 rounded-xl border  cursor-pointer has-[:checked]:bg-[#1f44f9]/10 has-[:checked]:border-[#1f44f9] transition-colors group">
                             <input class="peer sr-only" name="role" type="radio" value="arbitro" />
                             <div
@@ -90,7 +94,7 @@ import { IconChevronRight } from '@tabler/icons-vue';
                                 <IconCheck />
                             </div>
                         </label>
-                        <label
+                        <label @click="() => { activePersona = 'CUERPO_TECNICO', selectedTipo = 'CUERPO_TECNICO' }"
                             class="relative flex items-center p-3 rounded-xl border  cursor-pointer has-[:checked]:bg-[#1f44f9]/10 has-[:checked]:border-[#1f44f9] transition-colors group">
                             <input class="peer sr-only" name="role" type="radio" value="tecnico" />
                             <div
@@ -156,7 +160,8 @@ import { IconChevronRight } from '@tabler/icons-vue';
                     </div>
                     <!-- Section: Datos Deportivos (Dynamic Content) -->
                     <!-- This section simulates the dynamic nature requested. In a real app, JS would toggle visibility. Here we show the "Player" fields as default since it's checked. -->
-                    <div class="bg-surface-light p-6 md:p-8 rounded-lg border  shadow-sm relative overflow-hidden">
+                    <div class="bg-surface-light p-6 md:p-8 rounded-lg border  shadow-sm relative overflow-hidden"
+                        v-if="activePersona == 'JUGADOR' || activePersona == 'CUERPO_TECNICO'">
                         <!-- Decorative bg element -->
                         <div
                             class="absolute -top-10 -right-10 size-40 bg-[#1f44f9]/5 rounded-full blur-3xl pointer-events-none">
@@ -176,7 +181,7 @@ import { IconChevronRight } from '@tabler/icons-vue';
                                 <label class="flex flex-col gap-2">
                                     <span class="text-sm font-semibold text-[#1c1c0d]">Equipo Actual</span>
                                     <div class="relative">
-                                        <select 
+                                        <select
                                             class="w-full rounded-xl  border   focus:border-transparent py-3 pl-4 pr-10 text-[#1c1c0d] appearance-none cursor-pointer transition-shadow">
                                             <option disabled="" selected="" value="">Seleccione un equipo...</option>
                                             <option value="fc_barcelona">Inter Miami CF</option>

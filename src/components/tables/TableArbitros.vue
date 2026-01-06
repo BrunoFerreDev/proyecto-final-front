@@ -1,7 +1,26 @@
-<script setup lang="ts">
+<script setup>
 import { IconTrash } from '@tabler/icons-vue';
 import { IconEdit } from '@tabler/icons-vue';
+import Pagination from '../Pagination.vue';
+import { IconTrashFilled } from '@tabler/icons-vue';
+import { IconPhone } from '@tabler/icons-vue';
+import { IconMail } from '@tabler/icons-vue';
+const props = defineProps({
+    arbitros: {
+        type: Array,
+        required: true,
+    },
+    // Items por página
+    // Nuevas props para paginación
+    page: { type: Number, default: 0 },         // Página actual (0-indexed)
+    totalPages: { type: Number, default: 0 },   // Total de páginas
+    totalElements: { type: Number, default: 0 },// Total de items
+    size: { type: Number, default: 10 },
 
+});
+
+// Definimos el evento para avisar al padre
+const emit = defineEmits(['page-change']);
 </script>
 
 <template>
@@ -22,7 +41,8 @@ import { IconEdit } from '@tabler/icons-vue';
                     Acciones</th>
             </tr>
         </thead>
-        <tbody class="divide-y divide-[#e7edf4]">
+        <tbody class="divide-y divide-[#e7edf4]" v-if="arbitros.length > 0" v-for="arbitro in arbitros"
+            :key="arbitro.idPersona">
             <!-- Row 1 -->
             <tr class="hover:bg-gray-50  transition-colors group">
                 <td class="py-4 px-6">
@@ -32,26 +52,26 @@ import { IconEdit } from '@tabler/icons-vue';
                             style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB9tzs7IDvSusm8KXJvJPequESfqQBJiTTbgeAPkib2R7Nv9t9ai5jKHERbStBCCrlt_87Z_kZRJvFdDCGEf7LDhCoZYD2tQOJP3T-4AavZGGHc5kaYEokrMWXCZcbyit5KZl9ZSWkMG32m5XPDyCAf4VSjwMBmyEAFqMKEPa_PdD_arf742OgZq7Hvdi6G73iPukbePV3DV1nPFjf7o73KyIQjiIRo4JLCSSS3Ojq-3xgkp_xPU8jP1Th9M-Xu1v7rjRb6PWgYINY");'>
                         </div>
                         <div>
-                            <p class="font-bold text-[#0d141c]">Carlos Ruiz</p>
-                            <p class="text-xs text-[#49739c] ">Madrid, ES</p>
+                            <p class="font-bold text-[#0d141c]">{{ arbitro.apellido }}</p>
+                            <p class="text-xs text-[#49739c] ">{{ arbitro.nombre }}</p>
                         </div>
                     </div>
                 </td>
                 <td class="py-4 px-6">
                     <div class="flex flex-col">
-                        <span class="text-sm font-medium text-[#0d141c]">FIFA Pro</span>
-                        <span class="text-xs text-[#49739c] ">ID: 884-219</span>
+                        <span class="text-sm font-medium text-[#0d141c]">D.N.I - {{ arbitro.dni }}</span>
+                        <span class="text-xs text-[#49739c] ">Fecha de Nacimiento: {{ arbitro.fechaNacimiento }}</span>
                     </div>
                 </td>
                 <td class="py-4 px-6">
                     <div class="flex flex-col gap-1">
                         <div class="flex items-center gap-2 text-sm text-[#0d141c]">
                             <IconMail />
-                            carlos.ruiz@liga.com
+                            {{ arbitro.email ? arbitro.email : 'Sin Email' }}
                         </div>
                         <div class="flex items-center gap-2 text-sm text-[#0d141c]">
                             <IconPhone />
-                            +34 654 999 123
+                            {{ arbitro.telefono }}
                         </div>
                     </div>
                 </td>
@@ -76,34 +96,13 @@ import { IconEdit } from '@tabler/icons-vue';
                         <button
                             class="size-8 flex items-center justify-center rounded-lg hover:bg-red-50  text-[#49739c] hover:text-red-600 transition-colors"
                             title="Eliminar">
-                            <IconTrash />
+                            <IconTrashFilled />
                         </button>
                     </div>
                 </td>
             </tr>
         </tbody>
     </table>
-    <!-- Pagination Footer -->
-    <div class="flex items-center justify-between px-6 py-4 border-t border-[#e7edf4] bg-white ">
-        <p class="text-sm text-[#49739c] ">
-            Mostrando <span class="font-bold text-[#0d141c]">1-4</span> de <span
-                class="font-bold text-[#0d141c]">24</span> árbitros
-        </p>
-        <div class="flex gap-2">
-            <button
-                class="h-9 px-3 rounded-lg border border-[#e7edf4] flex items-center text-sm font-medium text-[#0d141c] hover:bg-gray-50  disabled:opacity-50 disabled:cursor-not-allowed">
-                Anterior
-            </button>
-            <button
-                class="h-9 w-9 rounded-lg bg-[#0d7ff2] text-white text-sm font-bold flex items-center justify-center">1</button>
-            <button
-                class="h-9 w-9 rounded-lg border border-[#e7edf4] text-[#0d141c] text-sm font-medium flex items-center justify-center hover:bg-gray-50 ">2</button>
-            <button
-                class="h-9 w-9 rounded-lg border border-[#e7edf4] text-[#0d141c] text-sm font-medium flex items-center justify-center hover:bg-gray-50 ">3</button>
-            <button
-                class="h-9 px-3 rounded-lg border border-[#e7edf4] flex items-center text-sm font-medium text-[#0d141c] hover:bg-gray-50 ">
-                Siguiente
-            </button>
-        </div>
-    </div>
+    <Pagination :page="page" :totalPages="totalPages" :totalElements="totalElements" :size="size" :tipo="'Arbitros'"
+        @page-change="(n) => $emit('page-change', n)" />
 </template>

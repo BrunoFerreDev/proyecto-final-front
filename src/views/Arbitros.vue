@@ -1,20 +1,42 @@
 <script setup>
-import { IconMail } from '@tabler/icons-vue';
-import { IconPhone } from '@tabler/icons-vue';
-import { IconLayoutNavbarExpand } from '@tabler/icons-vue';
 import { IconSearch } from '@tabler/icons-vue';
 import TableArbitros from '../components/tables/TableArbitros.vue';
 import { IconPlus } from '@tabler/icons-vue';
 import { useRouter } from 'vue-router';
+import { usePersonaStore } from '../stores/personaStore';
+import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
 const router = useRouter();
 const navigateTo = (path) => {
     router.push(path);
 }
+
+const personaStore = usePersonaStore();
+const {
+    personas,
+    loading,
+    // FALTABAN ESTOS:
+    page,
+    totalPages,
+    totalElements,
+    size,
+    tipo
+} = storeToRefs(personaStore);
+const { fetchPersonas, nextPage, prevPage } = personaStore;
+
+onMounted(() => {
+    tipo.value = 2
+    fetchPersonas();
+})
+const handlePageChange = (newPage) => {
+    console.log("¡Click recibido en el padre! Pagina:", newPage);
+    personaStore.setPage(newPage);
+};
 </script>
 
 <template>
     <main class=" flex flex-col items-center py-8 px-4 md:px-10">
-        <div class="max-w-[1200px] w-full flex flex-col gap-6">
+        <div class="max-w-300 w-full flex flex-col gap-6">
             <!-- Breadcrumbs -->
             <nav class="flex flex-wrap gap-2 items-center text-sm">
                 <a class="text-[#49739c] font-medium hover:underline" href="#">Inicio</a>
@@ -33,8 +55,7 @@ const navigateTo = (path) => {
                         temporada actual.
                     </p>
                 </div>
-                <button
-                    @click.prevent="navigateTo('/nueva-persona')"
+                <button @click.prevent="navigateTo('/nueva-persona')"
                     class="flex shrink-0 items-center justify-center gap-2 rounded-lg h-10 px-5 bg-[#0d7ff2] hover:bg-blue-600 text-slate-50 text-sm font-bold leading-normal transition-colors shadow-sm shadow-blue-500/20">
                     <IconPlus />
                     <span>Añadir Árbitro</span>
@@ -57,9 +78,9 @@ const navigateTo = (path) => {
             <!-- Data Table -->
             <div class="bg-white  rounded-xl border border-[#e7edf4] overflow-hidden shadow-sm">
                 <div class="overflow-x-auto">
-                    <TableArbitros />
+                    <TableArbitros :arbitros="personas" :page="page" :total-pages="totalPages"
+                        :total-elements="totalElements" :size="size" @page-change="handlePageChange" />
                 </div>
-
             </div>
         </div>
     </main>

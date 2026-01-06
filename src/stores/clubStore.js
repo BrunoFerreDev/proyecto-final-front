@@ -10,7 +10,7 @@ export const useClubStore = defineStore("club", () => {
   // Paginación
   const page = ref(0); // Página actual (Spring empieza en 0)
   const size = ref(5); // Elementos por página
-  const totalElements = ref(0); // Total de clubes en la DB
+  const totalClubes = ref(0); // Total de clubes en la DB
   const totalPages = ref(0); // Cantidad total de páginas calculadas por el back
 
   // --- ACTIONS ---
@@ -24,18 +24,17 @@ export const useClubStore = defineStore("club", () => {
       // --- LOGICA DE PAGINACIÓN ---
       if (data.content) {
         // OPCIÓN A: El Backend devuelve un objeto Page (Spring Boot estándar)
-        // Estructura: { content: [...], totalElements: 20, totalPages: 4, ... }
+        // Estructura: { content: [...], totalClubes: 20, totalPages: 4, ... }
         clubes.value = data.content;
-        totalElements.value = data.totalElements;
+        totalClubes.value = data.totalElements;
         totalPages.value = data.totalPages;
       } else {
         // OPCIÓN B: El Backend devuelve un Array plano (Fallback)
         // Esto evita que la tabla muestre "0 de 0" si el back aún no está listo
         clubes.value = data;
-        totalElements.value = data.length || 0;
+        totalClubes.value = data.length || 0;
         totalPages.value = 1; // Asumimos 1 sola página si viene todo junto
       }
-
     } catch (error) {
       console.error("❌ Error cargando clubes:", error);
     } finally {
@@ -75,22 +74,22 @@ export const useClubStore = defineStore("club", () => {
   const agregarClub = async (payload) => {
     loading.value = true;
     try {
-        await clubApi.crearClub(payload);
-        fetchClubes(); // Recargamos la lista para ver el nuevo
+      await clubApi.crearClub(payload);
+      fetchClubes(); // Recargamos la lista para ver el nuevo
     } catch (error) {
-        throw error;
+      throw error;
     } finally {
-        loading.value = false;
+      loading.value = false;
     }
   };
 
   const borrarClub = async (id) => {
-      try {
-          await clubApi.eliminarClub(id);
-          fetchClubes(); // Recargamos
-      } catch (error) {
-          console.error(error);
-      }
+    try {
+      await clubApi.eliminarClub(id);
+      fetchClubes(); // Recargamos
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return {
@@ -99,15 +98,15 @@ export const useClubStore = defineStore("club", () => {
     loading,
     page,
     size,
-    totalElements,
+    totalClubes,
     totalPages,
     // Actions
     fetchClubes,
-    setPage,      // Nueva acción útil para saltar a una página específica
+    setPage, // Nueva acción útil para saltar a una página específica
     nextPage,
     prevPage,
     resetPagination,
     agregarClub,
-    borrarClub
+    borrarClub,
   };
 });

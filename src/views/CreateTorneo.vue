@@ -15,7 +15,7 @@
                             <div class="col-span-1 md:col-span-2">
                                 <label class="block mb-2 text-[#1c1c0d] text-sm font-bold">Nombre del Torneo <span
                                         class="text-red-500">*</span></label>
-                                <input
+                                <input v-model="crearTorneo.nombre"
                                     class="w-full h-12 px-4 rounded-lg bg-white border border-[#e9e8ce] text-[#1c1c0d] placeholder-[#4263a1] focus:outline-none focus:ring-2 focus:ring-[#163b72] focus:border-transparent transition-all shadow-sm"
                                     placeholder="Ej: Liga Apertura 2024 - Primera División" type="text" />
                             </div>
@@ -29,7 +29,7 @@
                                 <label class="block mb-2 text-[#1c1c0d] text-sm font-bold">Fecha de Inicio <span
                                         class="text-red-500">*</span></label>
                                 <div class="relative">
-                                    <input
+                                    <input v-model="crearTorneo.fechaInicio"
                                         class="w-full h-12 px-4 rounded-lg bg-white border border-[#e9e8ce] text-[#1c1c0d] focus:outline-none focus:ring-2 focus:ring-[#4263a1] focus:border-transparent transition-all shadow-sm"
                                         type="date" />
                                 </div>
@@ -81,5 +81,13 @@
 </template>
 <script setup>
 import { IconDeviceFloppy } from '@tabler/icons-vue';
+import { ref } from 'vue';
+const crearTorneo = ref({
+    nombre: '',
+    temporada: '',
+    descripcion: '',
+    fechaInicio: '',
+    estado: 'CREADO'
+})
 
 </script>

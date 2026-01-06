@@ -3,7 +3,7 @@ import apiClient from "./axios";
 export default {
   // GET /clubes - Obtener todos
   getClubes(params) {
-    return apiClient.get("/club", { params: { page: 0, size: 5 } });
+    return apiClient.get("/club", { params });
   },
 
   // GET /club/{id} - Obtener uno por ID

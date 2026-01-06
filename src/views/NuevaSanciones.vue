@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import { IconShirtSport } from '@tabler/icons-vue';
 import { IconSearch } from '@tabler/icons-vue';
 import { IconChevronDown } from '@tabler/icons-vue';

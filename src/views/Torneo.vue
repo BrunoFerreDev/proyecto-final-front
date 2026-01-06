@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import { IconShare } from '@tabler/icons-vue';
 import { IconCircleDashedPercentage } from '@tabler/icons-vue';
 import { IconChevronLeft } from '@tabler/icons-vue';
@@ -383,7 +383,7 @@ const tab = ref('fixture');
                                     class="px-6 py-3 rounded-lg text-sm font-semibold text-gray-600 transition-colors"
                                     type="button">Cancelar</button>
                                 <button
-                                    class="px-8 py-3 rounded-lg text-sm font-semibold shadow-lg shadow-blue-500/30  transition-all flex items-center gap-2"
+                                    class="px-8 py-3 rounded-lg text-sm bg-[#1f44f9] text-white font-semibold shadow-lg shadow-blue-500/30  transition-all flex items-center gap-2"
                                     type="button">
                                     <IconDeviceFloppy />
                                     Crear Partido

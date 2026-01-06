@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { IconEdit } from '@tabler/icons-vue';
 import { IconCalendar } from '@tabler/icons-vue';
 import { IconChevronRight } from '@tabler/icons-vue';

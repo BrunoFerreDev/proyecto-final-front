@@ -1,14 +1,14 @@
-import apiClient from './axios';
+import apiClient from "./axios";
 
 export default {
   // GET /personas
-  getPersonas() {
-    return apiClient.get('/personas');
+  getPersonas(params) {
+    return apiClient.get("/personas", { params });
   },
 
   // POST /personas
   crearPersona(data) {
-    return apiClient.post('/personas', data);
+    return apiClient.post("/personas", data);
   },
 
   // GET /personas/{personaId}
@@ -18,6 +18,6 @@ export default {
 
   // PUT /personas/actualizar
   actualizarPersona(data) {
-    return apiClient.put('/personas/actualizar', data);
-  }
+    return apiClient.put("/personas/actualizar", data);
+  },
 };

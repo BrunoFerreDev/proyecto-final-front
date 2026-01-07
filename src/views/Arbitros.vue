@@ -15,7 +15,6 @@ const personaStore = usePersonaStore();
 const {
     personas,
     loading,
-    // FALTABAN ESTOS:
     page,
     totalPages,
     totalElements,

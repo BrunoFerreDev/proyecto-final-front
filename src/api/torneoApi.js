@@ -2,10 +2,12 @@ import apiClient from "./axios";
 
 export default {
   // GET /torneos
-  getTorneos() {
-    return apiClient.get("/torneos");
+  getTorneos(idTorneo) {
+    return apiClient.get(`/torneos/${idTorneo}`);
   },
-
+  getCompetencias(idTorneo) {
+    return apiClient.get(`/torneos/${idTorneo}/competencias`);
+  },
   // POST /torneos
   crearTorneo(data) {
     return apiClient.post("/torneos", data);

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import torneoApi from "@/api/torneoApi";
+import torneoApi from "../api/torneoApi.js";
 
 export const useTorneoStore = defineStore("torneo", () => {
   // --- STATE (Datos) ---
@@ -8,6 +8,8 @@ export const useTorneoStore = defineStore("torneo", () => {
   const torneoActual = ref(null); // Para guardar el detalle de un torneo seleccionado
   const loading = ref(false);
   const error = ref(null);
+  const idTorneo = ref(0);
+  const competencias = ref([]);
 
   // --- ACTIONS (Funciones) ---
 
@@ -16,7 +18,7 @@ export const useTorneoStore = defineStore("torneo", () => {
     loading.value = true;
     error.value = null;
     try {
-      const { data } = await torneoApi.getTorneos();
+      const { data } = await torneoApi.getTorneos(idTorneo.value);
       torneos.value = data;
     } catch (err) {
       error.value = "Error al cargar los torneos";
@@ -25,7 +27,19 @@ export const useTorneoStore = defineStore("torneo", () => {
       loading.value = false;
     }
   };
-
+  const fetchCompetencias = async () => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const { data } = await torneoApi.getCompetencias(idTorneo.value);
+      competencias.value = [...data];
+    } catch (err) {
+      error.value = "Error al cargar los torneos";
+      console.error(err);
+    } finally {
+      loading.value = false;
+    }
+  };
   // Crear un nuevo torneo
   const agregarTorneo = async (nuevoTorneo) => {
     loading.value = true;
@@ -57,10 +71,13 @@ export const useTorneoStore = defineStore("torneo", () => {
 
   return {
     torneos,
+    competencias,
     torneoActual,
     loading,
     error,
+    idTorneo,
     fetchTorneos,
+    fetchCompetencias,
     agregarTorneo,
     fetchFixture,
   };

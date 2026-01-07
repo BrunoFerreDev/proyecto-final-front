@@ -102,6 +102,13 @@ const emit = defineEmits(['page-change']);
                 </td>
             </tr>
         </tbody>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700" v-else>
+            <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4 text-center" colspan="7">
+                    <span class="text-sm text-slate-500 ">No se encontraron resultados</span>
+                </td>
+            </tr>
+        </tbody>
     </table>
     <Pagination :page="page" :totalPages="totalPages" :totalElements="totalElements" :size="size" :tipo="'Arbitros'"
         @page-change="(n) => $emit('page-change', n)" />

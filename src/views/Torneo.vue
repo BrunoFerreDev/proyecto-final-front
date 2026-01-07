@@ -1,21 +1,32 @@
-<script setup >
+<script setup>
 import { IconShare } from '@tabler/icons-vue';
 import { IconCircleDashedPercentage } from '@tabler/icons-vue';
 import { IconChevronLeft } from '@tabler/icons-vue';
 import { IconEdit } from '@tabler/icons-vue';
-import { IconAdCircleFilled } from '@tabler/icons-vue';
 import { IconPlus } from '@tabler/icons-vue';
 import { IconDeviceFloppy } from '@tabler/icons-vue';
-import { IconCircleFilled } from '@tabler/icons-vue';
 import { IconLineDashed } from '@tabler/icons-vue';
 import { IconChevronRight } from '@tabler/icons-vue';
 import { IconCalendarEvent } from '@tabler/icons-vue';
 import { IconCalendar } from '@tabler/icons-vue';
 import { IconSettings } from '@tabler/icons-vue';
 import { IconSearch } from '@tabler/icons-vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useTorneoStore } from '../stores/torneoStore';
+import { storeToRefs } from 'pinia';
+import { IconTrophy } from '@tabler/icons-vue';
+import CardCompetencia from '../components/CardCompetencia.vue';
 
 const tab = ref('fixture');
+
+const torneoStore = useTorneoStore();
+const { torneos, loading, idTorneo, competencias } = storeToRefs(torneoStore);
+const { fetchTorneos, fetchCompetencias } = torneoStore;
+onMounted(() => {
+    idTorneo.value = 1;
+    fetchTorneos();
+    fetchCompetencias();
+})
 
 </script>
 
@@ -60,23 +71,21 @@ const tab = ref('fixture');
                             </div>
                         </div>
                         <!-- Tournament Info -->
-                        <div class="flex  flex-col justify-center gap-4 p-4 md:py-6 md:pr-6">
-                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div class="flex  flex-col gap-4 p-4 md:py-6 md:pr-6 w-full">
+                            <div class="flex justify-between items-center ">
                                 <div>
                                     <div class="flex items-center gap-3 mb-1">
                                         <span
-                                            class="inline-flex items-center rounded-md bg-green-50  px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">En
-                                            Progreso</span>
-                                        <span class="text-xs text-[#5f668c] font-mono">ID:
-                                            #8821</span>
+                                            class="inline-flex items-center rounded-md bg-green-50  px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{
+                                                torneos.estado }}</span>
+                                        <span class="text-xs text-[#5f668c] font-mono">#{{ torneos.idTorneo }}</span>
                                     </div>
-                                    <h2 class="text-2xl font-bold text-[#111218]">Copa De Oro 2024</h2>
-                                    <p class="text-[#5f668c] text-sm mt-1">Temporada 2024 - Apertura
-                                        | Fútbol 11 Masculino</p>
+                                    <h2 class="text-2xl font-bold text-[#111218]">{{ torneos.nombre }}</h2>
+                                    <p class="text-[#5f668c] text-sm mt-1">Temporada - {{ torneos.temporada }} </p>
                                 </div>
-                                <div class="flex gap-3 w-full md:w-auto">
+                                <div class="flex flex-col md:flex-row gap-2 ">
                                     <button
-                                        class="inline-flex  md:flex-none items-center justify-center gap-2 rounded-lg bg-[#0d7ff2]/10 hover:bg-[#0d7ff2]/20 px-4 py-2.5 text-sm font-semibold text-[#0d7ff2] transition-colors">
+                                        class="inline-flex md:flex-none items-center justify-end gap-2 rounded-lg bg-[#0d7ff2]/10 hover:bg-[#0d7ff2]/20 px-4 py-2.5 text-sm font-semibold text-[#0d7ff2] transition-colors">
                                         <IconSettings />
                                         <span>Configurar</span>
                                     </button>
@@ -90,25 +99,48 @@ const tab = ref('fixture');
                         </div>
                     </div>
                 </section>
+                <section class="flex flex-col gap-4 animate-in fade-in duration-500">
+                    <div class="flex items-center justify-between px-1">
+                        <h3 class="text-lg font-bold text-[#111218] flex items-center gap-2">
+                            <IconTrophy />
+                            Competencias Asociadas
+                        </h3>
+                        <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Seleccionar
+                            Competencia</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" v-if="competencias.length > 0"
+                        v-for="comp in competencias">
+                        <CardCompetencia :competencia="comp" />
+                    </div>
+                </section>
                 <!-- Tabs Navigation -->
                 <div class="border-b border-gray-200 dark:border-gray-700">
                     <nav aria-label="Tabs" class="-mb-px flex space-x-8 overflow-x-auto custom-scrollbar">
                         <!-- Tab: Fixture (Active) -->
-                        <button class="whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium flex items-center gap-2"
-                            @click="tab = 'fixture'">
-                            <IconCalendar />
+                        <button @click="tab = 'fixture'" :class="[
+                            tab === 'fixture'
+                                ? 'border-indigo-500 text-indigo-600'
+                                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                            'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium flex items-center gap-2 transition-colors'
+                        ]">
                             Fixture
                         </button>
-                        <!-- Tab: Clasificación -->
-                        <button class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium flex items-center gap-2 transition-colors"
-                            @click="tab = 'clasificacion'">
-                            <IconCircleDashedPercentage />
+
+                        <button @click="tab = 'clasificacion'" :class="[
+                            tab === 'clasificacion'
+                                ? 'border-indigo-500 text-indigo-600'
+                                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                            'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium flex items-center gap-2 transition-colors'
+                        ]">
                             Clasificación
                         </button>
-                        <!-- Tab: Programar Partidos -->
-                        <button class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium flex items-center gap-2 transition-colors"
-                            @click="tab = 'programar'">
-                            <IconCalendarEvent />
+
+                        <button @click="tab = 'programar'" :class="[
+                            tab === 'programar'
+                                ? 'border-indigo-500 text-indigo-600'
+                                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                            'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium flex items-center gap-2 transition-colors'
+                        ]">
                             Programar Partidos
                         </button>
                     </nav>
@@ -116,7 +148,8 @@ const tab = ref('fixture');
                 <!-- Tab Content Area -->
                 <div class="flex flex-col gap-12">
                     <!-- TAB CONTENT 1: FIXTURE -->
-                    <div v-if="tab ==='fixture'" class="animate-in fade-in slide-in-from-bottom-2 duration-500" id="fixture-content">
+                    <div v-if="tab == 'fixture'" class="animate-in fade-in slide-in-from-bottom-2 duration-500"
+                        id="fixture-content">
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="text-lg font-bold text-[#111218]">Partidos Recientes y Próximos
                             </h3>
@@ -224,9 +257,10 @@ const tab = ref('fixture');
                             </div>
                         </div>
                     </div>
-                
+
                     <!-- TAB CONTENT 2: CLASIFICACION -->
-                    <div v-if="tab ==='clasificacion'" class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-gray-200  overflow-hidden"
+                    <div v-if="tab == 'clasificacion'"
+                        class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-gray-200  overflow-hidden"
                         id="clasificacion-content">
                         <div class="p-4 border-b border-gray-200  flex justify-between items-center bg-gray-50">
                             <h3 class="text-base font-bold text-[#111218] flex items-center gap-2">
@@ -314,7 +348,8 @@ const tab = ref('fixture');
                         </div>
                     </div>
                     <!-- TAB CONTENT 3: PROGRAMAR PARTIDOS -->
-                    <div v-if="tab ==='programar'" class="bg-gray-50 rounded-xl shadow-[0_4px_20px_-2px_rgba(0,0,0,0.1)] border border-gray-200 dark:border-gray-700 p-6 md:p-8"
+                    <div v-if="tab == 'programar'"
+                        class="bg-gray-50 rounded-xl shadow-[0_4px_20px_-2px_rgba(0,0,0,0.1)] border border-gray-200 dark:border-gray-700 p-6 md:p-8"
                         id="programar-content">
                         <div class="flex items-center gap-3 mb-6">
                             <div class="bg-[#0d7ff2]/10 text-[#0d7ff2] p-2 rounded-lg">
@@ -369,7 +404,7 @@ const tab = ref('fixture');
                                     Encuentro (Cancha/Estadio)</label>
                                 <div class="relative">
                                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                                        <IconStadium />
+                                        <!-- <IconStadium /> -->
                                     </span>
                                     <input
                                         class="w-full h-12 rounded-lg border bg-white focus:ring-[#0d7ff2] focus:border-[#0d7ff2]focus:border-[#0d7ff2] pl-10"

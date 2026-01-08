@@ -1,8 +1,7 @@
-<script setup >
+<script setup>
 import { IconBallFootball } from '@tabler/icons-vue';
 import { IconEye } from '@tabler/icons-vue';
 import { IconCalendar } from '@tabler/icons-vue';
-import { IconCards } from '@tabler/icons-vue';
 import { IconCardsFilled } from '@tabler/icons-vue';
 import { IconPlus } from '@tabler/icons-vue';
 import { IconUser } from '@tabler/icons-vue';
@@ -12,7 +11,8 @@ import { usePersonaStore } from "../stores/personaStore.js"
 import { useClubStore } from "../stores/clubStore.js"
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
-
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const personaStore = usePersonaStore();
 const { personas, totalElements, tipo } = storeToRefs(personaStore);
 const { fetchPersonas } = personaStore;
@@ -25,6 +25,9 @@ onMounted(() => {
 const clubStore = useClubStore();
 const { clubes, totalClubes } = storeToRefs(clubStore);
 const { fetchClubes } = clubStore;
+const navigateTo = (path) => {
+    router.push(path);
+}
 </script>
 
 <template>
@@ -52,7 +55,7 @@ const { fetchClubes } = clubStore;
                             class="flex flex-col gap-2 rounded-2xl p-6 border border-gray-50 bg-white  shadow-sm hover:/50 transition-colors">
                             <div class="flex justify-between items-start">
                                 <p class="text-[#1c1c0d] text-base font-medium leading-normal">
-                                    Equipos Totales</p>
+                                    Clubes Totales</p>
                                 <IconUsersGroup />
                             </div>
                             <div class="flex items-end gap-2 mt-2">
@@ -169,16 +172,17 @@ const { fetchClubes } = clubStore;
                                 <h2 class="text-[#1c1c0d]  text-xl font-bold leading-tight">Acciones
                                     Rápidas</h2>
                                 <div class="grid grid-cols-2 gap-3">
-                                    <button
+                                    <button @click.prevent="navigateTo('/nuevo-club')"
                                         class="flex flex-col items-center justify-center p-4 rounded-2xl bg-white  border-gray-50   hover:border-primary transition-all group shadow-sm h-32">
                                         <div
                                             class="size-10 rounded-full bg-[#f4f4e6]  flex items-center justify-center mb-2 group-hover:bg-primary transition-colors">
                                             <IconPlus />
                                         </div>
                                         <span class="text-sm font-bold text-[#1c1c0d] text-center">Registrar
-                                            Equipo</span>
+                                            club</span>
                                     </button>
                                     <button
+                                    @click.prevent="navigateTo('/nuevo-partido')"
                                         class="flex flex-col items-center justify-center p-4 rounded-2xl border-gray-50 bg-white  border   hover:border-primary transition-all group shadow-sm h-32">
                                         <div
                                             class="size-10 rounded-full bg-[#f4f4e6]  flex items-center justify-center mb-2 group-hover:bg-primary transition-colors">

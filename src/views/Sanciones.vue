@@ -59,9 +59,9 @@ import {
                             <label
                                 class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 transition-all text-slate-500 text-sm font-medium leading-normal">
                                 <span class="flex items-center gap-2">
-                                    <IconUsersGroup /> Equipo
+                                    <IconUsersGroup /> club
                                 </span>
-                                <input class="invisible w-0" name="search_type" type="radio" value="Equipo" />
+                                <input class="invisible w-0" name="search_type" type="radio" value="club" />
                             </label>
                         </div>
                     </div>
@@ -115,7 +115,7 @@ import {
                     </div>
                     <div class="flex gap-4 text-center sm:text-right">
                         <div>
-                            <p class="text-xs uppercase tracking-wide text-slate-500 font-semibold">Equipo Actual</p>
+                            <p class="text-xs uppercase tracking-wide text-slate-500 font-semibold">club Actual</p>
                             <p class="font-bold text-slate-900 ">Leones FC</p>
                         </div>
                         <div class="w-px bg-slate-200 h-10"></div>
@@ -284,7 +284,7 @@ import {
                     <span class="material-symbols-outlined text-4xl text-slate-400">manage_search</span>
                 </div>
                 <h3 class="text-lg font-bold text-slate-900  mb-1">Comienza tu búsqueda</h3>
-                <p class="text-slate-500 max-w-sm">Selecciona un jugador o equipo arriba para ver su historial completo de sanciones.</p>
+                <p class="text-slate-500 max-w-sm">Selecciona un jugador o club arriba para ver su historial completo de sanciones.</p>
             </div> 
             -->
         </div>

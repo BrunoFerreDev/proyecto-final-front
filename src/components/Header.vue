@@ -69,7 +69,7 @@ import { RouterLink } from 'vue-router';
                         <span class="text-sm font-medium">Sanciones</span>
                     </a>
                 </RouterLink>
-                <RouterLink to="/competencia" v-slot="{ isActive }">
+                <!-- <RouterLink to="/competencia" v-slot="{ isActive }">
                     <a :class="[
                         'flex items-center gap-2 px-4 py-2 rounded-full transition-colors',
                         isActive
@@ -78,7 +78,7 @@ import { RouterLink } from 'vue-router';
                     ]">
                         <span class="text-sm font-medium">Competencias</span>
                     </a>
-                </RouterLink>
+                </RouterLink> -->
             </nav>
         </div>
         <div class="flex items-center gap-6">

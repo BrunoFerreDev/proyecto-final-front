@@ -6,11 +6,11 @@ export const usePersonaStore = defineStore("persona", () => {
   const personas = ref([]);
   const loading = ref(false);
 
-  // Paginación
-  const page = ref(0); // Página actual (Spring empieza en 0)
-  const size = ref(5); // Elementos por página
-  const totalElements = ref(0); // Total de clubes en la DB
-  const totalPages = ref(0); // Cantidad total de páginas calculadas por el back
+  // Estado de Paginación
+  const page = ref(0);
+  const size = ref(5);
+  const totalElements = ref(0);
+  const totalPages = ref(0);
   const tipo = ref(0);
 
   const fetchPersonas = async () => {
@@ -23,27 +23,55 @@ export const usePersonaStore = defineStore("persona", () => {
       };
       const { data } = await personaApi.getPersonas(params);
 
-      // --- LOGICA DE PAGINACIÓN ---
       if (data.content) {
-        // OPCIÓN A: El Backend devuelve un objeto Page (Spring Boot estándar)
-        // Estructura: { content: [...], totalElements: 20, totalPages: 4, ... }
         personas.value = data.content;
         totalElements.value = data.totalElements;
         totalPages.value = data.totalPages;
       } else {
-        // OPCIÓN B: El Backend devuelve un Array plano (Fallback)
-        // Esto evita que la tabla muestre "0 de 0" si el back aun no esta listo
         personas.value = data;
         totalElements.value = data.length || 0;
-        totalPages.value = 1; // Asumimos 1 sola página si viene todo junto
+        totalPages.value = 1;
       }
     } catch (error) {
       console.error("❌ Error cargando personas:", error);
+      throw error;
     } finally {
       loading.value = false;
     }
   };
-  // Acción para cambiar de página directamente (usada por los numeritos de la tabla)
+
+  const crearPersona = async (personaData) => {
+    loading.value = true;
+    try {
+      const { data } = await personaApi.crearPersona(personaData);
+      console.log(data);
+      // Después de crear, refrescamos la lista para actualizar la paginación
+      return { data };
+    } catch (error) {
+      console.error("❌ Error en Store (Crear):", error);
+      throw error; // Permite que el catch del componente funcione
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const actualizarPersona = async (tipoPersona, personaId) => {
+    loading.value = true;
+    try {
+      // Asegúrate de pasar los argumentos por separado si cambiaste el API
+      const { data } = await personaApi.actualizarPersona(
+        tipoPersona,
+        personaId
+      );
+      return { data };
+    } catch (error) {
+      console.error("❌ Error en Store (Actualizar):", error);
+      throw error;
+    } finally {
+      loading.value = false;
+    }
+  };
+  // --- LÓGICA DE NAVEGACIÓN ---
   const setPage = (newPage) => {
     if (newPage >= 0 && newPage < totalPages.value) {
       page.value = newPage;
@@ -51,7 +79,6 @@ export const usePersonaStore = defineStore("persona", () => {
     }
   };
 
-  // Acciones de Siguiente/Anterior
   const nextPage = () => {
     if (page.value < totalPages.value - 1) {
       page.value++;
@@ -70,17 +97,6 @@ export const usePersonaStore = defineStore("persona", () => {
     page.value = 0;
     fetchPersonas();
   };
-  const crearPersona = async (personaData) => {
-    loading.value = true;
-    try {
-      const { data } = await personaApi.crearPersona(personaData);
-      personas.value.push(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      loading.value = false;
-    }
-  };
 
   return {
     personas,
@@ -90,12 +106,12 @@ export const usePersonaStore = defineStore("persona", () => {
     totalElements,
     totalPages,
     tipo,
-    // Acciones
     fetchPersonas,
+    crearPersona,
+    actualizarPersona,
     setPage,
     nextPage,
     prevPage,
     resetPagination,
-    crearPersona,
   };
 });

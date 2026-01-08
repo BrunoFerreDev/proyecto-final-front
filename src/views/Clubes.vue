@@ -57,7 +57,7 @@ const handlePageChange = (newPage) => {
                 <button @click.prevent="navigateTo('/nuevo-club')"
                     class="flex items-center gap-2 bg-[#4871bd] hover:bg-blue-600 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 font-bold text-sm">
                     <IconPlus />
-                    <span>Añadir Nuevo Equipo</span>
+                    <span>Añadir Nuevo club</span>
                 </button>
             </div>
             <FilterClubes />

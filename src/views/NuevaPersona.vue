@@ -8,11 +8,57 @@ import { IconUser } from '@tabler/icons-vue';
 import { IconPlayFootball } from '@tabler/icons-vue';
 import { IconFileDownload } from '@tabler/icons-vue';
 import { IconChevronRight } from '@tabler/icons-vue';
-import { computed, ref, watch } from 'vue';
-const activePersona = ref('JUGADOR')
-const selectedTipo = ref('')
+import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { usePersonaStore } from '../stores/personaStore'; // Asegura la ruta correcta
 
+const activePersona = ref('JUGADOR');
+const selectedTipo = ref('JUGADOR'); // Iniciado con un valor por defecto
+const personaNueva = ref({
+    nombre: 'Bruno Marcos',
+    apellido: 'Ferreira',
+    dni: '42273555',
+    email: 'pittanaferreira@gmail.com',
+    telefono: '3743614796',
+    fechaNacimiento: '2000-01-01',
+});
 
+const personaStore = usePersonaStore();
+const { crearPersona, actualizarPersona } = personaStore;
+const { loading } = storeToRefs(personaStore);
+
+const nuevaPersona = async () => {
+    try {
+        // 1. Intentamos crear la persona
+        const response = await crearPersona(personaNueva.value);
+
+        if (response && response.data) {
+            // 2. Extraemos el id generado por el Backend (idPersona según Swagger)
+            const idGenerado = response.data.idPersona;
+            const tipoSeleccionado = selectedTipo.value;
+            console.log(idGenerado, tipoSeleccionado);
+
+            // 3. Ejecutamos la actualización/asignación de tipo
+            await actualizarPersona(tipoSeleccionado, idGenerado);
+
+            alert("¡Persona creada y asignada correctamente!");
+            resetForm();
+        }
+    } catch (error) {
+        // Gracias al 'throw error' en el store, este bloque ahora sí captura el fallo
+        console.error("Fallo en el flujo de creación:", error);
+    }
+}
+const resetForm = () => {
+    personaNueva.value = {
+        nombre: '',
+        apellido: '',
+        dni: '',
+        email: '',
+        telefono: '',
+        fechaNacimiento: '',
+    };
+};
 </script>
 
 <template>
@@ -29,17 +75,7 @@ const selectedTipo = ref('')
                 <p class="text--white text-lg max-w-2xl">Complete el formulario para registrar un nuevo integrante
                     en la base de datos de la liga.</p>
             </div>
-            <div class="flex gap-3">
-                <button
-                    class="px-5 py-2 rounded-lg border  font-medium hover:bg-white transition-colors bg-transparent">
-                    Cancelar
-                </button>
-                <button
-                    class="px-5 py-2 rounded-lg bg-[#4257c2] text-white font-bold shadow-[0_4px_0_0_rgba(0,0,0,0.1)] hover:shadow-none hover:translate-y-0.5 transition-all flex items-center gap-2">
-                    <IconFileDownload />
-                    Guardar Persona
-                </button>
-            </div>
+
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <!-- Left Column: Image Upload & Type Selector -->
@@ -73,7 +109,7 @@ const selectedTipo = ref('')
                             </div>
                             <div class="flex flex-col">
                                 <span class="font-bold text-[#1c1c0d]">Jugador</span>
-                                <span class="text-xs ">Participante activo de equipo</span>
+                                <span class="text-xs ">Participante activo de club</span>
                             </div>
                             <div class="absolute right-4 hidden peer-checked:block text-[#1f44f9]">
                                 <IconCheck />
@@ -81,7 +117,7 @@ const selectedTipo = ref('')
                         </label>
                         <label @click="() => { activePersona = 'ARBITRO', selectedTipo = 'ARBITRO' }"
                             class="relative flex items-center p-3 rounded-xl border  cursor-pointer has-[:checked]:bg-[#1f44f9]/10 has-[:checked]:border-[#1f44f9] transition-colors group">
-                            <input class="peer sr-only" name="role" type="radio" value="arbitro" />
+                            <input class="peer sr-only" name="role" type="radio" value="ARBITRO" />
                             <div
                                 class="size-10 rounded-full bg-background-light flex items-center justify-center text--white peer-checked:bg-[#1f44f9] peer-checked:text--[#1c1c0d] mr-3 transition-colors">
                                 <IconUser />
@@ -94,9 +130,9 @@ const selectedTipo = ref('')
                                 <IconCheck />
                             </div>
                         </label>
-                        <label @click="() => { activePersona = 'CUERPO_TECNICO', selectedTipo = 'CUERPO_TECNICO' }"
+                        <label @click="() => { activePersona = 'CT', selectedTipo = 'CT' }"
                             class="relative flex items-center p-3 rounded-xl border  cursor-pointer has-[:checked]:bg-[#1f44f9]/10 has-[:checked]:border-[#1f44f9] transition-colors group">
-                            <input class="peer sr-only" name="role" type="radio" value="tecnico" />
+                            <input class="peer sr-only" name="role" type="radio" value="CT" />
                             <div
                                 class="size-10 rounded-full bg-background-light flex items-center justify-center text--white peer-checked:bg-[#1f44f9] peer-checked:text-[#1c1c0d] mr-3 transition-colors">
                                 <IconUser />
@@ -114,7 +150,7 @@ const selectedTipo = ref('')
             </div>
             <!-- Right Column: Form Fields -->
             <div class="lg:col-span-8">
-                <form class="flex flex-col gap-6">
+                <form class="flex flex-col gap-6" @submit.prevent="nuevaPersona">
                     <!-- Section: Datos Personales -->
                     <div class="bg-surface-light p-6 md:p-8 rounded-lg border  shadow-sm">
                         <div class="flex items-center gap-2 mb-6 border-b  pb-4">
@@ -127,34 +163,43 @@ const selectedTipo = ref('')
                                         class="text-red-500">*</span></span>
                                 <input
                                     class="w-full rounded-xl  border py-3 px-4 text-[#1c1c0d] placeholder-text-white/60 transition-shadow"
-                                    placeholder="Ej. Lionel Andrés" type="text" />
+                                    placeholder="Ej. Lionel Andrés" type="text" required
+                                    v-model="personaNueva.nombre" />
                             </label>
                             <label class="flex flex-col gap-2">
                                 <span class="text-sm font-semibold text--[#1c1c0d]">Apellido <span
                                         class="text-red-500">*</span></span>
                                 <input
                                     class="w-full rounded-xl  border   focus:border-transparent py-3 px-4 text-[#1c1c0d] placeholder-text-white/60 transition-shadow"
-                                    placeholder="Ej. Messi" type="text" />
+                                    placeholder="Ej. Messi" type="text" required v-model="personaNueva.apellido" />
                             </label>
                             <label class="flex flex-col gap-2">
                                 <span class="text-sm font-semibold text--[#1c1c0d]">Documento (DNI/Pasaporte)</span>
                                 <input
                                     class="w-full rounded-xl  border   focus:border-transparent py-3 px-4 text-[#1c1c0d] placeholder-text-white/60 transition-shadow"
-                                    placeholder="12.345.678" type="text" />
+                                    placeholder="12.345.678" type="text" v-model="personaNueva.dni" required />
                             </label>
                             <label class="flex flex-col gap-2">
                                 <span class="text-sm font-semibold text--[#1c1c0d]">Fecha de Nacimiento</span>
                                 <div class="relative">
                                     <input
                                         class="w-full rounded-xl  border   focus:border-transparent py-3 px-4 text--[#1c1c0d] transition-shadow"
-                                        type="date" />
+                                        type="date" v-model="personaNueva.fechaNacimiento" required />
                                 </div>
                             </label>
                             <label class="flex flex-col gap-2 md:col-span-2">
                                 <span class="text-sm font-semibold text--[#1c1c0d]">Email de Contacto</span>
                                 <input
                                     class="w-full rounded-xl  border   focus:border-transparent py-3 px-4 text--[#1c1c0d] placeholder-text-white/60 transition-shadow"
-                                    placeholder="usuario@ejemplo.com" type="email" />
+                                    placeholder="usuario@ejemplo.com" type="email" v-model="personaNueva.email"
+                                    required />
+                            </label>
+                            <label class="flex flex-col gap-2 md:col-span-2">
+                                <span class="text-sm font-semibold text--[#1c1c0d]">Tel&eacute;fono</span>
+                                <input
+                                    class="w-full rounded-xl  border   focus:border-transparent py-3 px-4 text--[#1c1c0d] placeholder-text-white/60 transition-shadow"
+                                    placeholder="Ej. +54 9 11 2345-6789" type="tel" v-model="personaNueva.telefono"
+                                    required />
                             </label>
                         </div>
                     </div>
@@ -179,11 +224,11 @@ const selectedTipo = ref('')
                             <!-- Team Selection -->
                             <div class="md:col-span-12">
                                 <label class="flex flex-col gap-2">
-                                    <span class="text-sm font-semibold text-[#1c1c0d]">Equipo Actual</span>
+                                    <span class="text-sm font-semibold text-[#1c1c0d]">Club Actual</span>
                                     <div class="relative">
                                         <select
                                             class="w-full rounded-xl  border   focus:border-transparent py-3 pl-4 pr-10 text-[#1c1c0d] appearance-none cursor-pointer transition-shadow">
-                                            <option disabled="" selected="" value="">Seleccione un equipo...</option>
+                                            <option disabled="" selected="" value="">Seleccione un club...</option>
                                             <option value="fc_barcelona">Inter Miami CF</option>
                                             <option value="real_madrid">Manchester City</option>
                                             <option value="boca_juniors">Boca Juniors</option>
@@ -257,6 +302,17 @@ const selectedTipo = ref('')
                                 </label>
                             </div>
                         </div>
+                    </div>
+                    <div class="flex gap-3 justify-end">
+                        <button
+                            class="px-5 py-2 rounded-lg border  font-medium hover:bg-white transition-colors bg-transparent">
+                            Cancelar
+                        </button>
+                        <button type="submit"
+                            class="px-5 py-2 rounded-lg bg-[#4257c2] text-white font-bold shadow-[0_4px_0_0_rgba(0,0,0,0.1)] hover:shadow-none hover:translate-y-0.5 transition-all flex items-center gap-2">
+                            <IconFileDownload />
+                            Guardar Persona
+                        </button>
                     </div>
                 </form>
             </div>

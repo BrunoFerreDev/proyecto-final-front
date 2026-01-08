@@ -16,7 +16,10 @@ import { useTorneoStore } from '../stores/torneoStore';
 import { storeToRefs } from 'pinia';
 import { IconTrophy } from '@tabler/icons-vue';
 import CardCompetencia from '../components/CardCompetencia.vue';
+import { useRouter } from 'vue-router';
+import { IconNewSection } from '@tabler/icons-vue';
 
+const router = useRouter();
 const tab = ref('fixture');
 
 const torneoStore = useTorneoStore();
@@ -27,6 +30,9 @@ onMounted(() => {
     fetchTorneos();
     fetchCompetencias();
 })
+const navigateTo = (path) => {
+    router.push(path);
+}
 
 </script>
 
@@ -53,13 +59,11 @@ onMounted(() => {
                                 class="block w-full rounded-xl border-none bg-white py-4 pl-12 pr-4 text-[#111218] shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] ring-1 ring-inset ring-gray-200 dark:ring-gray-700 placeholder:text-[#9ca3af] focus:ring-2 focus:ring-inset focus:ring-[#0d7ff2] sm:text-sm sm:leading-6 transition-all"
                                 id="search-tournament" placeholder="Buscar torneo por nombre o ID (ej. #8821)..."
                                 type="search" />
-                            <div class="absolute inset-y-0 right-2 flex items-center">
-                            </div>
                         </div>
                     </div>
                 </section>
                 <!-- Selected Context: Tournament Card -->
-                <section>
+                <section class="flex flex-col justify-between items-center md:flex-row">
                     <div
                         class="flex flex-col md:flex-row items-stretch gap-6 rounded-2xl bg-white p-1 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.1)] ring-1 ring-gray-100">
                         <!-- Tournament Image -->
@@ -71,10 +75,10 @@ onMounted(() => {
                             </div>
                         </div>
                         <!-- Tournament Info -->
-                        <div class="flex  flex-col gap-4 p-4 md:py-6 md:pr-6 w-full">
-                            <div class="flex justify-between items-center ">
+                        <div class="flex flex-col gap-4 p-4 md:py-6 md:pr-6 w-130">
+                            <div class="flex justify-between items-center  ">
                                 <div>
-                                    <div class="flex items-center gap-3 mb-1">
+                                    <div class="flex items-center  gap-3 mb-1">
                                         <span
                                             class="inline-flex items-center rounded-md bg-green-50  px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{
                                                 torneos.estado }}</span>
@@ -83,20 +87,27 @@ onMounted(() => {
                                     <h2 class="text-2xl font-bold text-[#111218]">{{ torneos.nombre }}</h2>
                                     <p class="text-[#5f668c] text-sm mt-1">Temporada - {{ torneos.temporada }} </p>
                                 </div>
-                                <div class="flex flex-col md:flex-row gap-2 ">
+                                <div class="flex flex-col md:flex-row gap-2 justify-between ">
                                     <button
                                         class="inline-flex md:flex-none items-center justify-end gap-2 rounded-lg bg-[#0d7ff2]/10 hover:bg-[#0d7ff2]/20 px-4 py-2.5 text-sm font-semibold text-[#0d7ff2] transition-colors">
                                         <IconSettings />
                                         <span>Configurar</span>
                                     </button>
-                                    <button
-                                        class="inline-flex  md:flex-none items-center justify-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors">
-                                        <IconShare />
-                                        <span>Compartir</span>
-                                    </button>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="flex gap-1 md:flex-col justify-between items-center">
+                        <button
+                        @click.prevent="navigateTo('/nuevo-torneo')"
+                            class="inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 h-14 bg-white border border-stone-200 text-text-main text-sm font-bold hover:bg-sky-50 transition-colors shadow-sm">
+                            <IconPlus />
+                            Nuevo Torneo
+                        </button>
+                        <button
+                            class="inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 h-14 bg-white border border-stone-200 text-text-main text-sm font-bold hover:bg-sky-50 transition-colors shadow-sm">
+                            <IconEdit /> Editar Torneo
+                        </button>
                     </div>
                 </section>
                 <section class="flex flex-col gap-4 animate-in fade-in duration-500">
@@ -108,9 +119,13 @@ onMounted(() => {
                         <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Seleccionar
                             Competencia</span>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" v-if="competencias.length > 0"
-                        v-for="comp in competencias">
-                        <CardCompetencia :competencia="comp" />
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" v-if="competencias.length > 0">
+                        <CardCompetencia v-for="comp in competencias" :competencia="comp" />
+                        <button @click.prevent="navigateTo('/nueva-competencia')"
+                            class="flex items-center rounded-xl justify-center gap-2 px-5 l bg-white border border-stone-200 text-text-main text-sm font-bold hover:bg-sky-50 transition-colors shadow-sm">
+                            <IconNewSection /> Nueva
+                            Competencia
+                        </button>
                     </div>
                 </section>
                 <!-- Tabs Navigation -->
@@ -360,21 +375,21 @@ onMounted(() => {
                         <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Team Selection -->
                             <div class="space-y-2">
-                                <label class="text-sm font-semibold text-gray-700">Equipo
+                                <label class="text-sm font-semibold text-gray-700">club
                                     Local</label>
                                 <select
                                     class="w-full h-12 rounded-lg border bg-white focus:ring-[#0d7ff2] focus:border-[#0d7ff2]">
-                                    <option disabled selected value="">Seleccionar equipo...</option>
+                                    <option disabled selected value="">Seleccionar club...</option>
                                     <option value="1">Real Madrid FC</option>
                                     <option value="2">Atlético Sur</option>
                                 </select>
                             </div>
                             <div class="space-y-2">
-                                <label class="text-sm font-semibold text-gray-700">Equipo
+                                <label class="text-sm font-semibold text-gray-700">club
                                     Visitante</label>
                                 <select
                                     class="w-full h-12 rounded-lg border bg-white focus:ring-[#0d7ff2] focus:border-[#0d7ff2]">
-                                    <option disabled selected value="">Seleccionar equipo...</option>
+                                    <option disabled selected value="">Seleccionar club...</option>
                                     <option value="1">Dep. Libertad</option>
                                     <option value="2">Los Pumas</option>
                                 </select>

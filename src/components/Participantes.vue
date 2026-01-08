@@ -19,13 +19,13 @@ import { IconUsersGroup } from '@tabler/icons-vue';
                 </div>
                 <div class="flex-1">
                     <h3 class="text-text-main text-xl font-bold">Clubes Participantes</h3>
-                    <p class="text-text-secondary text-sm">Gestiona los equipos inscritos en la competencia.
+                    <p class="text-text-secondary text-sm">Gestiona los clubs inscritos en la competencia.
                     </p>
                 </div>
                 <div
                     class="hidden sm:flex items-center gap-2 bg-sky-50 border border-border-light px-3 py-1.5 rounded-lg">
                     <span class="text-xs font-bold text-text-secondary">Total:</span>
-                    <span class="text-sm font-bold text-primary">2 Equipos</span>
+                    <span class="text-sm font-bold text-primary">2 clubs</span>
                 </div>
             </div>
             <div class="flex flex-col md:flex-row gap-4 mb-6">

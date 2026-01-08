@@ -7,7 +7,7 @@
                         <th class="px-6 py-4 text-xs font-bold text-slate-500  uppercase tracking-wider w-16">
                             Escudo</th>
                         <th class="px-6 py-4 text-xs font-bold text-slate-500  uppercase tracking-wider min-w-[200px]">
-                            Equipo</th>
+                            club</th>
                         <th class="px-6 py-4 text-xs font-bold text-slate-500  uppercase tracking-wider min-w-[200px]">
                             Ciudad</th>
                         <th class="px-6 py-4 text-xs font-bold text-slate-500  uppercase tracking-wider min-w-[180px]">
@@ -74,7 +74,7 @@
                                 </button>
                                 <button
                                     class="p-2 text-slate-400 hover:text-[#0d7ff2] hover:bg-[#0d7ff2]/5 rounded-lg transition-colors"
-                                    title="Editar Equipo">
+                                    title="Editar club">
                                     <IconEdit />
                                 </button>
                                 <button

@@ -1,23 +1,22 @@
 import apiClient from "./axios";
 
 export default {
-  // GET /personas
   getPersonas(params) {
     return apiClient.get("/personas", { params });
   },
 
-  // POST /personas
   crearPersona(data) {
     return apiClient.post("/personas", data);
   },
 
-  // GET /personas/{personaId}
   getPersonaById(personaId) {
     return apiClient.get(`/personas/${personaId}`);
   },
 
-  // PUT /personas/actualizar
-  actualizarPersona(data) {
-    return apiClient.put("/personas/actualizar", data);
+  // CORRECCIÓN: El 2do argumento es el body (null), el 3ro es la config ({ params })
+  actualizarPersona(tipoPersona, personaId) {
+    return apiClient.put("/personas/actualizar", null, {
+      params: { tipoPersona, personaId },
+    });
   },
 };

@@ -10,7 +10,7 @@
                 </span>
                 <input
                     class="w-full bg-slate-50  border border-slate-200  text-slate-900  text-sm rounded-lg focus:ring-[#0d7ff2] focus:border-[#0d7ff2] block pl-10 p-2.5"
-                    placeholder="Buscar equipo por nombre, DT o ID..." type="text" />
+                    placeholder="Buscar club por nombre, DT o ID..." type="text" />
             </label>
         </div>
         <!-- Chips/Filters -->

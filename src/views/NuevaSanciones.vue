@@ -69,12 +69,12 @@ import { IconUser } from '@tabler/icons-vue';
                             <p class="text-xs text-[#49739c]">Seleccione el jugador de la lista desplegable</p>
                         </label>
                         <label class="flex flex-col gap-2">
-                            <span class="text-[#0d141c] text-sm font-semibold">Equipo
+                            <span class="text-[#0d141c] text-sm font-semibold">club
                                 (Lectura)</span>
                             <div class="relative">
                                 <input
                                     class="w-full bg-[#e7edf4]/50 text-[#49739c] border border-[#cedbe8] rounded-lg px-4 h-12 cursor-not-allowed"
-                                    disabled type="text" value="Seleccionar jugador para ver equipo..." />
+                                    disabled type="text" value="Seleccionar jugador para ver club..." />
                                 <div
                                     class="absolute right-0 top-0 h-full w-12 flex items-center justify-center text-[#49739c]">
                                     <IconLock />

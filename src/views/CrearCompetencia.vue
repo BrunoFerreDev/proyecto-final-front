@@ -11,14 +11,14 @@ import { IconDeviceFloppy } from '@tabler/icons-vue';
 import { onMounted, ref } from 'vue';
 import Participantes from '../components/Participantes.vue';
 const tabs = ref(['info', 'participantes']);
-const activeTab = ref('participantes');
+const activeTab = ref('info');
 const crearCompetencia = ref({
     nombre: '',
     categoria: '',
     idTorneo: 0,
 })
 const cargarConfiguracion = ref({
-    cantJugadoresEquipo: 0,
+    cantJugadoresclub: 0,
     minutosPorTiempo: 0,
     maxSustituciones: 0,
     formatoCompetencia: '',
@@ -269,7 +269,7 @@ const cargarConfiguracion = ref({
                                 </div>
                             </div>
                             <label class="flex flex-col gap-2 mb-4">
-                                <span class="text-text-main text-sm font-bold">Número de Equipos</span>
+                                <span class="text-text-main text-sm font-bold">Número de clubs</span>
                                 <input
                                     class="w-full h-12 px-4 rounded-xl border  bg-sky-50 text-text-main focus:ring-2 focus:ring-[#0ea5e9]/20 focus:border-[#0ea5e9] transition-all outline-none"
                                     placeholder="Ej. 18" type="number" />

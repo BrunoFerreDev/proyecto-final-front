@@ -24,7 +24,7 @@ import { IconPhoto } from '@tabler/icons-vue';
             <div class="flex flex-col gap-2 border-b border-slate-200 pb-6">
                 <h1 class="text-text-main text-4xl font-black leading-tight tracking-tight">Crear Nuevo Club</h1>
                 <p class="text-text-secondary text-base max-w-2xl">
-                    Registra un nuevo equipo en el sistema. Asegúrate de tener el escudo en formato digital y los datos
+                    Registra un nuevo club en el sistema. Asegúrate de tener el escudo en formato digital y los datos
                     de contacto de la sede.
                 </p>
             </div>

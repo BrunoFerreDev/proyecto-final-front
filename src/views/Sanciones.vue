@@ -59,7 +59,7 @@ import {
                             <label
                                 class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 transition-all text-slate-500 text-sm font-medium leading-normal">
                                 <span class="flex items-center gap-2">
-                                    <IconUsersGroup /> club
+                                    <IconUsersGroup /> Club
                                 </span>
                                 <input class="invisible w-0" name="search_type" type="radio" value="club" />
                             </label>
@@ -115,7 +115,7 @@ import {
                     </div>
                     <div class="flex gap-4 text-center sm:text-right">
                         <div>
-                            <p class="text-xs uppercase tracking-wide text-slate-500 font-semibold">club Actual</p>
+                            <p class="text-xs uppercase tracking-wide text-slate-500 font-semibold">Club Actual</p>
                             <p class="font-bold text-slate-900 ">Leones FC</p>
                         </div>
                         <div class="w-px bg-slate-200 h-10"></div>
@@ -277,16 +277,7 @@ import {
                     </div>
                 </div>
             </div>
-            <!-- Empty State Illustration (Hidden, shown only for context if needed in dynamic implementation) -->
-            <!-- 
-            <div class="flex flex-col items-center justify-center py-16 px-4 text-center">
-                <div class="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                    <span class="material-symbols-outlined text-4xl text-slate-400">manage_search</span>
-                </div>
-                <h3 class="text-lg font-bold text-slate-900  mb-1">Comienza tu búsqueda</h3>
-                <p class="text-slate-500 max-w-sm">Selecciona un jugador o club arriba para ver su historial completo de sanciones.</p>
-            </div> 
-            -->
+
         </div>
     </main>
 </template>

@@ -11,6 +11,7 @@ import { IconChevronRight } from '@tabler/icons-vue';
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { usePersonaStore } from '../stores/personaStore'; // Asegura la ruta correcta
+import PersonaForm from '../components/forms/PersonaForm.vue';
 
 const activePersona = ref('JUGADOR');
 const selectedTipo = ref('JUGADOR'); // Iniciado con un valor por defecto
@@ -62,7 +63,7 @@ const resetForm = () => {
 </script>
 
 <template>
-    <main class=" w-full max-w-5xl mx-auto px-6 py-8 md:py-12">
+    <main class=" w-full max-w-5xl mx-auto px-6 py-8 md:py-12" v-show="false">
         <!-- Page Header -->
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
             <div class="flex flex-col gap-2">
@@ -317,5 +318,9 @@ const resetForm = () => {
                 </form>
             </div>
         </div>
+    </main>
+    <main class=" w-full max-w-5xl mx-auto px-6 py-8 md:py-12">
+
+        <PersonaForm />
     </main>
 </template>

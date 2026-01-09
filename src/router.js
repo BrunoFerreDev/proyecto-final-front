@@ -12,7 +12,7 @@ const router = createRouter({
     },
     {
       path: "/torneo",
-      component: () => import("./views/Torneo.vue"),
+      component: () => import("./views/NewTorneo.vue"),
     },
     {
       path: "/arbitros",

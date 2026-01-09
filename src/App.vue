@@ -6,6 +6,6 @@ import Header from './components/Header.vue';
 <template>
   <Header />
   <main class="w-full overflow-y-auto ">
-    <RouterView />
+  <RouterView />
   </main>
 </template>

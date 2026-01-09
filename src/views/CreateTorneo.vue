@@ -8,7 +8,8 @@
                         configurar una nueva competición principal en el sistema.</p>
                 </div>
             </div>
-            <div class="bg-white rounded-xl border border-[#e9e8ce] shadow-sm">
+            <TorneoForm />
+            <!-- <div class="bg-white rounded-xl border border-[#e9e8ce] shadow-sm">
                 <div class="p-6 md:p-8 lg:p-10">
                     <form class="flex flex-col gap-8">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
@@ -75,13 +76,14 @@
                         </div>
                     </form>
                 </div>
-            </div>
+            </div> -->
         </div>
     </main>
 </template>
 <script setup>
 import { IconDeviceFloppy } from '@tabler/icons-vue';
 import { ref } from 'vue';
+import TorneoForm from '../components/forms/TorneoForm.vue';
 const crearTorneo = ref({
     nombre: '',
     temporada: '',

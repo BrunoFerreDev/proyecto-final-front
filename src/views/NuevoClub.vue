@@ -1,4 +1,4 @@
-<script setup >
+<script setup>
 import { IconClipboardData } from '@tabler/icons-vue';
 import { IconSearch } from '@tabler/icons-vue';
 import { IconDeviceFloppy } from '@tabler/icons-vue';
@@ -6,21 +6,13 @@ import { IconCalendar } from '@tabler/icons-vue';
 import { IconMapPin } from '@tabler/icons-vue';
 import { IconUpload } from '@tabler/icons-vue';
 import { IconPhoto } from '@tabler/icons-vue';
-
+import ClubForm from '../components/forms/ClubForm.vue';
 </script>
 
 <template>
     <main class=" flex flex-col h-full overflow-y-auto bg-white dark:bg-background-dark relative">
         <div class="w-full max-w-[1100px] mx-auto p-6 md:p-10 flex flex-col gap-8 pb-20">
-            <div class="flex items-center gap-2">
-                <a class="text-text-secondary hover:text-[##3b82f6] transition-colors text-sm font-medium"
-                    href="#">Inicio</a>
-                <span class="text-text-secondary text-sm">/</span>
-                <a class="text-text-secondary hover:text-[##3b82f6] transition-colors text-sm font-medium"
-                    href="#">Clubes</a>
-                <span class="text-text-secondary text-sm">/</span>
-                <span class="text-text-main text-sm font-medium">Nuevo Club</span>
-            </div>
+
             <div class="flex flex-col gap-2 border-b border-slate-200 pb-6">
                 <h1 class="text-text-main text-4xl font-black leading-tight tracking-tight">Crear Nuevo Club</h1>
                 <p class="text-text-secondary text-base max-w-2xl">
@@ -28,7 +20,8 @@ import { IconPhoto } from '@tabler/icons-vue';
                     de contacto de la sede.
                 </p>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+            <ClubForm />
+            <!-- <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
                 <div class="lg:col-span-4 flex flex-col gap-4">
                     <div
                         class="flex flex-col p-6 rounded-2xl border border-slate-200 bg-slate-50 items-center text-center gap-6 shadow-sm">
@@ -113,7 +106,7 @@ import { IconPhoto } from '@tabler/icons-vue';
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div
                 class="flex flex-col-reverse sm:flex-row items-center justify-end gap-4 mt-4 pt-6 border-t border-slate-200">
                 <button

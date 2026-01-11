@@ -1,5 +1,4 @@
 <template>
-
     <div class="flex flex-1 max-w-7xl mx-auto">
         <!-- Main Content -->
         <main class="flex-1 flex flex-col">
@@ -169,5 +168,5 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-
+const tab = ref(1);
 </script>

@@ -7,10 +7,12 @@ export default {
   },
 
   // GET /club/{id} - Obtener uno por ID
-  getClubById(id) {
-    return apiClient.get(`/club/${id}`);
+  traerJugadoresPorClub(id, params) {
+    return apiClient.get(`/club/${id}`, { params });
   },
-
+  traerPorId(id) {
+    return apiClient.get(`/club/${id}/informacion`);
+  },
   // POST /club - Crear uno nuevo
   crearClub(data) {
     return apiClient.post("/club", data);

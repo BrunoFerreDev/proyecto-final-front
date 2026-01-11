@@ -1,69 +1,108 @@
 <script setup>
-import { IconChevronRight } from '@tabler/icons-vue';
-import FilterClubes from '../components/FilterClubes.vue';
-import TableClubes from '../components/tables/TableClubes.vue';
-import { IconPlus } from '@tabler/icons-vue';
-import { useRouter } from 'vue-router';
-import { storeToRefs } from 'pinia';
-import { useClubStore } from '../stores/clubStore.js';
-import { onMounted } from 'vue';
+import { ref, onMounted, watch } from "vue";
+import { useRouter } from "vue-router";
+import axios from "axios";
+// Importa tu componente hijo
+import TableClubes from "../components/tables/TableClubes.vue";
+import FilterClubes from "../components/FilterClubes.vue";
 const router = useRouter();
+const API_BASE_URL = "http://localhost:8080/api";
 
-const clubStore = useClubStore();
-const {
-    clubes,
-    loading,
-    // FALTABAN ESTOS:
-    page,
-    totalPages,
-    totalElements,
-    size
-} = storeToRefs(clubStore);
-const { fetchClubes, nextPage, prevPage } = clubStore;
+// --- ESTADO ---
+const clubes = ref([]);
+const page = ref(0); // Spring Boot usa 0-indexed por defecto
+const size = ref(5); // Cantidad de items por página
+const totalElements = ref(0);
+const totalPages = ref(0);
+const loading = ref(false); // Opcional: para mostrar un spinner
 
-const navigateTo = (path) => {
-    router.push(path);
-}
-onMounted(() => {
-    fetchClubes();
-})
+// --- PETICIÓN AL BACKEND ---
+const fetchClubes = async () => {
+  loading.value = true;
+  try {
+    // Axios serializa los params automáticamente
+    const response = await axios.get(`${API_BASE_URL}/club`, {
+      params: {
+        page: page.value,
+        size: size.value,
+      },
+    });
 
+    // Asignación de datos
+    clubes.value = response.data.content;
 
-// Función que maneja el cambio de página
-const handlePageChange = (newPage) => {
-    console.log("¡Click recibido en el padre! Pagina:", newPage);
-    clubStore.setPage(newPage);
+    // Actualización de variables de paginación
+    totalElements.value = response.data.totalElements;
+    totalPages.value = response.data.totalPages;
+  } catch (error) {
+    console.error("Error al cargar clubes:", error);
+  } finally {
+    loading.value = false;
+  }
 };
-</script>
 
+// --- WATCHERS ---
+// Esto es la magia: cada vez que 'page' cambie, se ejecuta fetchClubes automáticamente.
+// También vigilamos 'size' por si decides agregar un selector de "items por página".
+watch([page, size], () => {
+  fetchClubes();
+});
+
+// --- EVENTOS ---
+// Esta función recibe el evento del hijo (TableClubes)
+const handlePageChange = (newPage) => {
+  page.value = newPage;
+  // No hace falta llamar a fetchClubes aquí, el 'watch' lo hará.
+};
+
+// Carga inicial
+onMounted(() => {
+  fetchClubes();
+});
+</script>
 <template>
-    <!-- Main Content -->
-    <main class=" flex justify-center py-6 px-4 lg:px-8">
-        <div class="flex flex-col max-w-300 w-full gap-6">
-            <!-- Breadcrumbs -->
-            <div class="flex items-center gap-2 text-sm text-slate-500 ">
-                <a class="hover:text-[#0d7ff2]" href="#">Competencias</a>
-                <IconChevronRight />
-                <span class="font-medium text-[#0d141c] ">Torneo Apertura 2024</span>
-            </div>
-            <!-- Page Heading -->
-            <div class="flex flex-wrap justify-between items-end gap-4 border-b border-slate-200  pb-6">
-                <div class="flex min-w-72 flex-col gap-2">
-                    <h1 class="text-[#0d141c]  text-3xl lg:text-4xl font-black leading-tight tracking-tight">
-                        Gestión de Clubes</h1>
-                    <p class="text-slate-500  text-base font-normal">Administra los Clubes
-                        inscritos, plantillas y estados para la Primera División.</p>
-                </div>
-                <button @click.prevent="navigateTo('/nuevo-club')"
-                    class="flex items-center gap-2 bg-[#4871bd] hover:bg-blue-600 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 font-bold text-sm">
-                    <IconPlus />
-                    <span>Añadir Nuevo club</span>
-                </button>
-            </div>
-            <FilterClubes />
-            <!-- Table Container -->
-            <TableClubes :clubs="clubes" :page="page" :total-pages="totalPages" :total-elements="totalElements"
-                :size="size" @page-change="handlePageChange" />
+  <!-- Main Content -->
+  <main class="flex justify-center py-6 px-4 lg:px-8">
+    <div class="flex flex-col max-w-300 w-full gap-6">
+      <!-- Breadcrumbs -->
+      <div class="flex items-center gap-2 text-sm text-slate-500">
+        <a class="hover:text-[#0d7ff2]" href="#">Competencias</a>
+        <IconChevronRight />
+        <span class="font-medium text-[#0d141c]">Torneo Apertura 2024</span>
+      </div>
+      <!-- Page Heading -->
+      <div
+        class="flex flex-wrap justify-between items-end gap-4 border-b border-slate-200 pb-6"
+      >
+        <div class="flex min-w-72 flex-col gap-2">
+          <h1
+            class="text-[#0d141c] text-3xl lg:text-4xl font-black leading-tight tracking-tight"
+          >
+            Gestión de Clubes
+          </h1>
+          <p class="text-slate-500 text-base font-normal">
+            Administra los Clubes inscritos, plantillas y estados para la
+            Primera División.
+          </p>
         </div>
-    </main>
+        <button
+          @click.prevent="navigateTo('/nuevo-club')"
+          class="flex items-center gap-2 bg-[#4871bd] hover:bg-blue-600 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 font-bold text-sm"
+        >
+          <IconPlus />
+          <span>Añadir Nuevo club</span>
+        </button>
+      </div>
+      <FilterClubes />
+      <!-- Table Container -->
+      <TableClubes
+        :clubs="clubes"
+        :page="page"
+        :total-pages="totalPages"
+        :total-elements="totalElements"
+        :size="size"
+        @page-change="handlePageChange"
+      />
+    </div>
+  </main>
 </template>

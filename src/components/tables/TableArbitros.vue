@@ -5,6 +5,8 @@ import Pagination from '../Pagination.vue';
 import { IconTrashFilled } from '@tabler/icons-vue';
 import { IconPhone } from '@tabler/icons-vue';
 import { IconMail } from '@tabler/icons-vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const props = defineProps({
     arbitros: {
         type: Array,
@@ -21,6 +23,14 @@ const props = defineProps({
 
 // Definimos el evento para avisar al padre
 const emit = defineEmits(['page-change']);
+const navigateTo = (idArbitro) => {
+    router.push({
+        name: 'ficha-arbitro', // Asegúrate de que este nombre coincida en tu router
+        params: {
+            idPersona: idArbitro
+        }
+    });
+}
 </script>
 
 <template>
@@ -88,7 +98,7 @@ const emit = defineEmits(['page-change']);
                 <td class="py-4 px-6 text-right">
                     <div
                         class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
+                        <button @click="navigateTo(arbitro.idPersona)"
                             class="size-8 flex items-center justify-center rounded-lg hover:bg-gray-100 text-[#49739c] hover:text-[#0d7ff2] transition-colors"
                             title="Editar">
                             <IconEdit />

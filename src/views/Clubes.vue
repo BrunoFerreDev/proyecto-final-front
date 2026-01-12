@@ -62,17 +62,15 @@ const handlePageChange = (newPage) => {
 onMounted(() => {
   fetchClubes();
 });
+const navigateTo = (path) => {
+  router.push(path);
+}
 </script>
 <template>
   <!-- Main Content -->
   <main class="flex justify-center py-6 px-4 lg:px-8">
     <div class="flex flex-col max-w-300 w-full gap-6">
-      <!-- Breadcrumbs -->
-      <div class="flex items-center gap-2 text-sm text-slate-500">
-        <a class="hover:text-[#0d7ff2]" href="#">Competencias</a>
-        <IconChevronRight />
-        <span class="font-medium text-[#0d141c]">Torneo Apertura 2024</span>
-      </div>
+   
       <!-- Page Heading -->
       <div
         class="flex flex-wrap justify-between items-end gap-4 border-b border-slate-200 pb-6"

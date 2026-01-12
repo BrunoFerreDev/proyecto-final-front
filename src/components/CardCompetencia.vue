@@ -1,11 +1,24 @@
-<script setup lang="ts">
+<script setup >
 import { IconCheck } from '@tabler/icons-vue';
 import { IconCalendar } from '@tabler/icons-vue';
 import { IconUsersGroup } from '@tabler/icons-vue';
 const props = defineProps({
     competencia: {
         type: Object,
-        required: true
+        required: true,
+        default: () => ({
+            id: 1,
+            nombre: "Competencia 1",
+            fechaInicio: "2023-08-01",
+            fechaFin: "2023-08-31",
+            idTorneo: 1,
+            configuracionDTO: {
+                cantJugadoresclub: 0,
+                minutosPorTiempo: 0,
+                maxSustituciones: 0,
+                formatoCompetencia: ''
+            }
+        })
     }
 })
 </script>

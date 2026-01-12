@@ -14,15 +14,15 @@
                             <span class="material-symbols-outlined !text-4xl">shield</span>
                             <span class="text-[10px] mt-1 font-bold uppercase">Sin Escudo</span>
                         </div>
-
+                        <!-- 
                         <img v-else :src="club.escudo" class="w-full h-full object-cover" alt="Escudo del club"
-                            @error="handleImageError" />
+                            @error="handleImageError" /> -->
                     </div>
                 </div>
 
                 <div class="flex flex-col gap-2 w-full max-w-md">
                     <label class="text-[#111218]  text-sm font-semibold">URL del Escudo</label>
-                    <input v-model="club.escudo" type="url"
+                    <input v-model="club.escudo" type="text"
                         class="rounded-lg border-gray-300  focus:ring-[#1f44f9] focus:border-[#1f44f9] h-11 px-4 text-sm"
                         placeholder="https://ejemplo.com/escudo.png" />
                     <p class="text-[#5f668c]  text-xs font-normal">
@@ -101,37 +101,52 @@
 
             </div>
         </section>
-
+        <div
+            class="flex flex-col-reverse sm:flex-row items-center justify-end gap-4 mt-4 pt-6 border-t border-slate-200">
+            <button type="reset"
+                class="w-full sm:w-auto px-8 h-12 rounded-full border border-slate-200 text-text-main font-bold hover:bg-slate-50 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-slate-200">
+                Cancelar
+            </button>
+            <button type="submit"
+                class="w-full sm:w-auto px-10 h-12 rounded-full bg-[#3b82f6] text-white font-bold hover:bg-[#2563eb] hover:translate-y-0.5 active:translate-y-1 transition-all flex items-center justify-center gap-2">
+                <IconDeviceFloppy class="text-xl" />
+                Guardar Club
+            </button>
+        </div>
     </form>
 </template>
 
 <script setup>
+import { IconDeviceFloppy } from '@tabler/icons-vue';
+import axios from 'axios';
 import { reactive } from 'vue';
 
 // Estado reactivo basado en Club.java
 const club = reactive({
-    nombre: '',
-    escudo: '',    // String en Java
-    ciudad: '',
-    fundacion: '', // LocalDate
-    isActivo: true,
-    estado: 'ACTIVO' // Enum: EstadoClub
+    nombre: "Fatitma",
+    escudo: "escudo.png",
+    ciudad: "Puerto Rico",
+    fundacion: "2023-01-01",
 });
 
-const handleImageError = (e) => {
-    // Si la URL falla, vuelve a mostrar el placeholder
-    club.escudo = '';
-    // Opcional: alertar al usuario
-    console.log("No se pudo cargar la imagen");
-};
+// const handleImageError = (e) => {
+//     // Si la URL falla, vuelve a mostrar el placeholder
+//     club.escudo = '';
+//     // Opcional: alertar al usuario
+//     console.log("No se pudo cargar la imagen");
+// };
 
 const guardarClub = async () => {
-    console.log("Payload Club:", JSON.parse(JSON.stringify(club)));
-
     try {
+        console.log(club);
+
         // await clubApi.create(club);
-        alert("Club guardado (Simulación)");
+        const clubPost = await axios.post('http://localhost:8080/api/club', club)
+        console.log(clubPost);
+
+        alert("Club creado exitosamente");
     } catch (error) {
+        alert("Error al crear el club", error);
         console.error("Error", error);
     }
 };
@@ -150,6 +165,7 @@ input {
     border: 1px solid #0a2150 !important;
     border-radius: 8px !important;
 }
+
 select {
     border: 1px solid #0a2150 !important;
     border-radius: 8px !important;

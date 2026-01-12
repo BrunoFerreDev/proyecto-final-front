@@ -12,7 +12,7 @@ const router = createRouter({
     },
     {
       path: "/torneo",
-      component: () => import("./views/NewTorneo.vue"),
+      component: () => import("./views/Torneo.vue"),
     },
     {
       path: "/arbitros",
@@ -61,6 +61,36 @@ const router = createRouter({
     {
       path: "/club/:idClub/ficha",
       component: () => import("./views/FichaClub.vue"),
+    },
+    {
+      path: "/arbitro/:idPersona/ficha",
+      name: "ficha-arbitro",
+      component: () => import("./views/FichaPersona.vue"),
+      // Pasamos 'tipo' como una prop estática y activamos params como props
+      props: (route) => ({
+        idPersona: route.params.idPersona,
+        tipo: "arbitro",
+      }),
+    },
+    {
+      path: "/jugador/:idPersona/ficha",
+      name: "ficha-jugador",
+      component: () => import("./views/FichaPersona.vue"),
+      // Pasamos 'tipo' como una prop estática y activamos params como props
+      props: (route) => ({
+        idPersona: route.params.idPersona,
+        tipo: "jugador",
+      }),
+    },
+    {
+      path: "/cuerpo-tecnico/:idPersona/ficha",
+      name: "ficha-cuerpo-tecnico",
+      component: () => import("./views/FichaPersona.vue"),
+      // Pasamos 'tipo' como una prop estática y activamos params como props
+      props: (route) => ({
+        idPersona: route.params.idPersona,
+        tipo: "cuerpo-tecnico",
+      }),
     },
   ],
   // Esta función se ejecuta en cada navegación

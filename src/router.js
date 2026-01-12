@@ -58,6 +58,10 @@ const router = createRouter({
       path: "/club/plantilla/:idClub",
       component: () => import("./views/Plantilla.vue"),
     },
+    {
+      path: "/club/:idClub/ficha",
+      component: () => import("./views/FichaClub.vue"),
+    },
   ],
   // Esta función se ejecuta en cada navegación
   scrollBehavior(to, from, savedPosition) {

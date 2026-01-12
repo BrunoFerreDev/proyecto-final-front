@@ -4,7 +4,8 @@ import { useRouter } from "vue-router";
 import { onMounted, ref, watch } from "vue";
 import StatsCard from "../components/StatsCard.vue";
 import axios from "axios";
-
+const categoria = ref("PRIMERA DIVISION");
+const selectedCategoaria = ref("asc");
 const router = useRouter();
 const idClub = router.currentRoute.value.params.idClub;
 const API_BASE_URL = `http://localhost:8080/api`;
@@ -16,7 +17,10 @@ const pagination = ref({
   totalPages: 0,
   totalElements: 0,
 });
-
+const cuerpoTecnico = ref({
+  nombre: "No asignado",
+  apellido: "No asignado",
+});
 const fetchClub = async () => {
   // TODO: Implementar llamada a API para obtener club
   try {
@@ -24,6 +28,7 @@ const fetchClub = async () => {
       `${API_BASE_URL}/club/${idClub}/informacion`
     );
     club.value = data;
+    cuerpoTecnico.value = data.cuerpoTecnico;
   } catch (error) {
     console.error(error);
   }
@@ -34,15 +39,16 @@ const fetchJugadores = async () => {
   try {
     const { data } = await axios.get(`${API_BASE_URL}/club/${idClub}`, {
       params: {
-        size: pagination.value.size,
         page: pagination.value.page,
+        size: pagination.value.size,
+        sort: "categoriaMaxima," + selectedCategoaria.value,
       },
     });
     jugadores.value = data.content;
-    console.log(jugadores.value);
-    
     pagination.value.totalPages = data.totalPages;
     pagination.value.totalElements = data.totalElements;
+    console.log(jugadores.value);
+    
   } catch (error) {
     console.error(error);
   }
@@ -57,11 +63,28 @@ onMounted(() => {
 watch([() => pagination.value.page, () => pagination.value.size], () => {
   fetchJugadores();
 });
+watch(
+  () => categoria.value,
+  () => {
+    if (categoria.value === "PRIMERA DIVISION") {
+      resetPagination();
+      selectedCategoaria.value = "asc";
+    } else {
+      selectedCategoaria.value = "desc";
+    }
+    fetchJugadores();
+  }
+);
 
 // --- EVENTOS ---
 const handlePageChange = (newPage) => {
   // Solo actualizamos el valor, el watcher detectará el cambio y llamará a fetchArbitros
   pagination.value.page = newPage;
+};
+
+const resetPagination = () => {
+  pagination.value.page = 0;
+  pagination.value.size = 10;
 };
 </script>
 
@@ -87,7 +110,7 @@ const handlePageChange = (newPage) => {
             Plantilla: {{ club?.nombre }}
           </h1>
           <p class="text-slate-500 text-base mt-1">
-            Temporada 2024 - Primera División
+            Temporada 2024 - Primera División y Sub 21
           </p>
         </div>
       </div>
@@ -100,7 +123,12 @@ const handlePageChange = (newPage) => {
     </div>
     <!-- Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <StatsCard />
+      <StatsCard :valor="pagination.totalElements" titulo="Total Jugadores" fontSize="text-2xl"/>
+      <StatsCard 
+        titulo="D.T Primera División" 
+        :valor="cuerpoTecnico.nombre + ' ' + cuerpoTecnico.apellido"
+        fontSize="text-lg"
+      />
     </div>
     <!-- Filters & Actions -->
     <div
@@ -122,21 +150,6 @@ const handlePageChange = (newPage) => {
           <select
             class="w-full pl-4 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0d7ff2]/50 focus:border-[#0d7ff2] appearance-none text-slate-700 cursor-pointer"
           >
-            <option value="">Todas las posiciones</option>
-            <option value="GK">Portero</option>
-            <option value="DEF">Defensa</option>
-            <option value="MID">Centrocampista</option>
-            <option value="FWD">Delantero</option>
-          </select>
-          <span
-            class="absolute right-3 top-3.5 text-slate-400 pointer-events-none material-symbols-outlined"
-            >expand_more</span
-          >
-        </div>
-        <div class="relative">
-          <select
-            class="w-full pl-4 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0d7ff2]/50 focus:border-[#0d7ff2] appearance-none text-slate-700 cursor-pointer"
-          >
             <option value="">Todos los estados</option>
             <option value="active">Activo</option>
             <option value="inactive">Inactivo</option>
@@ -147,8 +160,22 @@ const handlePageChange = (newPage) => {
             >expand_more</span
           >
         </div>
+        <div class="relative">
+          <select
+            v-model="categoria"
+            class="w-full pl-4 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0d7ff2]/50 focus:border-[#0d7ff2] appearance-none text-slate-700 cursor-pointer"
+          >
+            <option value="" disabled selected>Categorías</option>
+            <option value="PRIMERA DIVISION">Primera División</option>
+            <option value="SUB-21">Sub 21</option>
+          </select>
+          <span
+            class="absolute right-3 top-3.5 text-slate-400 pointer-events-none material-symbols-outlined"
+            >expand_more</span
+          >
+        </div>
       </div>
-      <div class="flex gap-2 w-full lg:w-auto justify-end">
+      <!-- <div class="flex gap-2 w-full lg:w-auto justify-end">
         <button
           class="flex items-center justify-center size-11 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors"
           title="Exportar CSV"
@@ -161,7 +188,7 @@ const handlePageChange = (newPage) => {
         >
           <span class="material-symbols-outlined">view_list</span>
         </button>
-      </div>
+      </div> -->
     </div>
     <!-- Players Table -->
     <TableJugadores
@@ -170,6 +197,7 @@ const handlePageChange = (newPage) => {
       :total-pages="pagination.totalPages"
       :total-elements="pagination.totalElements"
       :size="pagination.size"
+      :categoria="categoria"
       @page-change="handlePageChange"
     />
   </div>

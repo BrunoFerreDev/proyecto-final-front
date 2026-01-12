@@ -5,6 +5,8 @@ import axios from "axios";
 // Importa tu componente hijo
 import TableClubes from "../components/tables/TableClubes.vue";
 import FilterClubes from "../components/FilterClubes.vue";
+import { IconPlus } from "@tabler/icons-vue";
+import { IconChevronRight } from "@tabler/icons-vue";
 const router = useRouter();
 const API_BASE_URL = "http://localhost:8080/api";
 
@@ -34,6 +36,7 @@ const fetchClubes = async () => {
     // Actualización de variables de paginación
     totalElements.value = response.data.totalElements;
     totalPages.value = response.data.totalPages;
+    console.log(clubes.value[0]);
   } catch (error) {
     console.error("Error al cargar clubes:", error);
   } finally {

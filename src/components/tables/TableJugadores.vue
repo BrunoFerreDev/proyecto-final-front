@@ -19,12 +19,12 @@
             <th
               class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-slate-500"
             >
-              Posición
+              DNI / F.Identificación
             </th>
             <th
               class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-slate-500"
             >
-              Nacionalidad
+              Contacto
             </th>
             <th
               class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-slate-500"
@@ -34,7 +34,12 @@
             <th
               class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-slate-500 text-right"
             >
-              Acciones
+              Categoria
+            </th>
+            <th
+              class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-slate-500"
+            >
+              Ver Jugador
             </th>
           </tr>
         </thead>
@@ -62,33 +67,13 @@
             </td>
             <td class="py-4 px-6">
               <span
-                class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-rose-100 text-rose-700 border border-rose-200"
+                class="inline-flex items-center px-2.5 py-1 rounded-md text-md font-medium border border-slate-200"
               >
                 {{ new Intl.NumberFormat("es-AR").format(jugador.dni) }}
               </span>
             </td>
             <td class="py-4 px-6">
-              <div class="flex items-center gap-2">
-                <div
-                  class="w-6 h-4 rounded-sm bg-slate-200 overflow-hidden relative shadow-sm"
-                  data-alt="Argentina Flag"
-                >
-                  <div
-                    class="absolute inset-x-0 top-0 h-1/3 bg-[#75AADB]"
-                  ></div>
-                  <div
-                    class="absolute inset-x-0 bottom-0 h-1/3 bg-[#75AADB]"
-                  ></div>
-                  <div
-                    class="absolute inset-x-0 top-1/3 h-1/3 bg-white flex items-center justify-center"
-                  >
-                    <div class="size-1 bg-[#F4B32E] rounded-full"></div>
-                  </div>
-                </div>
-                <span class="text-sm text-slate-600">{{
-                  jugador.telefono
-                }}</span>
-              </div>
+              <span class="text-sm text-slate-600">{{ jugador.telefono }}</span>
             </td>
             <td class="py-4 px-6">
               <div class="flex items-center gap-2">
@@ -97,26 +82,10 @@
               </div>
             </td>
             <td class="py-4 px-6 text-right">
-              <div
-                class="flex items-center justify-end gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <button
-                  class="p-2 text-slate-400 hover:text-[#0d7ff2] hover:bg-[#0d7ff2]/10 rounded-lg transition-colors"
-                  title="Editar"
-                >
-                  <span class="material-symbols-outlined text-[20px]"
-                    >edit</span
-                  >
-                </button>
-                <button
-                  class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
-                  title="Eliminar"
-                >
-                  <span class="material-symbols-outlined text-[20px]"
-                    >delete</span
-                  >
-                </button>
-              </div>
+              {{ categoria }}
+            </td>
+            <td class="py-4 px-6 mx-auto w-12 text-center">
+              <button class="text-blue-600 hover:text-blue-800">Ver</button>
             </td>
           </tr>
         </tbody>
@@ -139,6 +108,10 @@ import Pagination from "../Pagination.vue";
 const props = defineProps({
   jugadores: {
     type: Array,
+    required: true,
+  },
+  categoria: {
+    type: String,
     required: true,
   },
   // Items por página

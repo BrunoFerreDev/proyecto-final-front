@@ -24,7 +24,7 @@
             <th
               class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider min-w-[180px]"
             >
-              Jugadores
+              Fundacion
             </th>
             <th
               class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-32"
@@ -84,14 +84,9 @@
             <td class="px-6 py-4">
               <div class="w-full max-w-[140px]">
                 <div class="flex justify-between text-xs mb-1">
-                  <span class="font-medium text-slate-700">22/25</span>
-                  <span class="text-emerald-600 font-bold">88%</span>
-                </div>
-                <div class="w-full bg-slate-100 rounded-full h-1.5">
-                  <div
-                    class="bg-emerald-500 h-1.5 rounded-full"
-                    style="width: 88%"
-                  ></div>
+                  <span class="font-medium text-slate-700"
+                    >Fundado el: {{ club.fundacion }}</span
+                  >
                 </div>
               </div>
             </td>
@@ -103,28 +98,21 @@
               </span>
             </td>
             <td class="px-6 py-4 text-right">
-              <div
-                class="flex items-center justify-end gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity"
-              >
+              <div class="flex items-center justify-end gap-1">
                 <button
                   type="button"
                   @click.prevent="navigateTo('/club/plantilla/' + club.idClub)"
-                  class="p-2 text-slate-400 hover:text-[#0d7ff2] hover:bg-[#0d7ff2]/5 rounded-lg transition-colors"
+                  class="p-2 text-slate-400 text-[#0d7ff2] bg-[#0d7ff2]/5 rounded-lg transition-colors"
                   title="Gestionar Jugadores"
                 >
                   <IconUsersGroup />
                 </button>
                 <button
-                  class="p-2 text-slate-400 hover:text-[#0d7ff2] hover:bg-[#0d7ff2]/5 rounded-lg transition-colors"
+                  @click.prevent="navigateTo('/club/' + club.idClub + '/ficha')"
+                  class="p-2 text-slate-400 text-[#0d7ff2] bg-[#0d7ff2]/5 rounded-lg transition-colors"
                   title="Editar club"
                 >
                   <IconEdit />
-                </button>
-                <button
-                  class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                  title="Eliminar"
-                >
-                  <IconTrash />
                 </button>
               </div>
             </td>
@@ -152,7 +140,6 @@
   </div>
 </template>
 <script setup>
-import { IconTrash } from "@tabler/icons-vue";
 import { IconEdit } from "@tabler/icons-vue";
 import { IconUsersGroup } from "@tabler/icons-vue";
 import { computed, ref } from "vue";

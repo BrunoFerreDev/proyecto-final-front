@@ -16,14 +16,17 @@ import PartidoItem from "../components/PartidoItem.vue";
 import SearchTorneo from "../components/forms/SearchTorneo.vue";
 import TablePosiciones from "../components/tables/TablePosiciones.vue";
 import NewPartido from "../components/forms/NewPartido.vue";
+import { IconLoader } from "@tabler/icons-vue";
+import { IconLoader2 } from "@tabler/icons-vue";
 
 const router = useRouter();
 const tab = ref("fixture");
 const torneo = ref({});
 const cargandoTorneo = ref(true);
 const competencias = ref([]);
-const fixture = ref([]);
-const id = ref(0);
+const partidos = ref([]);
+const fechaTorneo = ref(1)
+const cargandoPartidos = ref(true);
 onMounted(() => { });
 const navigateTo = (path, query) => {
   router.push({ path, query });
@@ -32,7 +35,12 @@ const navigateTo = (path, query) => {
 const manejarBusqueda = async (termino) => {
   console.log("Buscando:", termino);
   if (!termino) {
-    torneo.value = { encontrado: false }; // Limpiar si está vacío
+    torneo.value = {
+      encontrado: false,
+      nombre: "Ingrese un nombre",
+    }; // Limpiar si está vacío
+    competencias.value = [];
+    partidos.value = [];
     return;
   }
   try {
@@ -49,8 +57,11 @@ const manejarBusqueda = async (termino) => {
   } catch (error) {
     console.error("Error buscando torneos:", error);
     torneo.value = {
+      nombre: "No encontrado",
       encontrado: false,
     };
+    competencias.value = [];
+    partidos.value = [];
   } finally {
     cargandoTorneo.value = false;
   }
@@ -58,28 +69,40 @@ const manejarBusqueda = async (termino) => {
 const fetchCompetencias = async (idTorneo) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/torneos/${idTorneo}/competencias`
+      `http://localhost:8080/api/competencias`, {
+      params: {
+        idTorneo: idTorneo
+      }
+    }
     );
     competencias.value = response.data;
+    fetchPartidos()
   } catch (error) {
     console.log(error);
   }
 };
-const fetchPartidos = async (idCompetencia) => {
+
+const fetchPartidos = async () => {
+  cargandoPartidos.value = true;
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/partidos/competencia`,
-      {
-        params: {
-          competencia: idCompetencia,
-          page: 0,
-          size: 10,
-        },
-      }
+      'http://localhost:8080/api/partidos', {
+      params: {
+        idCompetencia: competencias.value[0].idCompetencia,
+        fecha: fechaTorneo.value,
+        page: 0,
+        size: 10,
+      },
+    }
     );
-    partidos.value = response.data;
+    console.log(response.data);
+    partidos.value = response.data.content;
   } catch (error) {
     console.log(error);
+  } finally {
+    setTimeout(() => {
+      cargandoPartidos.value = false;
+    }, 1000);
   }
 };
 </script>
@@ -208,33 +231,37 @@ const fetchPartidos = async (idCompetencia) => {
                 Partidos Recientes y Próximos
               </h3>
               <div class="flex items-center gap-2">
-                <button class="p-2 rounded-lg hover:bg-gray-100">
-                  <IconChevronLeft />
+                <button :disabled="fechaTorneo == 1" @click.prevent="() => {
+                  fechaTorneo--;
+                  fetchPartidos();
+                }" class="p-2 rounded-lg hover:bg-gray-100 text-gray-500">
+                  <span class="material-symbols-outlined">chevron_left</span>
                 </button>
                 <span
-                  class="text-sm font-medium text-gray-900 bg-white px-3 py-1.5 rounded border border-gray-200 shadow-sm">Jornada
-                  5</span>
-                <button class="p-2 rounded-lg hover:bg-gray-100">
-                  <IconChevronRight />
+                  class="text-sm font-medium text-gray-900 bg-white px-3 py-1.5 rounded border border-gray-200 shadow-sm">Fecha
+                  :
+                  {{ fechaTorneo }}</span>
+                <button :disabled="fechaTorneo == partidos.length" @click.prevent="() => {
+                  fechaTorneo++;
+                  fetchPartidos();
+                }" class="p-2 rounded-lg hover:bg-gray-100 text-gray-500">
+                  <span class="material-symbols-outlined">chevron_right</span>
                 </button>
               </div>
             </div>
             <!-- Match List -->
-            <div class="space-y-4">
-              <template v-if="fixture.length > 0">
-                <!-- Match Item: Played -->
-                <PartidoItem v-for="partidoBack in fixture" :key="partidoBack.idPartido" :partido="partidoBack" />
-              </template>
-              <template v-else>
-                <p>No hay partidos programados</p>
-              </template>
+            <div class="space-y-4" v-if="partidos.length > 0">
+              <IconLoader v-if="cargandoPartidos" class="animate-spin size-8 mx-auto" />
+              <!-- Match Item: Played -->
+              <PartidoItem v-if="!cargandoPartidos" v-for="partido in partidos" :key="partido.idPartido"
+                :partido="partido" />
             </div>
+            <p v-if="partidos.length == 0">No hay partidos programados</p>
           </div>
 
           <!-- TAB CONTENT 2: CLASIFICACION -->
           <div v-if="tab == 'clasificacion'"
-            class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-gray-200 overflow-hidden"
-            id="clasificacion-content">
+            class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden" id="clasificacion-content">
             <TablePosiciones />
           </div>
           <!-- TAB CONTENT 3: PROGRAMAR PARTIDOS -->

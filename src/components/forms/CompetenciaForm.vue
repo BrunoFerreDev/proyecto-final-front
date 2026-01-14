@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="guardarCompetencia" class="space-y-6">
+    <form @submit.prevent="guardarConfiguraciones" class="space-y-6">
         <div class="bg-white  border border-gray-200  rounded-xl overflow-hidden shadow-sm">
             <div class="bg-blue-50 px-6 py-4 border-b border-gray-200 ">
                 <h2 class="text-gray-800 text-lg font-bold">Información Básica</h2>
@@ -67,24 +67,12 @@
                             <span class="text-base text-gray-800">Copa (Eliminación directa)</span>
                         </label>
                     </div>
-                    <div class="flex items-center justify-end gap-4 py-6  ">
-                        <button type="button" @click="resetForm"
-                            class="px-6 py-3 rounded-lg text-gray-500 font-bold hover:bg-gray-100  transition-all">
-                            Cancelar
-                        </button>
-                        <button type="submit"
-                            class="bg-blue-600 px-8 py-3 rounded-lg text-white font-bold shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-all flex items-center gap-2">
-                            <span class="material-symbols-outlined text-lg">save</span>
-                            Guardar Competencia
-                        </button>
-                    </div>
                 </div>
             </div>
 
 
         </div>
-    </form>
-    <form action="POST" @submit.prevent="guardarConfiguraciones" class="mt-5">
+
         <!-- Configuración de Juego -->
         <div class="bg-white  border border-gray-200 overflow-hidden shadow-sm">
             <div class="bg-blue-50 px-6 py-4 border-b border-gray-200  flex items-center gap-2">
@@ -165,7 +153,6 @@
                             <span class="text-blue-700  text-sm">punto</span>
                         </div>
                     </div>
-
                     <div class="p-4 bg-red-50  rounded-lg border border-red-100 ">
                         <label
                             class="text-red-800 text-xs font-bold uppercase tracking-wider mb-2 block">Derrota</label>
@@ -175,25 +162,19 @@
                             <span class="text-red-700  text-sm">puntos</span>
                         </div>
                     </div>
-
-                </div>
-                <div class="flex items-center justify-end gap-4 py-6  mt-2">
-                    <button type="button" @click="resetForm"
-                        class="px-6 py-3 rounded-lg text-gray-500 font-bold hover:bg-gray-100  transition-all">
-                        Cancelar
-                    </button>
-                    <button type="button" @click="guardarConfiguraciones" :disabled="!configuracion.idCompetencia"
-                        :class="[
-                            !configuracion.idCompetencia
-                                ? 'bg-gray-400 cursor-not-allowed opacity-50'
-                                : 'bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/20'
-                        ]" class="px-8 py-3 rounded-lg text-white font-bold transition-all flex items-center gap-2">
-
-                        <span class="material-symbols-outlined text-lg">save</span>
-                        Guardar Configuración
-                    </button>
                 </div>
             </div>
+        </div>
+        <div class="flex items-center justify-end gap-4 py-6  ">
+            <button type="button" @click="resetForm"
+                class="px-6 py-3 rounded-lg text-gray-500 font-bold hover:bg-gray-100  transition-all">
+                Cancelar
+            </button>
+            <button type="submit"
+                class="bg-blue-600 px-8 py-3 rounded-lg text-white font-bold shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-all flex items-center gap-2">
+                <span class="material-symbols-outlined text-lg">save</span>
+                Guardar Competencia
+            </button>
         </div>
     </form>
 </template>
@@ -227,6 +208,7 @@ const competencia = reactive({
     nombre: '',
     categoria: '', // Obligatorio (Enum)
     idTorneo: 0,   // Relación
+    idConfiguracion: 0,
 });
 
 // Entidad Configuraciones (Java) - Se guardará en cascada o vinculada
@@ -245,22 +227,12 @@ const configuracion = reactive({
 });
 const guardarCompetencia = async () => {
     try {
-        // 1. Guardamos la competencia
-        const response = await axios.post('http://localhost:8080/api/torneos/competencia', competencia);
-        console.log("Respuesta del Backend:", response.data); // <--- MIRA ESTO EN CONSOLA
-        const nuevaCompetencia = response.data;
-
-        // VERIFICACIÓN: Si aquí response.data.idCompetencia es undefined, el problema está en tu Java DTO.
-        if (!nuevaCompetencia.idCompetencia) {
-            console.error("¡ALERTA! El backend no devolvió el ID");
-            return;
+        const response = await axios.post('http://localhost:8080/api/competencias', competencia)
+        if (response.status === 200) {
+            competencia.idCompetencia = response.data.idCompetencia;
         }
-        // 2. ACTUALIZACIÓN MANUAL (Aquí es donde fallaba)
-        // Actualizamos el ID en el objeto competencia local
-        competencia.value = { ...nuevaCompetencia };
-        // ¡ESTA ES LA LÍNEA CLAVE QUE TE FALTA! 
-        // Pasamos el ID recién creado a la configuración
-        configuracion.idCompetencia = nuevaCompetencia.idCompetencia;
+        alert("Competencia guardada exitosamente");
+        router.push({ name: 'Torneos' });
     } catch (error) {
         console.error("Error fatal:", error);
     }
@@ -268,13 +240,16 @@ const guardarCompetencia = async () => {
 const guardarConfiguraciones = async () => {
     // Ahora competencia.idCompetencia ya tiene valor real
     try {
-        const response = await axios.post(`http://localhost:8080/api/torneos/competencia/${competencia.idCompetencia}/cargar-configuracion`, configuracion);
-        console.log("Configuraciones guardadas:", response.data);
-        alert("Configuraciones guardadas");
+        const response = await axios.post('http://localhost:8080/api/configuraciones/competencia/cargar-configuracion', configuracion);
+        if (response.status === 200) {
+            competencia.idConfiguracion = response.data.idConfiguracion;
+            guardarCompetencia();
+        }
     } catch (error) {
         console.error("Error guardando configuración:", error);
     }
 };
+
 const resetForm = () => {
     competencia.nombre = '';
     competencia.categoria = '';

@@ -36,7 +36,8 @@ const props = defineProps({
                 <span
                     class="inline-block rounded bg-[#1f44f9]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#1f44f9]">Masculino</span>
             </div>
-            <h4 class="text-lg font-bold text-[#111218] ">{{ competencia.nombre }}</h4>
+            <h4 class="text-lg font-bold text-[#111218] ">{{ competencia.nombre }} - {{
+                competencia.categoria.replace("_", " ") }}</h4>
             <div class="flex items-center gap-3 text-sm text-gray-600  mt-1">
                 <span class="flex items-center gap-1 ">
                     <IconUsersGroup /> Formato de Competencia: {{ competencia.configuracionDTO.formatoCompetencia }}

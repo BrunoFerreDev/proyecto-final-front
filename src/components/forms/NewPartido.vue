@@ -10,7 +10,7 @@
     <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Team Selection -->
         <div class="space-y-2">
-            <label class="text-sm font-semibold text-gray-700">club Local</label>
+            <label class="text-sm font-semibold text-gray-700">Club Local</label>
             <select class="w-full h-12 rounded-lg border bg-white focus:ring-[#0d7ff2] focus:border-[#0d7ff2]">
                 <option disabled selected value="">
                     Seleccionar club...
@@ -20,7 +20,7 @@
             </select>
         </div>
         <div class="space-y-2">
-            <label class="text-sm font-semibold text-gray-700">club Visitante</label>
+            <label class="text-sm font-semibold text-gray-700">Club Visitante</label>
             <select class="w-full h-12 rounded-lg border bg-white focus:ring-[#0d7ff2] focus:border-[#0d7ff2]">
                 <option disabled selected value="">
                     Seleccionar club...

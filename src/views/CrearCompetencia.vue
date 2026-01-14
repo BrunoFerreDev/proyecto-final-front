@@ -24,7 +24,12 @@ const cargarConfiguracion = ref({
     maxSustituciones: 0,
     formatoCompetencia: '',
 });
-
+const props = defineProps({
+    torneo: {
+        type: Object,
+        required: true
+    }
+})
 </script>
 
 <template>

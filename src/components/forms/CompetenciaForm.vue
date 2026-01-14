@@ -21,9 +21,15 @@
                         class="w-full rounded-lg border-gray-300  bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 h-12 px-4 text-base">
                         <option value="" disabled>Seleccione Categoría...</option>
                         <option value="PRIMERA_DIVISION">Primera División</option>
-                        <option value="RESERVA">Reserva</option>
-                        <option value="JUVENIL">Juvenil</option>
-                        <option value="AMATEUR">Amateur</option>
+                        <option value="SUB_21">Sub 21</option>
+                        <option value="SUB_16">Sub 16</option>
+                        <option value="SUB_13">Sub 13</option>
+                        <option value="SUB_11">Sub 11</option>
+                        <option value="SUB_9">Sub 9</option>
+                        <option value="SUB_7">Sub 7</option>
+                        <option value="SUB_5">Sub 5</option>
+                        <option value="SUB_3">Sub 3</option>
+                        <option value="SUB_1">Sub 1</option>
                     </select>
                 </div>
 
@@ -31,19 +37,19 @@
                     <label class="text-gray-800  text-sm font-semibold">Torneo Padre <span
                             class="text-red-500">*</span></label>
                     <div class="relative">
-                        <select v-model="competencia.torneoId" required
-                            class="w-full rounded-lg border-gray-300  bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 h-12 px-4 text-base appearance-none">
-                            <option value="" disabled>Seleccione un Torneo...</option>
-                            <option v-for="t in torneos" :key="t.idTorneo" :value="t.idTorneo">
-                                {{ t.nombre }} ({{ t.temporada }})
-                            </option>
+                        <input type="text" v-model="torneo.nombre" disabled
+                            class="w-full rounded-lg border-gray-300  bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 h-12 px-4 text-base">
+                    </div>
+                    <div class="relative">
+                        <label class="text-gray-800  text-sm font-semibold">Tipo de Definición</label>
+                        <select name="tipoDefinicion" id="" v-model="configuracion.tipoDefinicion"
+                            class="w-full rounded-lg border-gray-300  bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 h-12 px-4 text-base">
+                            <option value="">Seleccione...</option>
+                            <option value="TIEMPO_REGULAR">Tiempo Regular</option>
+                            <option value="PENALTI">Tiempo Regular + Penalti</option>
+                            <option value="TIEMPO_REGULAR_ALARGUE">Tiempo Regular + Alargue + Penalti</option>
+
                         </select>
-                        <div
-                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
-                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                            </svg>
-                        </div>
                     </div>
                 </div>
 
@@ -61,11 +67,26 @@
                             <span class="text-base text-gray-800">Copa (Eliminación directa)</span>
                         </label>
                     </div>
+                    <div class="flex items-center justify-end gap-4 py-6  ">
+                        <button type="button" @click="resetForm"
+                            class="px-6 py-3 rounded-lg text-gray-500 font-bold hover:bg-gray-100  transition-all">
+                            Cancelar
+                        </button>
+                        <button type="submit"
+                            class="bg-blue-600 px-8 py-3 rounded-lg text-white font-bold shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-all flex items-center gap-2">
+                            <span class="material-symbols-outlined text-lg">save</span>
+                            Guardar Competencia
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="bg-white  border border-gray-200  rounded-xl overflow-hidden shadow-sm">
+
+        </div>
+    </form>
+    <form action="POST" @submit.prevent="guardarConfiguraciones" class="mt-5">
+        <!-- Configuración de Juego -->
+        <div class="bg-white  border border-gray-200 overflow-hidden shadow-sm">
             <div class="bg-blue-50 px-6 py-4 border-b border-gray-200  flex items-center gap-2">
                 <span class="material-symbols-outlined text-blue-600">sports_soccer</span>
                 <h2 class="text-gray-800 text-lg font-bold">Configuración de Juego</h2>
@@ -118,16 +139,13 @@
                 </div>
             </div>
         </div>
-
-        <div class="bg-white  border border-gray-200  rounded-xl overflow-hidden shadow-sm">
+        <div class="bg-white  border border-gray-200 overflow-hidden shadow-sm">
             <div class="bg-blue-50 px-6 py-4 border-b border-gray-200  flex items-center gap-2">
                 <span class="material-symbols-outlined text-blue-600">scoreboard</span>
                 <h2 class="text-gray-800 text-lg font-bold">Sistema de Puntuación</h2>
             </div>
-
             <div class="p-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
                     <div class="p-4 bg-green-50  rounded-lg border border-green-100 ">
                         <label
                             class="text-green-800  text-xs font-bold uppercase tracking-wider mb-2 block">Victoria</label>
@@ -159,27 +177,47 @@
                     </div>
 
                 </div>
-            </div>
-        </div>
+                <div class="flex items-center justify-end gap-4 py-6  mt-2">
+                    <button type="button" @click="resetForm"
+                        class="px-6 py-3 rounded-lg text-gray-500 font-bold hover:bg-gray-100  transition-all">
+                        Cancelar
+                    </button>
+                    <button type="button" @click="guardarConfiguraciones" :disabled="!configuracion.idCompetencia"
+                        :class="[
+                            !configuracion.idCompetencia
+                                ? 'bg-gray-400 cursor-not-allowed opacity-50'
+                                : 'bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/20'
+                        ]" class="px-8 py-3 rounded-lg text-white font-bold transition-all flex items-center gap-2">
 
-        <div class="flex items-center justify-end gap-4 py-6 border-t border-gray-200  mt-4">
-            <button type="button" @click="resetForm"
-                class="px-6 py-3 rounded-lg text-gray-500 font-bold hover:bg-gray-100  transition-all">
-                Cancelar
-            </button>
-            <button type="submit"
-                class="bg-blue-600 px-8 py-3 rounded-lg text-white font-bold shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-all flex items-center gap-2">
-                <span class="material-symbols-outlined text-lg">save</span>
-                Guardar Competencia
-            </button>
+                        <span class="material-symbols-outlined text-lg">save</span>
+                        Guardar Configuración
+                    </button>
+                </div>
+            </div>
         </div>
     </form>
 </template>
 
 <script setup>
-import { reactive, onMounted, ref } from 'vue';
+import axios from 'axios';
+import { reactive, onMounted, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
+const torneo = ref({});
+onMounted(() => {
+    // Asignar datos del torneo
+    const query = router.currentRoute.value.query;
+    torneo.value = {
+        idTorneo: query.idTorneo,
+        nombre: query.nombre
+    };
 
-// Estado de la UI para campos que no van a la DB
+    // Asignar directamente a la competencia sin esperar al watch
+    if (query.idTorneo) {
+        competencia.idTorneo = query.idTorneo;
+    }
+});
+// Estado de la UI para campos que no van a la DB       
 const uiState = reactive({
     entretiempo: 15
 });
@@ -188,56 +226,59 @@ const uiState = reactive({
 const competencia = reactive({
     nombre: '',
     categoria: '', // Obligatorio (Enum)
-    torneoId: '',  // Relación
+    idTorneo: 0,   // Relación
 });
 
 // Entidad Configuraciones (Java) - Se guardará en cascada o vinculada
 const configuracion = reactive({
+    idCompetencia: null, // Recuerda agregar esto para que funcione la lógica de IDs
     formatoCompetencia: 'LIGA',
     minutosPorTiempo: 45,
     maxSustituciones: 5,
-    cantidadJugadoresEquipo: 11,
+    // CORRECCIÓN AQUÍ:
+    cantJugadoresEquipo: 11, // Antes tenías "cantidadJugadoresEquipo"
     puntosVictoria: 3,
     puntosEmpate: 1,
     puntosDerrota: 0,
     permiteEmpate: true,
-    tipoDefinicion: 'RESULTADO_DIRECTO' // Valor por defecto
+    tipoDefinicion: null
 });
-
-// Datos simulados para el select de Torneos
-const torneos = ref([]);
-
-onMounted(() => {
-    // Aquí cargarías desde tu API: await torneoApi.getAll()
-    torneos.value = [
-        { idTorneo: 1, nombre: 'Liga Nacional', temporada: 2024 },
-        { idTorneo: 2, nombre: 'Copa Regional', temporada: 2024 },
-    ];
-});
-
 const guardarCompetencia = async () => {
-    // Construcción del Payload para Spring Boot
-    // Asumiendo que envías un objeto compuesto o DTO
-    const payload = {
-        ...competencia,
-        torneo: { idTorneo: competencia.torneoId }, // Relación objeto
-        configuracion: { ...configuracion }         // Relación objeto (Cascade)
-    };
-
-    console.log("Enviando JSON:", JSON.stringify(payload, null, 2));
-
     try {
-        // await competenciaApi.create(payload);
-        alert("Competencia creada (Simulación)");
+        // 1. Guardamos la competencia
+        const response = await axios.post('http://localhost:8080/api/torneos/competencia', competencia);
+        console.log("Respuesta del Backend:", response.data); // <--- MIRA ESTO EN CONSOLA
+        const nuevaCompetencia = response.data;
+
+        // VERIFICACIÓN: Si aquí response.data.idCompetencia es undefined, el problema está en tu Java DTO.
+        if (!nuevaCompetencia.idCompetencia) {
+            console.error("¡ALERTA! El backend no devolvió el ID");
+            return;
+        }
+        // 2. ACTUALIZACIÓN MANUAL (Aquí es donde fallaba)
+        // Actualizamos el ID en el objeto competencia local
+        competencia.value = { ...nuevaCompetencia };
+        // ¡ESTA ES LA LÍNEA CLAVE QUE TE FALTA! 
+        // Pasamos el ID recién creado a la configuración
+        configuracion.idCompetencia = nuevaCompetencia.idCompetencia;
     } catch (error) {
-        console.error(error);
+        console.error("Error fatal:", error);
     }
 };
-
+const guardarConfiguraciones = async () => {
+    // Ahora competencia.idCompetencia ya tiene valor real
+    try {
+        const response = await axios.post(`http://localhost:8080/api/torneos/competencia/${competencia.idCompetencia}/cargar-configuracion`, configuracion);
+        console.log("Configuraciones guardadas:", response.data);
+        alert("Configuraciones guardadas");
+    } catch (error) {
+        console.error("Error guardando configuración:", error);
+    }
+};
 const resetForm = () => {
     competencia.nombre = '';
     competencia.categoria = '';
-    competencia.torneoId = '';
+    competencia.idTorneo = 0;
     // Reset configs a default...
 };
 </script>

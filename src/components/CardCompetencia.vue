@@ -1,4 +1,4 @@
-<script setup >
+<script setup>
 import { IconCheck } from '@tabler/icons-vue';
 import { IconCalendar } from '@tabler/icons-vue';
 import { IconUsersGroup } from '@tabler/icons-vue';
@@ -13,7 +13,7 @@ const props = defineProps({
             fechaFin: "2023-08-31",
             idTorneo: 1,
             configuracionDTO: {
-                cantJugadoresclub: 0,
+                cantidadJugadoresEquipo: 0,
                 minutosPorTiempo: 0,
                 maxSustituciones: 0,
                 formatoCompetencia: ''

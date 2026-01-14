@@ -49,6 +49,10 @@ const router = createRouter({
     {
       path: "/nueva-competencia",
       component: () => import("./views/CrearCompetencia.vue"),
+      props: (route) => ({
+        torneoPadre: route.params.nombre,
+        idTorneo: route.params.idTorneo
+      })
     },
     {
       path: "/nuevo-partido",
@@ -68,7 +72,7 @@ const router = createRouter({
       component: () => import("./views/FichaPersona.vue"),
       // Pasamos 'tipo' como una prop estática y activamos params como props
       props: (route) => ({
-        idPersona: route.params.idPersona,
+        idPersona: route.redirectedFrom.params.idPersona,
         tipo: "arbitro",
       }),
     },

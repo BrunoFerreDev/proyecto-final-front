@@ -1,42 +1,87 @@
 <script setup>
-import { IconChevronLeft } from "@tabler/icons-vue";
-import { IconEdit } from "@tabler/icons-vue";
-import { IconPlus } from "@tabler/icons-vue";
-import { IconDeviceFloppy } from "@tabler/icons-vue";
-import { IconLineDashed } from "@tabler/icons-vue";
-import { IconChevronRight } from "@tabler/icons-vue";
-import { IconSettings } from "@tabler/icons-vue";
+import {
+  IconChevronLeft,
+  IconEdit,
+  IconPlus,
+  IconChevronRight,
+  IconSettings,
+  IconTrophy,
+  IconNewSection,
+} from "@tabler/icons-vue";
 import { onMounted, ref } from "vue";
-import { IconTrophy } from "@tabler/icons-vue";
+import { useRouter } from "vue-router";
+import axios from "axios";
 import CardCompetencia from "../components/CardCompetencia.vue";
 import PartidoItem from "../components/PartidoItem.vue";
-import { useRouter } from "vue-router";
-import { IconNewSection } from "@tabler/icons-vue";
 import SearchTorneo from "../components/forms/SearchTorneo.vue";
 import TablePosiciones from "../components/tables/TablePosiciones.vue";
 import NewPartido from "../components/forms/NewPartido.vue";
+
 const router = useRouter();
 const tab = ref("fixture");
-const torneo = ref({
-  nombre: "Resultado",
-  fechaInicio: "FECHA",
-  fechaFin: "2023-08-31",
-  idTorneo: "NO CARGADO"
-});
+const torneo = ref({});
+const cargandoTorneo = ref(true);
 const competencias = ref([]);
-onMounted(() => {
-  torneo.value.id = 1;
-});
-const navigateTo = (path) => {
-  router.push(path);
+const fixture = ref([]);
+const id = ref(0);
+onMounted(() => { });
+const navigateTo = (path, query) => {
+  router.push({ path, query });
 };
-const partidoBack = ref({
-  idPartido: 1,
-  fecha: "2023-08-31",
-  fechaTorneo: 1,
-  clubLocal: "Local",
-  clubVisitante: "Visitante"
-});
+// Esta función recibe el texto que viene del hijo (Buscador)
+const manejarBusqueda = async (termino) => {
+  console.log("Buscando:", termino);
+  if (!termino) {
+    torneo.value = { encontrado: false }; // Limpiar si está vacío
+    return;
+  }
+  try {
+    cargandoTorneo.value = true;
+    // EJEMPLO 1: Si filtras desde el Backend (Recomendado)
+    const respuesta = await axios.get(
+      `http://localhost:8080/api/torneos/${termino}`
+    );
+    torneo.value = {
+      ...respuesta.data,
+      encontrado: true,
+    };
+    fetchCompetencias(respuesta.data.idTorneo);
+  } catch (error) {
+    console.error("Error buscando torneos:", error);
+    torneo.value = {
+      encontrado: false,
+    };
+  } finally {
+    cargandoTorneo.value = false;
+  }
+};
+const fetchCompetencias = async (idTorneo) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/torneos/${idTorneo}/competencias`
+    );
+    competencias.value = response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+const fetchPartidos = async (idCompetencia) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/partidos/competencia`,
+      {
+        params: {
+          competencia: idCompetencia,
+          page: 0,
+          size: 10,
+        },
+      }
+    );
+    partidos.value = response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 </script>
 
 <template>
@@ -45,7 +90,7 @@ const partidoBack = ref({
       <div class="layout-content-container flex flex-col w-full max-w-[1024px] gap-8">
         <!-- Search & Title Section -->
         <!-- Search Bar -->
-        <SearchTorneo />
+        <SearchTorneo @buscar-torneo="manejarBusqueda" />
         <!-- Selected Context: Tournament Card -->
         <section class="flex flex-col justify-between items-center md:flex-row">
           <div
@@ -96,6 +141,7 @@ const partidoBack = ref({
             </button>
           </div>
         </section>
+        <!-- Competencias -->
         <section class="flex flex-col gap-4 animate-in fade-in duration-500">
           <div class="flex items-center justify-between px-1">
             <h3 class="text-lg font-bold text-[#111218] flex items-center gap-2">
@@ -105,9 +151,17 @@ const partidoBack = ref({
             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Seleccionar Competencia</span>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <CardCompetencia />
-            <button @click.prevent="navigateTo('/nueva-competencia')"
-              class="flex items-center rounded-xl justify-center gap-2 px-5 l bg-white border border-stone-200 text-text-main text-sm font-bold hover:bg-sky-50 transition-colors shadow-sm">
+            <template v-if="competencias.length > 0">
+              <CardCompetencia v-for="competencia in competencias" :key="competencia.idCompetencia"
+                :competencia="competencia" />
+            </template>
+            <button :disabled="!torneo.nombre" @click.prevent="
+              navigateTo('/nueva-competencia', {
+                idTorneo: torneo.idTorneo,
+                nombre: torneo.nombre,
+              })
+              " :class="!torneo.nombre ? 'opacity-50 cursor-not-allowed' : ''"
+              class="flex items-center rounded-xl justify-center gap-2 px-5 l bg-white border border-stone-200 text-text-main text-sm font-bold hover:bg-sky-50 transition-colors shadow-sm min-h-24">
               <IconNewSection /> Nueva Competencia
             </button>
           </div>
@@ -125,7 +179,7 @@ const partidoBack = ref({
               Fixture
             </button>
 
-            <button @click="tab = 'clasificacion'" :class="[
+            <button :disabled="competencias.length == 0" @click="tab = 'clasificacion'" :class="[
               tab === 'clasificacion'
                 ? 'border-indigo-500 text-indigo-600'
                 : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
@@ -134,7 +188,7 @@ const partidoBack = ref({
               Clasificación
             </button>
 
-            <button @click="tab = 'programar'" :class="[
+            <button :disabled="competencias.length == 0" @click="tab = 'programar'" :class="[
               tab === 'programar'
                 ? 'border-indigo-500 text-indigo-600'
                 : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
@@ -167,9 +221,13 @@ const partidoBack = ref({
             </div>
             <!-- Match List -->
             <div class="space-y-4">
-              <!-- Match Item: Played -->
-              <PartidoItem :partido="partidoBack" />
-
+              <template v-if="fixture.length > 0">
+                <!-- Match Item: Played -->
+                <PartidoItem v-for="partidoBack in fixture" :key="partidoBack.idPartido" :partido="partidoBack" />
+              </template>
+              <template v-else>
+                <p>No hay partidos programados</p>
+              </template>
             </div>
           </div>
 

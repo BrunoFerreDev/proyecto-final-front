@@ -1,6 +1,17 @@
-<script setup lang="ts">
+<script setup>
 import { IconSearch } from '@tabler/icons-vue';
+import { ref } from 'vue';
 
+// 1. Definimos el evento que este componente puede emitir
+const emit = defineEmits(['buscar-torneo']);
+
+const textoBusqueda = ref('');
+
+// 2. Función que se ejecuta al escribir o enviar
+const procesarBusqueda = () => {
+    // Emitimos el evento 'buscar-torneo' y le pasamos el valor del input
+    emit('buscar-torneo', textoBusqueda.value);
+};
 </script>
 
 <template>
@@ -21,7 +32,8 @@ import { IconSearch } from '@tabler/icons-vue';
                 </div>
                 <input
                     class="block w-full rounded-xl border-none bg-white py-4 pl-12 pr-4 text-[#111218] shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] ring-1 ring-inset ring-gray-200 dark:ring-gray-700 placeholder:text-[#9ca3af] focus:ring-2 focus:ring-inset focus:ring-[#0d7ff2] sm:text-sm sm:leading-6 transition-all"
-                    id="search-tournament" placeholder="Buscar torneo por nombre o ID (ej. #8821)..." type="search" />
+                    id="search-tournament" placeholder="Buscar torneo por nombre o ID (ej. #8821)..." type="text"
+                    @keyup.enter="procesarBusqueda" v-model="textoBusqueda" />
             </div>
         </div>
     </section>

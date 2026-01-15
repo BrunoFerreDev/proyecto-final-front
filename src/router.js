@@ -23,8 +23,11 @@ const router = createRouter({
       component: () => import("./views/Sanciones.vue"),
     },
     {
-      path: "/partido",
+      path: "/partido/:idPartido",
       component: () => import("./views/Partido.vue"),
+      props: (route) => ({
+        idPartido: route.params.idPartido
+      })
     },
     {
       path: "/competencia",

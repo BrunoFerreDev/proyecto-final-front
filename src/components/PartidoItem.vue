@@ -1,8 +1,7 @@
 <template>
-    <div
+    <div @click="router.push(`/partido/${partido.idPartido}`)"
         class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8 hover:border-[#0d7ff2]/30 transition-colors cursor-pointer group">
         <div class="flex items-center gap-3 text-gray-500 dark:text-gray-400 text-xs font-medium min-w-[140px]">
-
             <div class="flex flex-col">
                 <span class="text-green-600 font-bold">{{ partido.estado }}</span>
                 <span>{{ partido.fechaHora ? partido.fechaHora : 'Fecha no disponible' }}</span>
@@ -12,7 +11,7 @@
         <div class="flex items-center justify-center gap-4 md:gap-8 w-full">
             <div class="flex items-center gap-3 justify-end text-right w-full max-w-[140px]">
                 <span class="font-bold text-gray-900 md:text-lg text-base uppercase">{{ partido.clubLocal.nombre
-                    }}</span>
+                }}</span>
 
             </div>
             <div class="flex items-center justify-center bg-gray-50 rounded-lg px-3 py-1.5 border border-gray-100">
@@ -25,13 +24,15 @@
                 }}</span>
             </div>
         </div>
-        <div class="hidden md:flex min-w-[100px] justify-end">
+        <div class="hidden md:flex min-w-[100px] justify-end" @click="router.push(`/partido/${partido.idPartido}`)">
             <IconChevronRight />
         </div>
     </div>
 </template>
 <script setup>
 import { IconChevronRight } from '@tabler/icons-vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const props = defineProps({
     partido: {
         idPartido: Number,

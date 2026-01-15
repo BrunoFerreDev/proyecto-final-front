@@ -18,46 +18,56 @@
 
                 <div class="border-b border-[#cedbe8] px-6">
                     <div class="flex gap-8 overflow-x-auto">
-                        <button @click="activeTab = 'JUGADOR'"
-                            :class="activeTab === 'JUGADOR' ? 'border-[#0d7ff2] text-[#0d141c]' : 'border-transparent text-[#49739c] hover:text-[#0d141c]'"
+                        <button @click="() => {
+                            activeTab = 'JUGADOR'
+                            entidad = {}
+                        }" :class="activeTab === 'JUGADOR' ? 'border-[#0d7ff2] text-[#0d141c]' : 'border-transparent text-[#49739c] hover:text-[#0d141c]'"
                             class="group flex flex-col items-center justify-center border-b-[3px] gap-2 pb-3 pt-4 px-2 focus:outline-none min-w-[80px] transition-all">
                             <span class="material-symbols-outlined">person</span>
                             <span class="text-sm font-bold tracking-wide">Jugador</span>
                         </button>
 
-                        <button @click="activeTab = 'CLUB'"
-                            :class="activeTab === 'CLUB' ? 'border-[#0d7ff2] text-[#0d141c]' : 'border-transparent text-[#49739c] hover:text-[#0d141c]'"
-                            class="group flex flex-col items-center justify-center border-b-[3px] gap-2 pb-3 pt-4 px-2 focus:outline-none min-w-[80px] transition-all">
-                            <span class="material-symbols-outlined">shield</span>
-                            <span class="text-sm font-bold tracking-wide">Club</span>
-                        </button>
-
-                        <button @click="activeTab = 'CUERPO_TECNICO'"
-                            :class="activeTab === 'CUERPO_TECNICO' ? 'border-[#0d7ff2] text-[#0d141c]' : 'border-transparent text-[#49739c] hover:text-[#0d141c]'"
+                        <button @click="() => {
+                            activeTab = 'CUERPO_TECNICO'
+                            entidad = {}
+                        }" :class="activeTab === 'CUERPO_TECNICO' ? 'border-[#0d7ff2] text-[#0d141c]' : 'border-transparent text-[#49739c] hover:text-[#0d141c]'"
                             class="group flex flex-col items-center justify-center border-b-[3px] gap-2 pb-3 pt-4 px-2 focus:outline-none min-w-[80px] transition-all">
                             <span class="material-symbols-outlined">group</span>
                             <span class="text-sm font-bold tracking-wide">Cuerpo Técnico</span>
                         </button>
 
-                        <button @click="activeTab = 'ARBITRO'"
-                            :class="activeTab === 'ARBITRO' ? 'border-[#0d7ff2] text-[#0d141c]' : 'border-transparent text-[#49739c] hover:text-[#0d141c]'"
+                        <button @click="() => {
+                            activeTab = 'ARBITRO'
+                            entidad = {}
+                        }" :class="activeTab === 'ARBITRO' ? 'border-[#0d7ff2] text-[#0d141c]' : 'border-transparent text-[#49739c] hover:text-[#0d141c]'"
                             class="group flex flex-col items-center justify-center border-b-[3px] gap-2 pb-3 pt-4 px-2 focus:outline-none min-w-[80px] transition-all">
                             <span class="material-symbols-outlined">sports</span>
                             <span class="text-sm font-bold tracking-wide">Árbitro</span>
                         </button>
+
+                        <button @click="() => {
+                            activeTab = 'CLUB'
+                            entidad = {}
+                        }" :class="activeTab === 'CLUB' ? 'border-[#0d7ff2] text-[#0d141c]' : 'border-transparent text-[#49739c] hover:text-[#0d141c]'"
+                            class="group flex flex-col items-center justify-center border-b-[3px] gap-2 pb-3 pt-4 px-2 focus:outline-none min-w-[80px] transition-all">
+                            <span class="material-symbols-outlined">shield</span>
+                            <span class="text-sm font-bold tracking-wide">Club</span>
+                        </button>
+
                     </div>
                 </div>
 
-                <form @submit.prevent="guardarSancion" class="p-6 md:p-8 flex flex-col gap-6">
-
+                <form class="p-6 md:p-8 flex flex-col gap-6" @submit.prevent="guardarSancion">
+                    <!-- @submit.prevent="guardarSancion" -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <label class="flex flex-col gap-2">
-                            <span class="text-[#0d141c] text-sm font-semibold">
-                                Buscar {{ activeTab === 'CLUB' ? 'Club' : 'Persona' }}
+                            <span class="text-[#0d141c] text-sm font-semibold capitalize">
+                                Buscar {{ activeTab.toLowerCase() }}
                             </span>
                             <div class="relative group">
-                                <input
+                                <input @keydown.enter.prevent="buscarEntidad"
                                     class="w-full bg-[#f8fafc] text-[#0d141c] border border-[#cedbe8] rounded-lg pl-4 pr-12 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all placeholder:text-[#49739c]"
+                                    v-model="dni"
                                     :placeholder="activeTab === 'CLUB' ? 'Nombre del Club...' : 'Nombre, apellido o DNI...'"
                                     type="text" />
                                 <div
@@ -72,7 +82,8 @@
                             <div class="relative">
                                 <input
                                     class="w-full bg-[#e7edf4]/50 text-[#49739c] border border-[#cedbe8] rounded-lg px-4 h-12 cursor-not-allowed"
-                                    disabled type="text" value="Pendiente de selección..." />
+                                    disabled type="text"
+                                    :value="entidad.dni ? entidad.dni : 'Pendiente de selección...'" />
                                 <div
                                     class="absolute right-0 top-0 h-full w-12 flex items-center justify-center text-[#49739c]">
                                     <span class="material-symbols-outlined">lock</span>
@@ -80,23 +91,61 @@
                             </div>
                         </label>
                     </div>
+                    <div v-if="entidad.nombre">
+                        <div class="flex items-center gap-2 mb-6 text-blue-600">
+                            <span class="material-symbols-outlined">badge</span>
+                            <h2 class="text-lg font-bold">Informacion de la Entidad</h2>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-semibold text-gray-700 ">Nombre</label>
+                                <input v-model="entidad.nombre" disabled=""
+                                    class="bg-gray-100 rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full pl-3 pr-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
+                                    placeholder="Ej. Lionel" type="text" />
+                            </div>
 
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-semibold text-gray-700 ">{{ activeTab === 'CLUB' ? 'Ciudad' :
+                                    'Apellido' }}</label>
+                                <input :value="entidad.apellido || entidad.ciudad" disabled=""
+                                    class="bg-gray-100 rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full pl-3 pr-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
+                                    placeholder="Ej. Messi" type="text" />
+                            </div>
+
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-semibold text-gray-700 ">{{ activeTab === 'CLUB' ? 'ESTADO' :
+                                    'DNI / Pasaporte' }}</label>
+                                <input :value="entidad.dni || entidad.estado" disabled=""
+                                    class="bg-gray-100 rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full pl-3 pr-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
+                                    placeholder="Documento de identidad" type="text" />
+                            </div>
+
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-semibold text-gray-700 ">Fecha de {{ activeTab === 'CLUB' ?
+                                    'Fundacion' : 'Nacimiento' }}</label>
+
+                                <input :value="entidad.fundacion || entidad.fechaNacimiento" disabled=""
+                                    class="bg-gray-100 rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full pl-3 pr-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
+                                    type="text" />
+                            </div>
+                        </div>
+                    </div>
                     <hr class="border-[#e7edf4] my-2" />
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <label class="flex flex-col gap-2">
                             <span class="text-[#0d141c] text-sm font-semibold">Fecha del Incidente</span>
                             <div class="relative">
-                                <input v-model="sancion.fechaHecho" required
+                                <input v-model="sancion.fechaHecho"
                                     class="w-full bg-[#f8fafc] text-[#0d141c] border border-[#cedbe8] rounded-lg px-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all text-sm"
                                     type="date" />
                             </div>
                         </label>
-
+                        <!--  -->
                         <label class="flex flex-col gap-2" v-if="activeTab !== 'CLUB' && activeTab !== 'ARBITRO'">
                             <span class="text-[#0d141c] text-sm font-semibold">Tipo de Infracción</span>
                             <div class="relative">
-                                <select v-model="sancion.tipoSancion" required 
+                                <select v-model="sancion.tipoSancion"
                                     class="w-full bg-[#f8fafc] text-[#0d141c] border border-[#cedbe8] rounded-lg px-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all appearance-none">
                                     <option disabled value="">Seleccionar motivo...</option>
                                     <option value="AMARILLA_ACUMULACION">Acumulación Amarillas</option>
@@ -117,11 +166,22 @@
                         <label class="flex flex-col gap-2">
                             <span class="text-[#0d141c] text-sm font-semibold">Cantidad (Fechas / Monto)</span>
                             <div class="relative">
-                                <input v-model.number="sancion.cantidad" required
+                                <input v-model.number="sancion.cantidad"
                                     class="w-full bg-[#f8fafc] text-[#0d141c] border border-[#cedbe8] rounded-lg px-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
                                     min="0" placeholder="0" type="number" step="0.5" />
                             </div>
                         </label>
+                        <div class="flex flex-col gap-2" v-if="activeTab === 'CLUB'">
+                            <label for="tipoSancionCLub" class="text-[#0d141c] text-sm font-semibold">Tipo de Sanción:
+                            </label>
+                            <select v-model="sancion.tipoSancion" name="sancionclub" id="tipoSancionCLub"
+                                class="w-full bg-white text-[#0d141c] border border-blue-200 rounded-lg px-4 h-12 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                                <option value="">Seleccione</option>
+                                <option value="llamado_atencion">Llamado de Atención</option>
+                                <option value="multa">Multa Económica</option>
+                                <option value="clausura">Clausura del estadio</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -132,7 +192,7 @@
                                     class="absolute left-0 top-0 h-full w-10 flex items-center justify-center text-[#49739c]">
                                     <span class="material-symbols-outlined">tag</span>
                                 </div>
-                                <input v-model="sancion.codigo" required
+                                <input v-model="sancion.codigo"
                                     class="w-full bg-[#f8fafc] text-[#0d141c] border border-[#cedbe8] rounded-lg pl-10 pr-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
                                     placeholder="Ej: PART-2024-001" type="text" />
                             </div>
@@ -161,7 +221,8 @@
                             <span class="material-symbols-outlined">domain</span>
                             Información Adicional Institucional
                         </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                             <label class="flex flex-col gap-2">
                                 <span class="text-[#0d141c] text-sm font-semibold">Motivo Detallado</span>
                                 <input v-model="clubData.motivo"
@@ -214,19 +275,22 @@
 </template>
 
 <script setup>
+import axios from 'axios';
 import { reactive, ref } from 'vue';
+
 
 // Control de Tabs
 const activeTab = ref('JUGADOR');
 
 // Datos base de la entidad Sancion.java
 const sancion = reactive({
+    idEntidad: '',
     tipoSancion: '',         // String
     cantidad: 0.0,           // Double
     fechaHecho: '',          // LocalDate
     descripcionGeneral: '',  // String
-    codigo: '',              // String (unique)
-    estado: 'ACTIVA'         // Enum EstadoSancion
+    //codigo: '',              // String (unique)
+    //estado: 'ACTIVA'         // Enum EstadoSancion
 });
 
 // Datos específicos para CLUB
@@ -235,12 +299,14 @@ const clubData = reactive({
     motivo: ''
 });
 
+const dni = ref('');
+const entidad = ref({})
 const guardarSancion = async () => {
     // Preparar Payload
     const payload = {
         ...sancion,
         // Discriminador para backend saber qué tipo de sanción es
-        tipoEntidad: activeTab.value
+        entidad: activeTab.value
     };
 
     // Si es Club, agregamos los campos extra
@@ -254,8 +320,16 @@ const guardarSancion = async () => {
     console.log("Enviando sanción al backend:", payload);
 
     try {
-        // await sancionApi.crear(payload);
-        alert("Sanción registrada correctamente");
+        const response = await axios.post(`${BASIC_URL}/sanciones`, payload);
+        if (response.status === 201 || response.status === 200) {
+            console.log("Sanción registrada:", response.data);
+            // await sancionApi.crear(payload);
+            alert("Sanción registrada correctamente");
+            resetForm();
+        } else {
+            console.error("Error al registrar", response.data);
+            alert("Error al registrar sanción");
+        }
     } catch (error) {
         console.error("Error al registrar", error);
     }
@@ -269,6 +343,41 @@ const resetForm = () => {
     sancion.codigo = '';
     clubData.resolucion = '';
     clubData.motivo = '';
+};
+const BASIC_URL = 'http://localhost:8080/api';
+const buscarEntidad = async () => {
+    if (activeTab.value === 'CLUB') {
+        const response = await axios.get(`${BASIC_URL}/club/informacion`, {
+            params: {
+                idClub: dni.value
+            }
+        });
+        const entidadEncontrada = response.data;
+        entidad.value = entidadEncontrada;
+        sancion.idEntidad = entidadEncontrada.idClub;
+    }
+    if (activeTab.value !== 'CLUB') {
+        const response = await axios.get(`${BASIC_URL}/personas/buscar-dni`, {
+            params: {
+                dni: dni.value
+            }
+        });
+        const entidadEncontrada = response.data;
+        entidad.value = entidadEncontrada;
+        sancion.idEntidad = entidadEncontrada.idPersona;
+        console.log(entidadEncontrada.tipoPersona);
+
+        if (entidadEncontrada.tipoPersona === 'JUGADOR') {
+            activeTab.value = 'JUGADOR';
+        }
+        if (entidadEncontrada.tipoPersona === 'CUERPO_TECNICO') {
+            activeTab.value = 'CUERPO_TECNICO';
+        }
+        if (entidadEncontrada.tipoPersona === 'ARBITRO') {
+            activeTab.value = 'ARBITRO';
+        }
+    }
+
 };
 </script>
 
@@ -289,5 +398,32 @@ const resetForm = () => {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Animación simple para que el cambio de tabs no sea brusco */
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+input {
+    border: 1px solid #0a2150 !important;
+    border-radius: 8px !important;
+}
+
+select {
+    border: 1px solid #0a2150 !important;
+    border-radius: 8px !important;
 }
 </style>

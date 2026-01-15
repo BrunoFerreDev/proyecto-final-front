@@ -35,10 +35,7 @@ const navigateTo = (path, query) => {
 const manejarBusqueda = async (termino) => {
   console.log("Buscando:", termino);
   if (!termino) {
-    torneo.value = {
-      encontrado: false,
-      nombre: "Ingrese un nombre",
-    }; // Limpiar si está vacío
+    torneo.value = {};
     competencias.value = [];
     partidos.value = [];
     return;
@@ -51,19 +48,18 @@ const manejarBusqueda = async (termino) => {
     );
     torneo.value = {
       ...respuesta.data,
-      encontrado: true,
     };
     fetchCompetencias(respuesta.data.idTorneo);
   } catch (error) {
     console.error("Error buscando torneos:", error);
-    torneo.value = {
-      nombre: "No encontrado",
-      encontrado: false,
-    };
+    torneo.value = {};
     competencias.value = [];
     partidos.value = [];
+    alert("No se encontro el torneo");
   } finally {
     cargandoTorneo.value = false;
+    console.log(torneo.value);
+
   }
 };
 const fetchCompetencias = async (idTorneo) => {
@@ -105,6 +101,27 @@ const fetchPartidos = async () => {
     }, 1000);
   }
 };
+
+const crearFixtureAutomatico = async () => {
+  console.log(competencias.value[0].idCompetencia);
+  if (confirm("¿Estas seguro de crear el fixture automatico?")) {
+    try {
+      const response = await axios.post('http://localhost:8080/api/competencias/crear-fixture', {
+        params: {
+          idCompetencia: competencias.value[0].idCompetencia
+        }
+      });
+      if (response.status == 200) {
+        alert("Fixture creado correctamente");
+        fetchPartidos();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    alert("No se creo el fixture automatico");
+  }
+}
 </script>
 
 <template>
@@ -178,12 +195,12 @@ const fetchPartidos = async () => {
               <CardCompetencia v-for="competencia in competencias" :key="competencia.idCompetencia"
                 :competencia="competencia" />
             </template>
-            <button :disabled="!torneo.nombre" @click.prevent="
+            <button :disabled="!torneo.nombre && torneo.nombre != ''" @click.prevent="
               navigateTo('/nueva-competencia', {
                 idTorneo: torneo.idTorneo,
                 nombre: torneo.nombre,
               })
-              " :class="!torneo.nombre ? 'opacity-50 cursor-not-allowed' : ''"
+              " :class="!torneo.nombre && torneo.nombre != '' ? 'opacity-50 cursor-not-allowed' : ''"
               class="flex items-center rounded-xl justify-center gap-2 px-5 l bg-white border border-stone-200 text-text-main text-sm font-bold hover:bg-sky-50 transition-colors shadow-sm min-h-24">
               <IconNewSection /> Nueva Competencia
             </button>
@@ -256,7 +273,12 @@ const fetchPartidos = async () => {
               <PartidoItem v-if="!cargandoPartidos" v-for="partido in partidos" :key="partido.idPartido"
                 :partido="partido" />
             </div>
-            <p v-if="partidos.length == 0">No hay partidos programados</p>
+            <div v-if="partidos.length == 0 && torneo.nombre" class="flex items-center justify-center flex-col gap-2">
+              <p>No hay partidos programados para esta competencia</p>
+              <strong>Desea generar un fixture automatico?</strong>
+              <button @click.prevent="crearFixtureAutomatico"
+                class="bg-blue-500 text-white px-4 py-2 rounded">Generar</button>
+            </div>
           </div>
 
           <!-- TAB CONTENT 2: CLASIFICACION -->

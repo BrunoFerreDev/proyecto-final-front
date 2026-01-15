@@ -69,7 +69,6 @@
                 </div>
             </div>
         </div>
-
         <div>
             <div class="flex items-center gap-2 mb-6 text-blue-600">
                 <span class="material-symbols-outlined">assignment_ind</span>
@@ -233,7 +232,7 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 
 // Estado inicial del formulario
 const persona = reactive({

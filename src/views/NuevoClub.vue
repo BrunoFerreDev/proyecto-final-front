@@ -1,5 +1,4 @@
 <script setup>
-import { IconDeviceFloppy } from '@tabler/icons-vue';
 import ClubForm from '../components/forms/ClubForm.vue';
 </script>
 
@@ -15,7 +14,6 @@ import ClubForm from '../components/forms/ClubForm.vue';
                 </p>
             </div>
             <ClubForm />
-        
         </div>
     </main>
 </template>

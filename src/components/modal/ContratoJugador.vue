@@ -123,7 +123,7 @@
                     class="px-6 py-2.5 rounded-lg text-[#111218] font-semibold text-sm hover:bg-gray-200 transition-colors">
                     Cancelar
                 </button>
-                <button @submit.prevent="guardarContrato"
+                <button @submit.prevent="verificarGuardado"
                     class="px-6 py-2.5 bg-[#516dfb] hover:bg-[#516dfb]/90 rounded-lg text-white font-bold text-sm shadow-md shadow-[#516dfb]/20 transition-all flex items-center gap-2">
                     <span class="material-symbols-outlined text-sm">person_add</span>
                     Vincular Jugador
@@ -171,6 +171,18 @@ const fetchJugador = async () => {
         const errorData = error.response.data;
         jugadorSeleccionado.value = errorData;
     }
+}
+const verificarGuardado = () => {
+    if (confirm("¿Estas seguro de guardar el contrato?")) {
+        guardarContrato();
+    } else {
+        alert("Operacion cancelada");
+        resetForm();
+    }
+}
+const resetForm = () => {
+    dniBuscar.value = '';
+    jugadorSeleccionado.value = {};
 }
 </script>
 <!-- 

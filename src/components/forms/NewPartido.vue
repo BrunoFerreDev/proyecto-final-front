@@ -7,7 +7,7 @@
             Programar Nuevo Encuentro
         </h3>
     </div>
-    <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <form class="grid grid-cols-1 md:grid-cols-2 gap-6" @submit.prevent="verificarGuardado">
         <!-- Team Selection -->
         <div class="space-y-2">
             <label class="text-sm font-semibold text-gray-700">Club Local</label>
@@ -72,3 +72,24 @@
         </div>
     </form>
 </template>
+<script setup>
+const verificarGuardado = () => {
+    if (confirm("¿Estas seguro de guardar el partido?")) {
+        guardarPartido();
+    } else {
+        alert("Operacion cancelada");
+        resetForm();
+    }
+}
+const guardarPartido = () => {
+    console.log("Partido a guardar:", partido);
+    // Todo: Llamada a API
+}
+const resetForm = () => {
+    partido.clubLocal = '';
+    partido.clubVisitante = '';
+    partido.fecha = '';
+    partido.hora = '';
+    partido.lugar = '';
+}
+</script>

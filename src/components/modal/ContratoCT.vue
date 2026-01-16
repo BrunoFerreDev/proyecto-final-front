@@ -28,7 +28,7 @@
                         <p class="text-[#516dfb] font-medium text-sm">Temporada 2024/2025</p>
                     </div>
                 </div>
-                <form class="space-y-5" @submit.prevent="guardarContrato">
+                <form class="space-y-5" @submit.prevent="verificarGuardado">
                     <!-- Person Search -->
                     <div class="flex flex-col gap-2">
                         <label class="text-gray-700 text-sm font-semibold">Buscar Persona</label>
@@ -141,6 +141,18 @@ const closeModalCT = () => {
 const guardarContrato = () => {
     console.log("contrato guardado");
 
+}
+const verificarGuardado = () => {
+    if (confirm("¿Estas seguro de guardar el contrato?")) {
+        guardarContrato();
+    } else {
+        alert("Operacion cancelada");
+        resetForm();
+    }
+}
+const resetForm = () => {
+    dniBuscar.value = '';
+    integranteSeleccionado.value = {};
 }
 const fetchCuerpoTecnico = async () => {
     try {

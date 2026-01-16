@@ -1,58 +1,5 @@
-<!-- <template>
-    <div class="max-w-lg mx-auto bg-white p-8 rounded-xl shadow-lg border border-gray-100">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-            <span>🏆 Nuevo Torneo</span>
-        </h2>
-
-        <form @submit.prevent="guardarTorneo" class="space-y-5">
-
-            <div>
-                <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre del Torneo</label>
-                <input v-model="torneo.nombre" type="text" id="nombre" required
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="Ej: Copa Apertura" />
-            </div>
-
-            <div>
-                <label for="temporada" class="block text-sm font-medium text-gray-700">Temporada (Año)</label>
-                <input v-model.number="torneo.temporada" type="number" id="temporada" min="1900" max="2100"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label for="fechaInicio" class="block text-sm font-medium text-gray-700">Fecha Inicio</label>
-                    <input v-model="torneo.fechaInicio" type="date" id="fechaInicio"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-
-                <div>
-                    <label for="fechaFinal" class="block text-sm font-medium text-gray-700">Fecha Final</label>
-                    <input v-model="torneo.fechaFinal" type="date" id="fechaFinal"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-            </div>
-
-            <div>
-                <label for="estado" class="block text-sm font-medium text-gray-700">Estado del Torneo</label>
-                <select v-model="torneo.estado" id="estado"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                    <option value="PROGRAMADO">Programado</option>
-                    <option value="EN_CURSO">En Curso</option>
-                    <option value="FINALIZADO">Finalizado</option>
-                    <option value="CANCELADO">Cancelado</option>
-                </select>
-            </div>
-
-            <button type="submit"
-                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
-                Crear Torneo
-            </button>
-        </form>
-    </div>
-</template> -->
 <template>
-    <form @submit.prevent="guardarTorneo" class="bg-white rounded-xl shadow-sm border border-[#f0f1f5]">
+    <form @submit.prevent="verificarGuardado" class="bg-white rounded-xl shadow-sm border border-[#f0f1f5]">
 
         <div class="p-6 border-b border-[#f0f1f5]">
             <div class="flex items-center gap-2 mb-4">
@@ -189,6 +136,14 @@ const guardarTorneo = async () => {
     }
 };
 
+const verificarGuardado = () => {
+    if (confirm("¿Estas seguro de guardar el torneo?")) {
+        guardarTorneo();
+    } else {
+        alert("Operacion cancelada");
+        resetForm();
+    }
+}
 const resetForm = () => {
     torneo.nombre = '';
     torneo.temporada = new Date().getFullYear();

@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="guardarClub" class="flex flex-col gap-8 p-8 bg-white rounded-xl shadow-sm">
+    <form @submit.prevent="verificarGuardado" class="flex flex-col gap-8 p-8 bg-white rounded-xl shadow-sm">
 
         <section class="flex flex-col gap-6">
             <h3 class="text-[#111218]  text-xl font-bold leading-tight border-b border-gray-50 pb-3">
@@ -159,6 +159,14 @@ const resetForm = () => {
     club.isActivo = true;
     club.estado = 'ACTIVO';
 };
+const verificarGuardado = () => {
+    if (confirm("¿Estas seguro de guardar el club?")) {
+        guardarClub();
+    } else {
+        alert("Operacion cancelada");
+        resetForm();
+    }
+}
 </script>
 <style scoped>
 input {

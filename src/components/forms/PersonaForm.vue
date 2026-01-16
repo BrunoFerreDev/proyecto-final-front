@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="guardarPersona"
+    <form @submit.prevent="verificarGuardado"
         class="p-6 md:p-10 flex flex-col gap-10 bg-white  rounded-xl shadow-sm border border-gray-200 ">
 
         <div class="flex flex-col sm:flex-row items-center gap-6">
@@ -307,6 +307,14 @@ const resetForm = () => {
     persona.tipoPersona = 'JUGADOR';
     // ... resto de campos
 };
+const verificarGuardado = () => {
+    if (confirm("¿Estas seguro de guardar la persona?")) {
+        guardarPersona();
+    } else {
+        alert("Operacion cancelada");
+        resetForm();
+    }
+}
 </script>
 
 <style scoped>

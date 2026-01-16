@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="guardarConfiguraciones" class="space-y-6">
+    <form @submit.prevent="verificarGuardado" class="space-y-6">
         <div class="bg-white  border border-gray-200  rounded-xl overflow-hidden shadow-sm">
             <div class="bg-blue-50 px-6 py-4 border-b border-gray-200 ">
                 <h2 class="text-gray-800 text-lg font-bold">Información Básica</h2>
@@ -249,7 +249,14 @@ const guardarConfiguraciones = async () => {
         console.error("Error guardando configuración:", error);
     }
 };
-
+const verificarGuardado = () => {
+    if (confirm("¿Estas seguro de guardar la competencia?")) {
+        guardarConfiguraciones();
+    } else {
+        alert("Operacion cancelada");
+        resetForm();
+    }
+}
 const resetForm = () => {
     competencia.nombre = '';
     competencia.categoria = '';

@@ -4,7 +4,7 @@
             <span>⚙️ Nueva Configuración de Reglas</span>
         </h2>
 
-        <form @submit.prevent="guardarConfiguracion" class="space-y-8">
+        <form @submit.prevent="verificarGuardado" class="space-y-8">
 
             <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
                 <h3 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">Datos Generales</h3>
@@ -112,5 +112,24 @@ const config = reactive({
 const guardarConfiguracion = () => {
     console.log("Configuración a guardar:", config);
     // Todo: Llamada a API
+};
+const verificarGuardado = () => {
+    if (confirm("¿Estas seguro de guardar la configuración?")) {
+        guardarConfiguracion();
+    } else {
+        alert("Operacion cancelada");
+        resetForm();
+    }
+}
+const resetForm = () => {
+    config.formatoCompetencia = '';
+    config.cantidadJugadoresEquipo = 11;
+    config.minutosPorTiempo = 45;
+    config.maxSustituciones = 5;
+    config.puntosVictoria = 3;
+    config.puntosEmpate = 1;
+    config.puntosDerrota = 0;
+    config.permiteEmpate = true;
+    config.tipoDefinicion = '';
 };
 </script>

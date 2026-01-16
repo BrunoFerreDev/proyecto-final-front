@@ -74,6 +74,7 @@ const fetchCompetencias = async (idTorneo) => {
     }
     );
     competencias.value = response.data;
+    console.log(competencias.value);
     fetchPartidos()
   } catch (error) {
     console.log(error);
@@ -105,20 +106,20 @@ const fetchPartidos = async () => {
 };
 
 const crearFixtureAutomatico = async () => {
-  console.log(competencias.value[0].idCompetencia);
   if (confirm("¿Estas seguro de crear el fixture automatico?")) {
     try {
-      const response = await axios.post('http://localhost:8080/api/competencias/crear-fixture', {
+      const response = await axios.post('http://localhost:8080/api/competencias/crear-fixture', null, {
         params: {
-          idCompetencia: competencias.value[0].idCompetencia
+          idTorneo: torneo.value.idTorneo
         }
       });
-      if (response.status == 200) {
+      if (response.status == 200 || response.status == 201) {
         alert("Fixture creado correctamente");
         fetchPartidos();
       }
     } catch (error) {
       console.log(error);
+      alert("Error al crear el fixture automatico");
     }
   } else {
     alert("No se creo el fixture automatico");
@@ -128,6 +129,7 @@ const crearFixtureAutomatico = async () => {
 const showModalInscribirClub = () => {
   modalInscribirClub.value = true;
 }
+
 </script>
 
 <template>
@@ -193,7 +195,7 @@ const showModalInscribirClub = () => {
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <template v-if="competencias.length > 0">
               <CardCompetencia v-for="competencia in competencias" :key="competencia.idCompetencia"
-                :competencia="competencia" />
+                :competencia="competencia" :seleccionado="competencia.categoria == 'PRIMERA_DIVISION'" />
             </template>
             <button :disabled="!torneo.nombre && torneo.nombre != ''" @click.prevent="
               navigateTo('/nueva-competencia', {

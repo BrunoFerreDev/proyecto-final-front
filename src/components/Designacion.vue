@@ -15,9 +15,9 @@
                 </div>
                 <select
                     class="w-full rounded-lg border-[#dbdde6] focus:border-[#516dfb] focus:ring-[#516dfb] h-10 text-sm">
-                    <option>Antonio Mateu Lahoz</option>
-                    <option>Jesús Gil Manzano</option>
-                    <option>José Luis Munuera Montero</option>
+                    <option v-for="arbitro in arbitrosPrimera" :key="arbitro.idPersona" :value="arbitro.idPersona">
+                        {{ arbitro.nombre }} {{ arbitro.apellido }} -{{ arbitro.rol }}
+                    </option>
                 </select>
             </div>
             <div class="p-4 rounded-lg border border-[#dbdde6] hover:border-[#516dfb]/50 transition-colors">
@@ -28,8 +28,9 @@
                 </div>
                 <select
                     class="w-full rounded-lg border-[#dbdde6] focus:border-[#516dfb] focus:ring-[#516dfb] h-10 text-sm">
-                    <option>Pau Cebrián Devis</option>
-                    <option>Roberto Díaz Pérez</option>
+                    <option v-for="arbitro in arbitrosSegunda" :key="arbitro.idPersona" :value="arbitro.idPersona">
+                        {{ arbitro.nombre }} {{ arbitro.apellido }} -{{ arbitro.rol }}
+                    </option>
                 </select>
             </div>
             <div class="p-4 rounded-lg border border-[#dbdde6] hover:border-[#516dfb]/50 transition-colors">
@@ -40,8 +41,9 @@
                 </div>
                 <select
                     class="w-full rounded-lg border-[#dbdde6] focus:border-[#516dfb] focus:ring-[#516dfb] h-10 text-sm">
-                    <option>Guadalupe Porras Ayuso</option>
-                    <option>Iker De Francisco Grijalba</option>
+                    <option v-for="arbitro in arbitrosAsistentes" :key="arbitro.idPersona" :value="arbitro.idPersona">
+                        {{ arbitro.nombre }} {{ arbitro.apellido }} -{{ arbitro.rol }}
+                    </option>
                 </select>
             </div>
             <div class="p-4 rounded-lg border border-[#dbdde6] hover:border-[#516dfb]/50 transition-colors">
@@ -52,8 +54,9 @@
                 </div>
                 <select
                     class="w-full rounded-lg border-[#dbdde6] focus:border-[#516dfb] focus:ring-[#516dfb] h-10 text-sm">
-                    <option>Juan Martínez Munuera</option>
-                    <option>Ricardo De Burgos Bengoetxea</option>
+                    <option v-for="arbitro in cuartoArbitros" :key="arbitro.idPersona" :value="arbitro.idPersona">
+                        {{ arbitro.nombre }} {{ arbitro.apellido }} -{{ arbitro.rol }}
+                    </option>
                 </select>
             </div>
         </div>
@@ -66,3 +69,43 @@ select {
     border: 1px solid #dbdde6;
 }
 </style>
+<script setup>
+import axios from 'axios';
+import { computed, onMounted, ref } from 'vue';
+
+// 1. Definición de la función de búsqueda
+const fetchArbitros = async (page, size) => {
+    try {
+        const response = await axios.get('http://localhost:8080/api/personas', {
+            params: {
+                page: page,
+                size: size,
+                tipo: 2
+            }
+        });
+        console.log(response.data.content);
+
+        // Retornamos el contenido o un array vacío por seguridad
+        return response.data.content || [];
+    } catch (error) {
+        console.error(`Error cargando página ${page}:`, error);
+        return []; // Retorna array vacío en caso de error para no romper la UI
+    }
+}
+
+// 2. Variables reactivas
+const arbitrosPrimera = ref([]);
+const arbitrosSegunda = ref([]);
+const arbitrosAsistentes = ref([]);
+const cuartoArbitros = ref([]);
+// 3. Ejecución al montar el componente
+onMounted(async () => {
+    // Opción A: Ejecución secuencial (una tras otra)
+    arbitrosPrimera.value = await fetchArbitros(0, 10);
+    arbitrosSegunda.value = await fetchArbitros(1, 10);
+    arbitrosAsistentes.value = await fetchArbitros(2, 10);
+    cuartoArbitros.value = await fetchArbitros(3, 10);
+
+    // NOTA: Ver la opción optimizada abajo si quieres que carguen más rápido
+});
+</script>

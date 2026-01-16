@@ -21,7 +21,6 @@ const fetchPartido = async () => {
         partido.value = response.data;
         competencia.value = partido.value.competenciaDTO;
         torneo.value = competencia.value.idTorneo;
-        console.table(partido.value);
         nombreLocal.value = partido.value.clubLocal.nombre;
         nombreVisitante.value = partido.value.clubVisitante.nombre;
         categoria.value = competencia.value.categoria;

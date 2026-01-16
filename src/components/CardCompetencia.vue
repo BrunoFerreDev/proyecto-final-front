@@ -1,6 +1,4 @@
 <script setup>
-import { IconCheck } from '@tabler/icons-vue';
-import { IconCalendar } from '@tabler/icons-vue';
 import { IconUsersGroup } from '@tabler/icons-vue';
 const props = defineProps({
     competencia: {
@@ -19,18 +17,12 @@ const props = defineProps({
                 formatoCompetencia: ''
             }
         })
-    }
+    },
 })
 </script>
 
 <template>
-    <div
-        class="relative cursor-pointer rounded-xl border-2 border-[#1f44f9] bg-blue-50/60  p-5 transition-all shadow-md ring-2 ring-[#1f44f9]/10">
-        <div class="absolute top-4 right-4">
-            <div class="flex h-6 w-6 items-center justify-center rounded-full bg-[#1f44f9] text-white shadow-sm">
-                <IconCheck />
-            </div>
-        </div>
+    <div class="relative rounded-xl border border-[#1f44f9] bg-blue-50/60  p-5 transition-all shadow-md">
         <div class="flex flex-col gap-2">
             <div class="flex items-center gap-2">
                 <span
@@ -45,5 +37,4 @@ const props = defineProps({
             </div>
         </div>
     </div>
-
 </template>

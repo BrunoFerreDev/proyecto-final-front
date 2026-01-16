@@ -100,7 +100,7 @@
                             <div class="flex flex-col gap-2">
                                 <label class="text-sm font-semibold text-gray-700 ">Nombre</label>
                                 <input v-model="entidad.nombre" disabled=""
-                                    class="bg-gray-100 rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full pl-3 pr-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
+                                    class="bg-gray-100 rounded-lg border-gray-300 w-full pl-3 pr-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
                                     placeholder="Ej. Lionel" type="text" />
                             </div>
 
@@ -108,7 +108,7 @@
                                 <label class="text-sm font-semibold text-gray-700 ">{{ activeTab === 'CLUB' ? 'Ciudad' :
                                     'Apellido' }}</label>
                                 <input :value="entidad.apellido || entidad.ciudad" disabled=""
-                                    class="bg-gray-100 rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full pl-3 pr-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
+                                    class="bg-gray-100 rounded-lg border-gray-300 w-full pl-3 pr-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
                                     placeholder="Ej. Messi" type="text" />
                             </div>
 
@@ -116,7 +116,7 @@
                                 <label class="text-sm font-semibold text-gray-700 ">{{ activeTab === 'CLUB' ? 'ESTADO' :
                                     'DNI / Pasaporte' }}</label>
                                 <input :value="entidad.dni || entidad.estado" disabled=""
-                                    class="bg-gray-100 rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full pl-3 pr-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
+                                    class="bg-gray-100 rounded-lg border-gray-300 w-full pl-3 pr-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
                                     placeholder="Documento de identidad" type="text" />
                             </div>
 
@@ -125,7 +125,7 @@
                                     'Fundacion' : 'Nacimiento' }}</label>
 
                                 <input :value="entidad.fundacion || entidad.fechaNacimiento" disabled=""
-                                    class="bg-gray-100 rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full pl-3 pr-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
+                                    class="bg-gray-100 rounded-lg border-gray-300 w-full pl-3 pr-4 h-12 focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
                                     type="text" />
                             </div>
                         </div>

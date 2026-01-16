@@ -37,13 +37,13 @@ onMounted(() => {
 <template>
     <main class="max-w-[1200px] mx-auto px-6 py-8">
         <div class="flex items-center gap-2 mb-6 text-sm">
-            <a class="text-gray-500 hover:text-[#516dfb]" href="#">Ligas</a>
+            <a disabled class="text-gray-500 hover:text-[#516dfb]" href="/torneo">Torneos</a>
             <span class="material-symbols-outlined text-xs text-gray-400">chevron_right</span>
-            <a class="text-gray-500 hover:text-[#516dfb]" href="#">
+            <a disabled class="text-gray-500 hover:text-[#516dfb]" href="#">
                 {{ competencia.categoria }}
             </a>
             <span class="material-symbols-outlined text-xs text-gray-400">chevron_right</span>
-            <a class="text-gray-500 hover:text-[#516dfb]" href="#">Temporada {{ torneo.temporada }}</a>
+            <a disabled class="text-gray-500 hover:text-[#516dfb]" href="#">Temporada {{ torneo.temporada }}</a>
             <span class="material-symbols-outlined text-xs text-gray-400">chevron_right</span>
             <span class="text-[#516dfb] font-semibold">Programación Partido #{{ partido.idPartido }}</span>
         </div>

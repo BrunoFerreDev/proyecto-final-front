@@ -18,6 +18,7 @@ import TablePosiciones from "../components/tables/TablePosiciones.vue";
 import NewPartido from "../components/forms/NewPartido.vue";
 import { IconLoader } from "@tabler/icons-vue";
 import { IconLoader2 } from "@tabler/icons-vue";
+import InscribirModal from "../components/modal/InscribirModal.vue";
 
 const router = useRouter();
 const tab = ref("fixture");
@@ -27,6 +28,7 @@ const competencias = ref([]);
 const partidos = ref([]);
 const fechaTorneo = ref(1)
 const cargandoPartidos = ref(true);
+const modalInscribirClub = ref(false);
 onMounted(() => { });
 const navigateTo = (path, query) => {
   router.push({ path, query });
@@ -122,19 +124,27 @@ const crearFixtureAutomatico = async () => {
     alert("No se creo el fixture automatico");
   }
 }
+
+const showModalInscribirClub = () => {
+  modalInscribirClub.value = true;
+}
 </script>
 
 <template>
   <div class="layout-container flex h-full grow flex-col">
+    <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      v-if="modalInscribirClub">
+      <InscribirModal :modalInscribirClub="modalInscribirClub" @closeModal="modalInscribirClub = false" />
+    </div>
     <div class="flex justify-center py-8 px-4 sm:px-6 lg:px-8">
       <div class="layout-content-container flex flex-col w-full max-w-[1024px] gap-8">
         <!-- Search & Title Section -->
         <!-- Search Bar -->
         <SearchTorneo @buscar-torneo="manejarBusqueda" />
         <!-- Selected Context: Tournament Card -->
-        <section class="flex flex-col justify-between items-center md:flex-row">
+        <section class="flex flex-col justify-between items-center ">
           <div
-            class="flex flex-col md:flex-row items-stretch gap-6 rounded-2xl bg-white p-1 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.1)] ring-1 ring-gray-100">
+            class="flex flex-col md:flex-row items-stretch gap-6 rounded-2xl bg-white p-1 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.1)] ring-1 ring-gray-100 w-full">
             <!-- Tournament Image -->
             <div class="w-full md:w-48 shrink-0 aspect-video md:aspect-auto rounded-xl bg-cover bg-center"
               data-alt="Abstract dynamic soccer pattern blue and white" style="
@@ -143,15 +153,13 @@ const crearFixtureAutomatico = async () => {
               <div class="w-full h-full bg-gradient-to-t from-black/50 to-transparent md:hidden rounded-xl"></div>
             </div>
             <!-- Tournament Info -->
-            <div class="flex flex-col gap-4 p-4 md:py-6 md:pr-6 w-130">
-              <div class="flex justify-between items-center">
-                <div>
-                  <div class="flex items-center gap-3 mb-1">
-                    <span
-                      class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{
-                        torneo.estado }}</span>
-                    <span class="text-xs text-[#5f668c] font-mono">#{{ torneo.idTorneo }}</span>
-                  </div>
+            <div class="flex items-start justify-between w-full px-4 min-h-34 gap-4 py-4">
+              <div class="grid grid-cols-2 justify-between">
+                <div class="flex flex-col">
+                  <span
+                    class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{
+                      torneo.estado
+                    }}</span>
                   <h2 class="text-2xl font-bold text-[#111218]">
                     {{ torneo.nombre }}
                   </h2>
@@ -159,26 +167,18 @@ const crearFixtureAutomatico = async () => {
                     Temporada - {{ torneo.temporada }}
                   </p>
                 </div>
-                <div class="flex flex-col md:flex-row gap-2 justify-between">
-                  <button
-                    class="inline-flex md:flex-none items-center justify-end gap-2 rounded-lg bg-[#0d7ff2]/10 hover:bg-[#0d7ff2]/20 px-4 py-2.5 text-sm font-semibold text-[#0d7ff2] transition-colors">
-                    <IconSettings />
-                    <span>Configurar</span>
-                  </button>
-                </div>
+              </div>
+              <div class="flex flex-col gap-4">
+                <button @click.prevent="showModalInscribirClub" v-if="torneo.nombre"
+                  class="inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 h-14 bg-white border border-stone-200 text-text-main text-sm font-bold hover:bg-sky-50 transition-colors shadow-sm">
+                  <IconEdit /> Inscribir Clubes
+                </button>
+                <button @click.prevent="navigateTo('/nuevo-torneo')" v-if="!torneo.nombre"
+                  class="inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 h-14 bg-white border border-stone-200 text-text-main text-sm font-bold hover:bg-sky-50 transition-colors shadow-sm">
+                  <IconPlus /> Nuevo Torneo
+                </button>
               </div>
             </div>
-          </div>
-          <div class="flex gap-1 md:flex-col justify-between items-center">
-            <button @click.prevent="navigateTo('/nuevo-torneo')"
-              class="inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 h-14 bg-white border border-stone-200 text-text-main text-sm font-bold hover:bg-sky-50 transition-colors shadow-sm">
-              <IconPlus />
-              Nuevo Torneo
-            </button>
-            <button
-              class="inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 h-14 bg-white border border-stone-200 text-text-main text-sm font-bold hover:bg-sky-50 transition-colors shadow-sm">
-              <IconEdit /> Editar Torneo
-            </button>
           </div>
         </section>
         <!-- Competencias -->

@@ -2,7 +2,7 @@
     <!-- Pagination -->
     <div class="flex items-center justify-between px-6 py-4 bg-white border-t border-slate-200">
 
-        <span class="text-sm text-slate-500">
+        <span class="text-sm text-slate-500 hidden md:block">
             Mostrando
             <span class="font-bold text-slate-900">{{ rangeStart }}-{{ rangeEnd }}</span>
             de

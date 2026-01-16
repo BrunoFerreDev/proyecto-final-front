@@ -1,9 +1,11 @@
 <script setup>
 import TableJugadores from "../components/tables/TableJugadores.vue";
 import { useRouter } from "vue-router";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 import StatsCard from "../components/StatsCard.vue";
 import axios from "axios";
+import ContratoJugador from "../components/modal/ContratoJugador.vue"
+import ContratoCT from "../components/modal/ContratoCT.vue"
 const categoria = ref("PRIMERA DIVISION");
 const selectedCategoaria = ref("asc");
 const router = useRouter();
@@ -17,6 +19,7 @@ const pagination = ref({
   totalPages: 0,
   totalElements: 0,
 });
+
 const cuerpoTecnico = ref({
   nombre: "No asignado",
   apellido: "No asignado",
@@ -50,16 +53,29 @@ const fetchJugadores = async () => {
     jugadores.value = data.content;
     pagination.value.totalPages = data.totalPages;
     pagination.value.totalElements = data.totalElements;
-    console.log(jugadores.value);
+  } catch (error) {
+    console.error(error);
+  }
+};
+const fetchCuerpoTecnico = async (categoria) => {
+  try {
+    const { data } = await axios.get(`${API_BASE_URL}/cuerpo-tecnico`, {
+      params: {
+        idClub: idClub,
+        categoria: categoria
+      }
+    });
+    cuerpoTecnico.value = data;
+    console.log(cuerpoTecnico.value);
 
   } catch (error) {
     console.error(error);
   }
 };
-
 onMounted(() => {
   fetchClub();
   fetchJugadores();
+  fetchCuerpoTecnico("PRIMERA_DIVISION");
 });
 // --- WATCHERS ---
 // CORRECCIÓN 3: Sintaxis correcta para vigilar propiedades dentro de un ref
@@ -70,9 +86,11 @@ watch(
   () => categoria.value,
   () => {
     if (categoria.value === "PRIMERA DIVISION") {
+      fetchCuerpoTecnico("PRIMERA_DIVISION");
       resetPagination();
       selectedCategoaria.value = "asc";
     } else {
+      fetchCuerpoTecnico("SUB_21");
       selectedCategoaria.value = "desc";
     }
     fetchJugadores();
@@ -89,10 +107,43 @@ const resetPagination = () => {
   pagination.value.page = 0;
   pagination.value.size = 10;
 };
+const modalJugador = ref(false);
+const modalCT = ref(false);
+const showModalJugador = () => {
+  modalJugador.value = true;
+}
+const showModalCT = () => {
+  modalCT.value = true;
+}
+// --- LÓGICA PARA BLOQUEAR EL SCROLL ---
+watch([modalCT, modalJugador], ([valCT, valJugador]) => {
+  // Si alguno de los dos modales está activo (true)
+  if (valCT || valJugador) {
+    document.body.classList.add('overflow-hidden');
+  } else {
+    // Si ambos están cerrados (false)
+    document.body.classList.remove('overflow-hidden');
+  }
+});
+
+// Limpieza de seguridad: Si sales de esta pantalla (cambias de ruta) 
+// mientras un modal está abierto, reactivamos el scroll.
+onUnmounted(() => {
+  document.body.classList.remove('overflow-hidden');
+});
 </script>
 
 <template>
-  <div class="flex flex-col max-w-[1200px] py-4 px-4 mx-auto w-full gap-6">
+
+  <div v-if="modalCT" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4 ">
+    <ContratoCT :showModalCT="modalCT" @closeModalCT="modalCT = false" :club="club" />
+  </div>
+  <div v-if="modalJugador" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4 ">
+    <ContratoJugador :showModalJugador="modalJugador" @closeModalJugador="modalJugador = false" :club="club" />
+  </div>
+  <!-- Plantilla -->
+  <div class="flex flex-col max-w-[1200px] py-4 px-4 mx-auto w-full gap-6"
+    :class="{ 'blur-sm pointer-events-none': modalCT || modalJugador }">
     <!-- PageHeading -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="flex gap-4 items-center">
@@ -110,16 +161,23 @@ const resetPagination = () => {
           </p>
         </div>
       </div>
-      <button
-        class="bg-[#0d7ff2] hover:bg-blue-600 text-white shadow-md shadow-blue-500/20 h-11 px-5 rounded-lg text-sm font-bold flex items-center gap-2 transition-all">
-        <span class="material-symbols-outlined text-lg">person_add</span>
-        Añadir Jugador
-      </button>
+      <div class="flex gap-2">
+        <button @click="showModalJugador"
+          class="bg-[#0d7ff2] hover:bg-blue-600 text-white shadow-md shadow-blue-500/20 h-11 px-5 rounded-lg text-sm font-bold flex items-center gap-2 transition-all">
+          <span class="material-symbols-outlined text-lg">person_add</span>
+          Vincular Jugador
+        </button>
+        <button @click="showModalCT"
+          class="bg-[#0d7ff2] hover:bg-blue-600 text-white shadow-md shadow-blue-500/20 h-11 px-5 rounded-lg text-sm font-bold flex items-center gap-2 transition-all">
+          <span class="material-symbols-outlined text-lg">person_add</span>
+          Vincular Cuerpo Técnico
+        </button>
+      </div>
     </div>
     <!-- Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <StatsCard :valor="pagination.totalElements" titulo="Total Jugadores" fontSize="text-2xl" />
-      <StatsCard titulo="D.T Primera División" :valor="cuerpoTecnico.nombre + ' ' + cuerpoTecnico.apellido"
+      <StatsCard v-for="ct in cuerpoTecnico" :key="ct.id" :titulo="ct.rol" :valor="ct.nombre + ' ' + ct.apellido"
         fontSize="text-lg" />
     </div>
     <!-- Filters & Actions -->
@@ -154,20 +212,6 @@ const resetPagination = () => {
             class="absolute right-3 top-3.5 text-slate-400 pointer-events-none material-symbols-outlined">expand_more</span>
         </div>
       </div>
-      <!-- <div class="flex gap-2 w-full lg:w-auto justify-end">
-        <button
-          class="flex items-center justify-center size-11 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors"
-          title="Exportar CSV"
-        >
-          <span class="material-symbols-outlined">download</span>
-        </button>
-        <button
-          class="flex items-center justify-center size-11 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors"
-          title="Vista de lista"
-        >
-          <span class="material-symbols-outlined">view_list</span>
-        </button>
-      </div> -->
     </div>
     <!-- Players Table -->
     <TableJugadores :jugadores="jugadores" :page="pagination.page" :total-pages="pagination.totalPages"

@@ -1,10 +1,7 @@
 <script setup>
 import {
-  IconChevronLeft,
   IconEdit,
   IconPlus,
-  IconChevronRight,
-  IconSettings,
   IconTrophy,
   IconNewSection,
 } from "@tabler/icons-vue";
@@ -17,8 +14,7 @@ import SearchTorneo from "../components/forms/SearchTorneo.vue";
 import TablePosiciones from "../components/tables/TablePosiciones.vue";
 import NewPartido from "../components/forms/NewPartido.vue";
 import { IconLoader } from "@tabler/icons-vue";
-import { IconLoader2 } from "@tabler/icons-vue";
-import InscribirModal from "../components/modal/InscribirModal.vue";
+import ModalInscribirClub from "../components/modal/ModalInscribirClub.vue";
 
 const router = useRouter();
 const tab = ref("fixture");

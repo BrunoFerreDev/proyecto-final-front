@@ -16,7 +16,22 @@ const router = createRouter({
     },
     {
       path: "/arbitros",
-      component: () => import("./views/Arbitros.vue"),
+      component: () => import("./views/ArbitrosLayout.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("./views/ArbitrosLista.vue"),
+
+        },
+        {
+          path: "costos",
+          component: () => import("./components/CostosEncuentro.vue"),
+        },
+        {
+          path:"aranceles",
+          component: () => import("./components/Aranceles.vue")
+        }
+      ],
     },
     {
       path: "/sanciones",
@@ -26,8 +41,8 @@ const router = createRouter({
       path: "/partido/:idPartido",
       component: () => import("./views/Partido.vue"),
       props: (route) => ({
-        idPartido: route.params.idPartido
-      })
+        idPartido: route.params.idPartido,
+      }),
     },
     {
       path: "/competencia",
@@ -54,8 +69,8 @@ const router = createRouter({
       component: () => import("./views/CrearCompetencia.vue"),
       props: (route) => ({
         torneoPadre: route.params.nombre,
-        idTorneo: route.params.idTorneo
-      })
+        idTorneo: route.params.idTorneo,
+      }),
     },
     {
       path: "/nuevo-partido",
@@ -75,7 +90,7 @@ const router = createRouter({
       component: () => import("./views/FichaPersona.vue"),
       // Pasamos 'tipo' como una prop estática y activamos params como props
       props: (route) => ({
-        idPersona: route.redirectedFrom.params.idPersona,
+        idPersona: route.params.idPersona,
         tipo: "arbitro",
       }),
     },

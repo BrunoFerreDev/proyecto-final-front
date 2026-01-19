@@ -4,8 +4,9 @@ import { useRouter } from "vue-router";
 import { onMounted, onUnmounted, ref, watch } from "vue";
 import StatsCard from "../components/StatsCard.vue";
 import axios from "axios";
-import ContratoJugador from "../components/modal/ContratoJugador.vue"
-import ContratoCT from "../components/modal/ContratoCT.vue"
+import ModalContratoCT from "../components/modal/ModalContratoCT.vue";
+import ModalContratoJugador from "../components/modal/ModalContratoJugador.vue";
+
 const categoria = ref("PRIMERA DIVISION");
 const selectedCategoaria = ref("asc");
 const router = useRouter();
@@ -136,10 +137,10 @@ onUnmounted(() => {
 <template>
 
   <div v-if="modalCT" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4 ">
-    <ContratoCT :showModalCT="modalCT" @closeModalCT="modalCT = false" :club="club" />
+    <ModalContratoCT :showModalCT="modalCT" @closeModalCT="modalCT = false" :club="club" />
   </div>
   <div v-if="modalJugador" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4 ">
-    <ContratoJugador :showModalJugador="modalJugador" @closeModalJugador="modalJugador = false" :club="club" />
+    <ModalContratoJugador :showModalJugador="modalJugador" @closeModalJugador="modalJugador = false" :club="club" />
   </div>
   <!-- Plantilla -->
   <div class="flex flex-col max-w-[1200px] py-4 px-4 mx-auto w-full gap-6"
@@ -177,7 +178,7 @@ onUnmounted(() => {
     <!-- Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <StatsCard :valor="pagination.totalElements" titulo="Total Jugadores" fontSize="text-2xl" />
-      <StatsCard v-for="ct in cuerpoTecnico" :key="ct.id" :titulo="ct.rol" :valor="ct.nombre + ' ' + ct.apellido"
+      <StatsCard v-for="ct in cuerpoTecnico" :key="ct.id" titulo="Miembro Cuerpo Técnico" :valor="ct.nombre + ' ' + ct.apellido"
         fontSize="text-lg" />
     </div>
     <!-- Filters & Actions -->

@@ -2,9 +2,11 @@
     <main class="flex-1 flex flex-col items-center">
         <div class="w-full max-w-[1200px] px-6 py-6 space-y-6">
             <div class="flex flex-wrap items-center gap-2 text-sm">
-                <a class="text-[#5f668c] hover:text-[#1f44f9]" href="#">Inicio</a>
+                <RouterLink to="/"><a class="text-[#5f668c] hover:text-[#1f44f9]" href="#">Inicio</a></RouterLink>
                 <span class="text-[#5f668c] material-symbols-outlined text-sm">chevron_right</span>
-                <a class="text-[#5f668c] hover:text-[#1f44f9] capitalize" href="#">{{ labelTipo }}s</a>
+                <RouterLink :to="labelTipo === 'Cuerpo Técnico' ? '/cuerpo-tecnico' : labelTipo === 'Árbitro' ? '/arbitros' : '/jugadores'"> <a
+                        class="text-[#5f668c] hover:text-[#1f44f9] capitalize" href="#">{{ labelTipo
+                        }}s</a></RouterLink>
                 <span class="text-[#5f668c] material-symbols-outlined text-sm">chevron_right</span>
                 <span class="text-[#111218] font-semibold">Perfil de {{ labelTipo }}</span>
             </div>
@@ -101,7 +103,7 @@
                             <span class="text-[10px] font-bold uppercase text-[#5f668c] tracking-widest">DNI /
                                 Pasaporte</span>
                             <p class="font-medium text-[#111218]">{{ new Intl.NumberFormat("es-AR").format(persona.dni)
-                                }}</p>
+                            }}</p>
                         </div>
                     </div>
                 </div>
@@ -113,7 +115,10 @@
 <script setup>
 import axios from 'axios';
 import { computed, onMounted, ref } from 'vue';
-
+import { useRouter } from 'vue-router';
+const router = useRouter()
+const idPersona = router.currentRoute.value.params.idPersona
+const tipo = router.currentRoute.value.params.tipo
 // Definimos las props que vienen desde el Router
 const props = defineProps({
     idPersona: {

@@ -50,9 +50,9 @@ onMounted(() => {
             :categoria="categoria" />
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div class="lg:col-span-8 space-y-8">
-                <DetalleEncuentro />
-                <Designacion />
-                <CostosEncuentro />
+                <DetalleEncuentro :idPartido="partido.idPartido" />
+                <Designacion :idPartido="partido.idPartido" />
+                <!-- <CostosEncuentro /> -->
             </div>
             <PreviewDesignacion />
         </div>

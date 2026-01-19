@@ -4,6 +4,7 @@ import TableArbitros from "../components/tables/TableArbitros.vue";
 import { useRouter } from "vue-router";
 import { onMounted, ref, watch } from "vue";
 import axios from "axios";
+import { IconChevronRight } from "@tabler/icons-vue";
 
 const API_URL = `http://localhost:8080/api`;
 const arbitros = ref([]);
@@ -70,6 +71,15 @@ const handlePageChange = (newPage) => {
         <a class="text-[#49739c] font-medium hover:underline" href="#">Gestión de Liga</a>
         <span class="text-[#49739c] font-medium">/</span>
         <span class="text-[#0d141c] font-medium">Árbitros</span>
+        <span class="text-[#49739c] font-medium">
+          <IconChevronRight size="14" />
+        </span>
+        <select name="nav" id="nav">
+          <RouterLink to="aranceles" v-slot="{ isActive }">
+            <option :class="[isActive && 'bg-[#0d7ff2] text-slate-50']">Aranceles</option>
+          </RouterLink>
+        </select>
+
       </nav>
       <!-- Page Heading & [#0d7ff2] Action -->
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -81,6 +91,9 @@ const handlePageChange = (newPage) => {
             Administra el panel de árbitros, sus licencias, información de
             contacto y disponibilidad para la temporada actual.
           </p>
+        </div>
+        <div>
+          
         </div>
         <button @click.prevent="navigateTo('/nueva-persona')"
           class="flex shrink-0 items-center justify-center gap-2 rounded-lg h-10 px-5 bg-[#0d7ff2] hover:bg-blue-600 text-slate-50 text-sm font-bold leading-normal transition-colors shadow-sm shadow-blue-500/20">

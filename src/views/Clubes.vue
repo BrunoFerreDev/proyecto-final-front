@@ -6,7 +6,6 @@ import axios from "axios";
 import TableClubes from "../components/tables/TableClubes.vue";
 import FilterClubes from "../components/FilterClubes.vue";
 import { IconPlus } from "@tabler/icons-vue";
-import { IconChevronRight } from "@tabler/icons-vue";
 const router = useRouter();
 const API_BASE_URL = "http://localhost:8080/api";
 

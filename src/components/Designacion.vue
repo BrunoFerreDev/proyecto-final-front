@@ -86,7 +86,6 @@ const props = defineProps({
     required: true
 })
 const dataAenviar = ref({
-    idPartido: props.idPartido,
     arbitros: []
 })
 const arbitros = ref([]);
@@ -108,11 +107,13 @@ const fetchArbitros = async (page, size) => {
     }
 }
 const guardarDesignacion = async () => {
-    console.log(dataAenviar.value);
 
     try {
         // 1. Hacemos la petición
-        const response = await axios.post("http://localhost:8080/api/designaciones/cargar", dataAenviar.value);
+        const response = await axios.post("http://localhost:8080/api/designaciones/cargar", {
+            idPartido: props.idPartido,
+            arbitros: dataAenviar.value.arbitros
+        });
 
         // 2. Si llega aquí, es un código 2xx (Éxito)
         if (response.status === 200 || response.status === 201) {
@@ -159,8 +160,6 @@ const pushArbitro = (idArbitro, rol) => {
         // CASO A: El rol ya existe en el array.
         // "Eliminamos el que estaba" simplemente sobrescribiendo su idArbitro con el nuevo.
         arbitros.value[index].idArbitro = idArbitro;
-        console.log(`Designación actualizada para el rol ${rol}`);
-        console.log(arbitros.value);
     } else {
         // CASO B: El rol no existe en el array.
         // Verificamos que no superemos el límite de 4 antes de agregar.
@@ -169,13 +168,11 @@ const pushArbitro = (idArbitro, rol) => {
                 idArbitro: idArbitro,
                 rol: rol,
             });
-            console.log("Nuevo árbitro agregado:", arbitros.value);
         } else {
             alert("No puedes asignar más de 4 árbitros");
         }
     }
-console.log(dataAenviar.value);
-    
+
 }
 // 2. Variables reactivas
 const arbitrosPrimera = ref([]);
@@ -184,8 +181,6 @@ const arbitrosAsistentes = ref([]);
 const cuartoArbitros = ref([]);
 // 3. Ejecución al montar el componente
 onMounted(async () => {
-    console.log(props.idPartido);
-    
     // Opción A: Ejecución secuencial (una tras otra)
     arbitrosPrimera.value = await fetchArbitros(0, 10);
     arbitrosSegunda.value = await fetchArbitros(1, 10);

@@ -4,19 +4,6 @@ const props = defineProps({
     competencia: {
         type: Object,
         required: true,
-        default: () => ({
-            id: 1,
-            nombre: "Competencia 1",
-            fechaInicio: "2023-08-01",
-            fechaFin: "2023-08-31",
-            idTorneo: 1,
-            configuracionDTO: {
-                cantidadJugadoresEquipo: 0,
-                minutosPorTiempo: 0,
-                maxSustituciones: 0,
-                formatoCompetencia: ''
-            }
-        })
     },
 })
 </script>
@@ -32,7 +19,7 @@ const props = defineProps({
                 competencia.categoria.replace("_", " ") }}</h4>
             <div class="flex items-center gap-3 text-sm text-gray-600  mt-1">
                 <span class="flex items-center gap-1 ">
-                    <IconUsersGroup /> Formato de Competencia: {{ competencia.configuracionDTO.formatoCompetencia }}
+                    <IconUsersGroup /> Formato de Competencia:
                 </span>
             </div>
         </div>

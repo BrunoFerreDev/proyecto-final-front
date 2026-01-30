@@ -19,11 +19,11 @@ const fetchPartido = async () => {
     try {
         const response = await axios.get(`http://localhost:8080/api/partidos/${idPartido}`);
         partido.value = response.data;
-        competencia.value = partido.value.competenciaDTO;
-        torneo.value = competencia.value.idTorneo;
         nombreLocal.value = partido.value.clubLocal.nombre;
         nombreVisitante.value = partido.value.clubVisitante.nombre;
-        categoria.value = competencia.value.categoria;
+        categoria.value = partido.value.competenciaDTO.categoria;
+        console.log(partido.value);
+        
     } catch (error) {
         console.error(error);
     }
@@ -50,7 +50,7 @@ onMounted(() => {
             :categoria="categoria" />
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div class="lg:col-span-8 space-y-8">
-                <DetalleEncuentro :idPartido="partido.idPartido" />
+                <DetalleEncuentro :partido="partido" />
                 <Designacion :idPartido="partido.idPartido" />
                 <!-- <CostosEncuentro /> -->
             </div>

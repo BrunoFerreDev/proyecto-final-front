@@ -4,13 +4,14 @@
         <div class="flex items-center gap-3 text-gray-500 dark:text-gray-400 text-xs font-medium min-w-[140px]">
             <div class="flex flex-col">
                 <span class="text-green-600 font-bold">{{ partido.estado }}</span>
-                <span>{{ partido.fechaHora ? partido.fechaHora : 'Fecha no disponible' }}</span>
+                <span>{{ new Date(partido.fecha).toLocaleDateString() ? new Date(partido.fecha).toLocaleDateString() : 'Fecha no disponible' }}</span>
+                <span>{{ new Date(partido.hora).toLocaleTimeString() ? new Date(partido.hora).toLocaleTimeString() : 'Hora no disponible' }}</span>
                 <span class="truncate max-w-[100px]">Estadio No asignado</span>
             </div>
         </div>
         <div class="flex items-center justify-center gap-4 md:gap-8 w-full">
-            <div class="flex items-center gap-3 justify-end text-right w-full max-w-[140px]">
-                <span class="font-bold text-gray-900 md:text-lg text-base uppercase">{{ partido.clubLocal.nombre
+            <div class="flex items-center gap-3 justify-end text-right w-full max-w-[180px]">
+                <span class="font-bold text-gray-900 md:text-md text-base uppercase">{{ partido.clubLocal.nombre
                 }}</span>
 
             </div>
@@ -19,8 +20,8 @@
                     class="text-md font-black text-gray-900 tracking-widest">VS</span>
                 <span v-else class="text-md font-black text-gray-900 tracking-widest">3 - 1</span>
             </div>
-            <div class="flex items-center gap-3 justify-start text-left w-full max-w-[140px]">
-                <span class="font-bold text-gray-900 md:text-lg text-base uppercase">{{ partido.clubVisitante.nombre
+            <div class="flex items-center gap-3 justify-start text-left w-full max-w-[180px]">
+                <span class="font-bold text-gray-900 md:text-md text-base uppercase">{{ partido.clubVisitante.nombre
                 }}</span>
             </div>
         </div>
@@ -31,6 +32,7 @@
 </template>
 <script setup>
 import { IconChevronRight } from '@tabler/icons-vue';
+import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter();
 const props = defineProps({
@@ -54,9 +56,12 @@ const props = defineProps({
             isActivo: Boolean,
             estado: String,
         },
-        fechaHora: String,
+        fecha: String,
         fechaTorneo: Number,
+        hora: String,
     }
 })
-
+onMounted(() => {
+    console.log(props.partido)
+})
 </script>

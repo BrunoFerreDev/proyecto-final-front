@@ -47,7 +47,7 @@ const manejarBusqueda = async (termino) => {
     torneo.value = {
       ...respuesta.data,
     };
-    fetchCompetencias(respuesta.data.idTorneo);
+    fetchCompetencias(torneo.value.idTorneo);
   } catch (error) {
     console.error("Error buscando torneos:", error);
     torneo.value = {};
@@ -70,7 +70,6 @@ const fetchCompetencias = async (idTorneo) => {
     }
     );
     competencias.value = response.data;
-    console.log(competencias.value);
     fetchPartidos()
   } catch (error) {
     console.log(error);
@@ -90,7 +89,6 @@ const fetchPartidos = async () => {
       },
     }
     );
-    console.log(response.data);
     partidos.value = response.data.content;
   } catch (error) {
     console.log(error);
@@ -132,7 +130,7 @@ const showModalInscribirClub = () => {
   <div class="layout-container flex h-full grow flex-col">
     <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
       v-if="modalInscribirClub">
-      <InscribirModal :modalInscribirClub="modalInscribirClub" @closeModal="modalInscribirClub = false" />
+      <ModalInscribirClub :modalInscribirClub="modalInscribirClub" @closeModal="modalInscribirClub = false" />
     </div>
     <div class="flex justify-center py-8 px-4 sm:px-6 lg:px-8">
       <div class="layout-content-container flex flex-col w-full max-w-[1024px] gap-8">

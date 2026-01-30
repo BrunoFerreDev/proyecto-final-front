@@ -26,9 +26,10 @@
                 <div class="relative">
                     <span
                         class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">schedule</span>
-                    <input v-model="partido.hora"
+                    <input 
+                        :value="formatHora(partido.hora)"
                         class="w-full pl-10 rounded-lg border-[#dbdde6] focus:border-[#516dfb] focus:ring-[#516dfb] h-12"
-                        type="time" value="21:00" />
+                        type="time" />
                 </div>
             </label>
             <label class="flex flex-col gap-2 md:col-span-2">
@@ -56,20 +57,16 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 const props = defineProps({
-    idPartido: Number,
-    required: true
+   partido: Object,
+   required: true
 })
-const partido = ref({
-    fecha: '2024-11-20',
-    hora: '21:00',
-    sede: '1',
-});
-const actualizarPartido = () => {
-    console.log(partido.value);
-}
 
+const formatHora = (hora) => {
+    const horaCompleta = new Date(hora).toTimeString().slice(0, 5)
+    return horaCompleta
+}
 </script>
 <style scoped>
 input,

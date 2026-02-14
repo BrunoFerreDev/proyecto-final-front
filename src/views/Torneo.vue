@@ -41,12 +41,17 @@ const manejarBusqueda = async (termino) => {
   try {
     cargandoTorneo.value = true;
     // EJEMPLO 1: Si filtras desde el Backend (Recomendado)
-    const respuesta = await axios.get(
-      `http://localhost:8080/api/torneos/${termino}`
-    );
+    const respuesta = await axios.get(`http://localhost:8080/api/torneos/${termino}`,{
+      headers:{
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    });
     torneo.value = {
       ...respuesta.data,
     };
+
     fetchCompetencias(torneo.value.idTorneo);
   } catch (error) {
     console.error("Error buscando torneos:", error);

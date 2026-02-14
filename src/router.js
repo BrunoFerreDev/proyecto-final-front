@@ -4,6 +4,15 @@ const router = createRouter({
   routes: [
     {
       path: "/",
+      component: () => import("./views/Login.vue"),
+      meta:{
+        hideHeader: true,
+        hideFooter: true
+      }
+    },
+    {
+      path: "/inicio",
+      name: "Inicio",
       component: () => import("./views/Home.vue"),
     },
     {
@@ -21,16 +30,15 @@ const router = createRouter({
         {
           path: "",
           component: () => import("./views/ArbitrosLista.vue"),
-
         },
         {
           path: "costos",
           component: () => import("./components/CostosEncuentro.vue"),
         },
         {
-          path:"aranceles",
-          component: () => import("./components/Aranceles.vue")
-        }
+          path: "aranceles",
+          component: () => import("./components/Aranceles.vue"),
+        },
       ],
     },
     {

@@ -141,7 +141,12 @@ const guardarClub = async () => {
         console.log(club);
 
         // await clubApi.create(club);
-        const clubPost = await axios.post('http://localhost:8080/api/club', club)
+        const clubPost = await axios.post('http://localhost:8080/api/club', club, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        })
         console.log(clubPost);
 
         alert("Club creado exitosamente");

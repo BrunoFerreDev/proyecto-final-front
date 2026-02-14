@@ -32,6 +32,11 @@ const fetchClub = async () => {
       `${API_BASE_URL}/club/informacion`, {
       params: {
         idClub: idClub
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     }
     );
@@ -50,6 +55,11 @@ const fetchJugadores = async () => {
         size: pagination.value.size,
         sort: "categoriaMaxima," + selectedCategoaria.value,
       },
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
     });
     jugadores.value = data.content;
     pagination.value.totalPages = data.totalPages;
@@ -64,6 +74,11 @@ const fetchCuerpoTecnico = async (categoria) => {
       params: {
         idClub: idClub,
         categoria: categoria
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     });
     cuerpoTecnico.value = data;
@@ -178,8 +193,8 @@ onUnmounted(() => {
     <!-- Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <StatsCard :valor="pagination.totalElements" titulo="Total Jugadores" fontSize="text-2xl" />
-      <StatsCard v-for="ct in cuerpoTecnico" :key="ct.id" titulo="Miembro Cuerpo Técnico" :valor="ct.nombre + ' ' + ct.apellido"
-        fontSize="text-lg" />
+      <StatsCard v-for="ct in cuerpoTecnico" :key="ct.id" titulo="Miembro Cuerpo Técnico"
+        :valor="ct.nombre + ' ' + ct.apellido" fontSize="text-lg" />
     </div>
     <!-- Filters & Actions -->
     <div

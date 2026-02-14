@@ -27,6 +27,9 @@ const fetchClubes = async () => {
         page: page.value,
         size: size.value,
       },
+      headers:{
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
     });
 
     // Asignación de datos

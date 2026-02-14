@@ -26,17 +26,6 @@
                         <span class="font-bold">$ 150.00</span>
                     </div>
                 </div>
-                <!-- <div class="flex flex-col gap-3">
-                    <button
-                        class="w-full bg-white text-[#516dfb] hover:bg-gray-100 py-3 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2">
-                        <span class="material-symbols-outlined text-lg">verified</span>
-                        Confirmar Programación
-                    </button>
-                    <button
-                        class="w-full bg-white/20 hover:bg-white/30 text-white py-3 rounded-lg font-bold text-sm transition-all">
-                        Guardar Cambios
-                    </button>
-                </div> -->
             </div>
             <div class="absolute -right-10 -bottom-10 opacity-10">
                 <span class="material-symbols-outlined text-[160px]">payments</span>

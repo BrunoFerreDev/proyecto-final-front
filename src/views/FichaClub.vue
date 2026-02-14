@@ -248,6 +248,9 @@ const fetchClub = async () => {
       `${API_BASE_URL}/club/informacion`, {
       params: {
         idClub: idClub
+      },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     }
     );

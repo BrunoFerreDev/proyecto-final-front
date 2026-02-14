@@ -320,7 +320,13 @@ const guardarSancion = async () => {
     console.log("Enviando sanción al backend:", payload);
 
     try {
-        const response = await axios.post(`${BASIC_URL}/sanciones`, payload);
+        const response = await axios.post(`${BASIC_URL}/sanciones`, {
+            payload, headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
         if (response.status === 201 || response.status === 200) {
             console.log("Sanción registrada:", response.data);
             // await sancionApi.crear(payload);
@@ -350,6 +356,11 @@ const buscarEntidad = async () => {
         const response = await axios.get(`${BASIC_URL}/club/informacion`, {
             params: {
                 idClub: dni.value
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
             }
         });
         const entidadEncontrada = response.data;

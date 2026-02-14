@@ -41,8 +41,8 @@ const manejarBusqueda = async (termino) => {
   try {
     cargandoTorneo.value = true;
     // EJEMPLO 1: Si filtras desde el Backend (Recomendado)
-    const respuesta = await axios.get(`http://localhost:8080/api/torneos/${termino}`,{
-      headers:{
+    const respuesta = await axios.get(`http://localhost:8080/api/torneos/${termino}`, {
+      headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -71,6 +71,11 @@ const fetchCompetencias = async (idTorneo) => {
       `http://localhost:8080/api/competencias`, {
       params: {
         idTorneo: idTorneo
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     }
     );
@@ -92,6 +97,11 @@ const fetchPartidos = async () => {
         page: 0,
         size: 10,
       },
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
     }
     );
     partidos.value = response.data.content;
@@ -110,6 +120,11 @@ const crearFixtureAutomatico = async () => {
       const response = await axios.post('http://localhost:8080/api/competencias/crear-fixture', null, {
         params: {
           idTorneo: torneo.value.idTorneo
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
       });
       if (response.status == 200 || response.status == 201) {

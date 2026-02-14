@@ -227,7 +227,13 @@ const configuracion = reactive({
 });
 const guardarCompetencia = async () => {
     try {
-        const response = await axios.post('http://localhost:8080/api/competencias', competencia)
+        const response = await axios.post('http://localhost:8080/api/competencias', competencia, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
         if (response.status === 200) {
             competencia.idCompetencia = response.data.idCompetencia;
         }
@@ -240,7 +246,13 @@ const guardarCompetencia = async () => {
 const guardarConfiguraciones = async () => {
     // Ahora competencia.idCompetencia ya tiene valor real
     try {
-        const response = await axios.post('http://localhost:8080/api/configuraciones/competencia/cargar-configuracion', configuracion);
+        const response = await axios.post('http://localhost:8080/api/configuraciones/competencia/cargar-configuracion', configuracion, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
         if (response.status === 200) {
             competencia.idConfiguracion = response.data.idConfiguracion;
             guardarCompetencia();

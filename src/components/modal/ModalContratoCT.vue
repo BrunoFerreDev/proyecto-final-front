@@ -159,6 +159,10 @@ const fetchCuerpoTecnico = async () => {
         const response = await axios.get('http://localhost:8080/api/cuerpo-tecnico/buscar', {
             params: {
                 dni: dniBuscar.value
+            },
+             headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
         const data = response.data;

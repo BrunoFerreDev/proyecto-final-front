@@ -28,6 +28,10 @@ const fetchJugadores = async () => {
       params: {
         tipo: 1
       },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+        
+      }
     });
     totalJugadores.value = data.totalElements;
   } catch (error) {

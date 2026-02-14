@@ -68,7 +68,12 @@ const aranceles = ref(null)
 
 const fetchAranceles = async () => {
     try {
-        const response = await axios.get('http://localhost:8080/api/costos/obtener/aranceles')
+        const response = await axios.get('http://localhost:8080/api/costos/obtener/aranceles', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        })
         const data = response.data;
         console.log(data);
         const orderByRol = data.sort((a, b) => {
@@ -76,7 +81,7 @@ const fetchAranceles = async () => {
                 "PRINCIPAL": 1,
                 "ASISTENTE_1": 2,
                 "ASISTENTE_2": 3,
-                "CUARTO":4
+                "CUARTO": 4
                 // Agrega más roles si es necesario
             };
             return rolOrder[a.rol] - rolOrder[b.rol];

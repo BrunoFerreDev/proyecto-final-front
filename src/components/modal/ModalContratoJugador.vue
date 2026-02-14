@@ -163,6 +163,10 @@ const fetchJugador = async () => {
         const response = await axios.get('http://localhost:8080/api/jugadores/buscar', {
             params: {
                 dni: dniBuscar.value
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
         const data = response.data;

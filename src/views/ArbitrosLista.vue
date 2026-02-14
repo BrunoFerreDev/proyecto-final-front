@@ -69,7 +69,13 @@ const fetchArbitros = async () => {
             tipo: 2,
         };
 
-        const response = await axios.get(`${API_URL}/personas`, { params });
+        const response = await axios.get(`${API_URL}/personas`, {
+            params,
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
 
         arbitros.value = response.data.content;
 

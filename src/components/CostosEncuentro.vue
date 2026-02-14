@@ -17,11 +17,24 @@ const loadData = async () => {
     loading.value = true;
     try {
         // 1. Obtener Localidades
-        const responseLoc = await axios.get('/api/costos/obtener/localidades');
+        const responseLoc = await axios.get('/api/costos/obtener/localidades', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+
+            }
+        });
         localidades.value = responseLoc.data;
 
         // 2. Obtener Costos Existentes
-        const responseCostos = await axios.get('/api/costos/obtener');
+        const responseCostos = await axios.get('/api/costos/obtener', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
 
         // Transformar la lista a un Mapa para renderizado rápido
         const mapa = {};
@@ -114,7 +127,13 @@ const saveChanges = async () => {
     try {
         // Asumo que tienes un endpoint para guardar (batch o uno por uno)
         // Si tu API no soporta array, habría que hacer un Promise.all con llamadas individuales
-        await axios.post('/api/costos/guardar-lote', cambios);
+        await axios.post('/api/costos/guardar-lote', cambios, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
         alert("Datos guardados correctamente");
         await loadData(); // Recargar para limpiar el estado "sucio"
     } catch (error) {

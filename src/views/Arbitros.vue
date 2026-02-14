@@ -32,7 +32,13 @@ const fetchArbitros = async () => {
       tipo: 2,
     };
 
-    const response = await axios.get(`${API_URL}/personas`, { params });
+    const response = await axios.get(`${API_URL}/personas`, {
+      params,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
 
     arbitros.value = response.data.content;
 
@@ -93,7 +99,7 @@ const handlePageChange = (newPage) => {
           </p>
         </div>
         <div>
-          
+
         </div>
         <button @click.prevent="navigateTo('/nueva-persona')"
           class="flex shrink-0 items-center justify-center gap-2 rounded-lg h-10 px-5 bg-[#0d7ff2] hover:bg-blue-600 text-slate-50 text-sm font-bold leading-normal transition-colors shadow-sm shadow-blue-500/20">

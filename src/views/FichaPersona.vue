@@ -146,7 +146,11 @@ const subtituloDinamico = computed(() => {
 
 const fetchPersona = async () => {
     try {
-        const { data } = await axios.get(`http://localhost:8080/api/personas/${props.idPersona}`);
+        const { data } = await axios.get(`http://localhost:8080/api/personas/${props.idPersona}`,{
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
         console.log(data);
         persona.value = data;
     } catch (error) {

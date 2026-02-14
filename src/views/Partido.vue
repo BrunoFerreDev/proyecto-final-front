@@ -17,13 +17,18 @@ const nombreVisitante = ref('');
 const categoria = ref('');
 const fetchPartido = async () => {
     try {
-        const response = await axios.get(`http://localhost:8080/api/partidos/${idPartido}`);
+        const response = await axios.get(`http://localhost:8080/api/partidos/${idPartido}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
         partido.value = response.data;
         nombreLocal.value = partido.value.clubLocal.nombre;
         nombreVisitante.value = partido.value.clubVisitante.nombre;
         categoria.value = partido.value.competenciaDTO.categoria;
         console.log(partido.value);
-        
     } catch (error) {
         console.error(error);
     }

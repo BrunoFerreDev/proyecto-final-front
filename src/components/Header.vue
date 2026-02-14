@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { IconSearch, IconMenu2, IconX } from '@tabler/icons-vue';
 import { RouterLink } from 'vue-router';
+import axios from 'axios';
 
 // Estado para el menú móvil
 const isMobileMenuOpen = ref(false);
@@ -19,6 +20,30 @@ const menuItems = [
 const toggleMenu = () => {
     isMobileMenuOpen.value = !isMobileMenuOpen.value;
 };
+const logout = async () => {
+    try {
+        const token = localStorage.getItem('token');
+
+        // El segundo parámetro es el BODY (vacío en este caso)
+        // El tercer parámetro es el objeto de CONFIGURACIÓN
+        const response = await axios.post('http://localhost:8080/api/auth/logout', {}, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        console.log('Respuesta del servidor:', response.data);
+
+        // Limpiar localstorage y redirigir
+        localStorage.removeItem('token');
+        window.location.href = '/';
+
+    } catch (error) {
+        console.error('Error al cerrar sesión:', error);
+        // Incluso si falla el servidor, limpia el localstorage por seguridad
+        localStorage.removeItem('token');
+    }
+}
 </script>
 
 <template>
@@ -73,7 +98,8 @@ const toggleMenu = () => {
                     </div>
                     <div class="hidden sm:flex flex-col">
                         <span class="text-sm font-bold leading-none mb-0.5 text-[#1c1c0d]">Admin User</span>
-                        <span class="text-xs leading-none text-gray-500 cursor-pointer hover:text-red-500">Cerrar
+                        <span @click="logout"
+                            class="text-xs leading-none text-gray-500 cursor-pointer hover:text-red-500">Cerrar
                             sesión</span>
                     </div>
                 </div>

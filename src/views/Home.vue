@@ -44,6 +44,10 @@ const fetchClubes = async () => {
       params: {
         page: 0,
         size: 10
+      },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+        
       }
     });
     totalClubes.value = data.totalElements;

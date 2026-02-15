@@ -107,6 +107,7 @@
 </template>
 
 <script setup>
+import axios from 'axios';
 import { reactive } from 'vue';
 
 // Objeto reactivo mapeado EXACTAMENTE a Torneo.java
@@ -130,6 +131,15 @@ const guardarTorneo = async () => {
     try {
         // Aquí iría tu llamada a la API
         // const { data } = await torneoApi.crear(torneo);
+        const data = await axios.post("http://localhost:8080/api/torneos", torneo, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
+        });
+        
+        console.log("Respuesta del servidor:", data);
+        location.href = '/torneo'; // Redirige a la lista de torneos después de guardar
         alert("Torneo creado exitosamente (Simulación)");
     } catch (error) {
         console.error("Error al guardar", error);

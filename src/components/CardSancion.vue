@@ -1,3 +1,9 @@
+<script setup>
+import { IconCheck } from '@tabler/icons-vue';
+import { IconEye } from '@tabler/icons-vue';
+
+</script>
+
 <template>
     <!-- Entity Summary Card -->
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mx-4">
@@ -11,7 +17,7 @@
                 <div>
                     <h3 class="text-xl font-bold text-slate-900 ">Carlos Mendoza</h3>
                     <p class="text-slate-500 text-sm flex items-center gap-1">
-                        <IconShieldCheckeredFilled /> Delantero | ID: #88321
+                         Delantero | ID: #88321
                     </p>
                 </div>
             </div>
@@ -25,7 +31,7 @@
                     <p class="text-xs uppercase tracking-wide text-slate-500 font-semibold">Sanciones Activas
                     </p>
                     <p class="font-bold text-red-600 flex items-center justify-end gap-1">
-                        <IconAlertSquareRounded /> 1
+                         1
                     </p>
                 </div>
             </div>
@@ -82,7 +88,6 @@
                         <td class="py-4 px-6 text-right">
                             <button
                                 class="text-slate-400 hover:text-[#0d7ff2] transition-colors p-2 rounded-full hover:bg-slate-100 ">
-                                <IconEye />
                             </button>
                         </td>
                     </tr>
@@ -110,13 +115,12 @@
                         <td class="py-4 px-6">
                             <span
                                 class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2.5 py-1 text-xs font-semibold text-green-600 border border-green-100">
-                                <IconCheck /> Cumplida
+                                Cumplida
                             </span>
                         </td>
                         <td class="py-4 px-6 text-right">
                             <button
                                 class="text-slate-400 hover:text-[#0d7ff2] transition-colors p-2 rounded-full hover:bg-slate-100 ">
-                                <IconEye />
                             </button>
                         </td>
                     </tr>
@@ -150,13 +154,13 @@
                         <td class="py-4 px-6">
                             <span
                                 class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2.5 py-1 text-xs font-semibold text-green-600 border border-green-100">
-                                <IconCheck /> Cumplida
+                                Cumplida
                             </span>
                         </td>
                         <td class="py-4 px-6 text-right">
                             <button
                                 class="text-slate-400 hover:text-[#0d7ff2] transition-colors p-2 rounded-full hover:bg-slate-100 ">
-                                <IconEye />
+                                
                             </button>
                         </td>
                     </tr>

@@ -33,6 +33,7 @@
         </div>
         <div class="flex flex-col gap-3 shrink-0">
           <button
+          @click.prevent="navigateToEdit(club.idClub)"
             class="w-full px-6 py-2.5 bg-[#516dfb] text-white text-sm font-bold rounded-lg flex items-center justify-center gap-2 shadow-lg shadow-[#516dfb]/20">
             <span class="material-symbols-outlined text-sm">edit</span> Editar
             Perfil
@@ -261,4 +262,7 @@ const fetchClub = async () => {
     console.error(error);
   }
 };
+const navigateToEdit = (id) => {
+  router.push(`/club/editar/${id}`);
+}
 </script>

@@ -118,8 +118,8 @@
 <script setup>
 import axios from 'axios';
 import { ref } from 'vue';
-import { useRoute } from 'vue-router';
-const router = useRoute();
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const email = ref('');
 const dni = ref('');
 const login = async () => {
@@ -131,11 +131,18 @@ const login = async () => {
         console.log(response.data);
         if (response.data.jwt && response.data.status) {
             localStorage.setItem('token', response.data.jwt);
-            location.href = '/inicio';
+            router.push('/inicio');
         }
     } catch (error) {
         console.error(error);
     }
 
 }
+// ... después de recibir el token del backend en el login
+// localStorage.setItem('token', token);
+// localStorage.setItem('refreshToken', refreshToken);
+
+// INICIAR EL RELOJ
+//import { scheduleTokenRefresh } from '../authService.js'; // Asumiendo que tienes una función para programar la renovación/';
+//scheduleTokenRefresh(token);
 </script>

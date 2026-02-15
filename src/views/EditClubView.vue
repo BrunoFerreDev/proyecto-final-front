@@ -1,6 +1,7 @@
 <template>
-    <form @submit.prevent="verificarGuardado" class="flex flex-col gap-8 p-8 bg-white rounded-xl shadow-sm">
 
+    <form @submit.prevent="verificarGuardado"
+        class="flex flex-col gap-8 p-8 bg-white rounded-xl shadow-sm max-w-7xl mx-auto">
         <section class="flex flex-col gap-6">
             <h3 class="text-[#111218] text-xl font-bold leading-tight border-b border-gray-50 pb-3">
                 Identidad Visual
@@ -10,8 +11,9 @@
                     <div
                         class="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden border-2 border-dashed border-gray-300 transition-all group-hover:border-[#1f44f9]">
 
-                        <img v-if="imagePreview" :src="imagePreview" class="w-full h-full object-cover" alt="Escudo del club" />
-                        
+                        <img v-if="imagePreview" :src="imagePreview" class="w-full h-full object-cover"
+                            alt="Escudo del club" />
+
                         <div v-else class="text-gray-400 flex flex-col items-center">
                             <span class="material-symbols-outlined !text-4xl">shield</span>
                             <span class="text-[10px] mt-1 font-bold uppercase">Sin Escudo</span>
@@ -35,20 +37,20 @@
                 Información General
             </h3>
 
-            <div class="grid grid-cols-1 gap-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div class="flex flex-col gap-1.5">
-                    <label class="text-sm font-bold text-[#111218] ">
-                        Nombre del Club <span class="text-red-500">*</span>
-                    </label>
-                    <input v-model="club.nombre" required maxlength="100"
-                        class="rounded-lg border-gray-300 focus:ring-[#1f44f9] focus:border-[#1f44f9] h-11 px-4"
-                        placeholder="Ej: Real Madrid C.F." type="text" />
+                    <label class="text-sm font-bold text-[#111218] ">Nombre de la Institución</label>
+                    <div class="relative">
+                        <input :value="club.nombre"
+                            class="w-full rounded-lg border-gray-300 focus:ring-[#1f44f9] focus:border-[#1f44f9] h-11 px-4"
+                            type="text" readonly=""/>
+                    </div>
                 </div>
-
                 <div class="flex flex-col gap-1.5">
                     <label class="text-sm font-bold text-[#111218] ">Fecha de Fundación</label>
                     <div class="relative">
-                        <input v-model="club.fundacion"
+                        <input :value="club.fundacion"
+                        readonly=""
                             class="w-full rounded-lg border-gray-300 focus:ring-[#1f44f9] focus:border-[#1f44f9] h-11 px-4"
                             type="date" />
                     </div>
@@ -60,45 +62,34 @@
             <h3 class="text-[#111218] text-xl font-bold leading-tight border-b border-gray-50 pb-3">
                 Ubicación y Estado
             </h3>
+            <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
 
-            <div class="flex flex-col gap-1.5">
-                <label class="text-sm font-bold text-[#111218] ">Ciudad</label>
-                <div class="relative">
-                    <span
-                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 !text-xl">location_on</span>
-                    <input v-model="club.ciudad"
-                        class="w-full pl-10 rounded-lg border-gray-300 focus:ring-[#1f44f9] focus:border-[#1f44f9] h-11"
-                        placeholder="Ej: Buenos Aires" type="text" />
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
                 <div class="flex flex-col gap-1.5">
-                    <label class="text-sm font-bold text-[#111218] ">Estado Institucional</label>
-                    <select v-model="club.estado"
-                        class="w-full rounded-lg border-gray-300 focus:ring-[#1f44f9] focus:border-[#1f44f9] h-11 px-4 bg-white ">
-                        <option value="ACTIVO">Activo</option>
-                        <option value="SUSPENDIDO">Suspendido</option>
-                        <option value="BAJA">Baja</option>
-                    </select>
-                </div>
-
-                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg bg-gray-50 ">
-                    <div>
-                        <p class="text-sm font-bold text-[#111218] ">Habilitado</p>
-                        <p class="text-xs text-[#5f668c] ">¿Puede jugar torneos?</p>
+                    <label class="text-sm font-bold text-[#111218] ">Ciudad</label>
+                    <div class="relative">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 !text-xl">location_on</span>
+                        <input :value="club.ciudad"
+                            readonly=""
+                            class="w-full pl-10 rounded-lg border-gray-300 focus:ring-[#1f44f9] focus:border-[#1f44f9] h-11"
+                            placeholder="Ej: Buenos Aires" type="text" />
                     </div>
-                    <label class="inline-flex items-center cursor-pointer">
-                        <input v-model="club.isActivo" type="checkbox" class="sr-only peer" />
-                        <div
-                            class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#1f44f9]">
-                        </div>
-                    </label>
+                </div>
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-sm font-bold text-[#111218] ">Estado</label>
+                    <div class="relative">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 !text-xl">location_on</span>
+                        <input :value="club.estado"
+                            class="w-full pl-10 rounded-lg border-gray-300 focus:ring-[#1f44f9] focus:border-[#1f44f9] h-11"
+                            placeholder="Ej: Buenos Aires" type="text" readonly="" />
+                    </div>
                 </div>
             </div>
         </section>
-        
-        <div class="flex flex-col-reverse sm:flex-row items-center justify-end gap-4 mt-4 pt-6 border-t border-slate-200">
+
+        <div
+            class="flex flex-col-reverse sm:flex-row items-center justify-end gap-4 mt-4 pt-6 border-t border-slate-200">
             <button type="button" @click="verificarCancelacion"
                 class="w-full sm:w-auto px-8 h-12 rounded-full border border-slate-200 text-gray-700 font-bold hover:bg-slate-50 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-slate-200">
                 Cancelar
@@ -115,20 +106,41 @@
 <script setup>
 import { IconDeviceFloppy } from '@tabler/icons-vue';
 import axios from 'axios';
-import { reactive, ref } from 'vue';
-
-const club = reactive({
-    nombre: "Fatima",
-    ciudad: "Puerto Rico",
-    fundacion: "2023-01-01",
-    estado: "ACTIVO",
-    isActivo: true
-});
+import { onMounted, reactive, ref } from 'vue';
+import { useRoute } from 'vue-router';
+const router = useRoute();
+const idClub = router.params.idClub;
+const API_BASE_URL = `http://localhost:8080/api`;
+const club = ref({});
 
 // Variables reactivas para el manejo de la imagen
 const imagePreview = ref(null);
 const selectedFile = ref(null);
 
+const fetchClub = async () => {
+    // TODO: Implementar llamada a API para obtener club
+    try {
+        const response = await axios.get(
+            `${API_BASE_URL}/club/informacion`, {
+            params: {
+                idClub: idClub
+            },
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        );
+        club.value = response.data;
+        console.log(response.data);
+        imagePreview.value = club.value.escudo;
+
+    } catch (error) {
+        console.error(error);
+    }
+};
+onMounted(() => {
+    fetchClub();
+});
 // Método para capturar el archivo y generar la vista previa
 const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -146,7 +158,7 @@ const guardarClub = async () => {
     try {
         // Usamos FormData para enviar texto + archivos binarios (Multipart)
         const formData = new FormData();
-        
+
         // Enviamos el objeto club como un Blob de tipo JSON
         formData.append('club', new Blob([JSON.stringify(club)], {
             type: "application/json"
@@ -163,7 +175,7 @@ const guardarClub = async () => {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
-        
+
         console.log(clubPost);
         alert("Club creado exitosamente");
         resetForm();
@@ -180,14 +192,14 @@ const resetForm = () => {
     club.fundacion = '';
     club.isActivo = true;
     club.estado = 'ACTIVO';
-    
+
     // Limpiamos la imagen
     selectedFile.value = null;
     if (imagePreview.value) {
         URL.revokeObjectURL(imagePreview.value); // Liberamos memoria
         imagePreview.value = null;
     }
-    
+
     // Limpiar el input file visualmente si es necesario
     const fileInput = document.querySelector('input[type="file"]');
     if (fileInput) fileInput.value = '';

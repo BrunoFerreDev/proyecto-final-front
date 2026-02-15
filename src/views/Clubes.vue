@@ -34,11 +34,11 @@ const fetchClubes = async () => {
 
     // Asignación de datos
     clubes.value = response.data.content;
-
     // Actualización de variables de paginación
     totalElements.value = response.data.totalElements;
     totalPages.value = response.data.totalPages;
-    console.log(clubes.value[0]);
+    console.log(clubes.value);
+    
   } catch (error) {
     console.error("Error al cargar clubes:", error);
   } finally {

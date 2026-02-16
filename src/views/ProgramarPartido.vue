@@ -1,7 +1,32 @@
+<script setup>
+import axios from 'axios';
+import { ref } from 'vue';
+import ItemCompetencia from '../components/ItemCompetencia.vue';
+const buscador = ref('')
+const competencia = ref([])
+const fetchCompetencia = async () => {
+    try {
+        const response = await axios.get('http://localhost:8080/api/competencias/traer', {
+            params: {
+                idCompetencia: buscador.value
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        });
+        const data = response.data;
+        competencia.value = data;
+    } catch (error) {
+        console.error('Error fetching competencia:', error);
+    }
+}
+</script>
+
 <template>
     <div class="flex flex-1 justify-center py-8 px-4 md:px-10 lg:px-20">
         <div class="flex flex-col max-w-270 w-full gap-6">
-        
+
             <!-- Page Heading -->
             <div class="flex flex-wrap justify-between gap-4">
                 <div class="flex flex-col gap-2">
@@ -31,10 +56,10 @@
                                     class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#5f668c]">
                                     <span class="material-symbols-outlined">search</span>
                                 </div>
-                                <input
+                                <input @keyup.enter="fetchCompetencia" v-model="buscador"
                                     class="w-full pl-10 pr-4 py-3 rounded-lg bg-[#f8f9fc]  border-none focus:ring-2 focus:ring-[#0d7ff2] text-[#111218]  placeholder-[#5f668c]"
                                     placeholder="Buscar por nombre, temporada o categoría (ej. Liga Mayor 2024)..."
-                                    type="text" value="" />
+                                    type="text" />
                                 <div class="absolute inset-y-0 right-3 flex items-center">
                                     <span class="material-symbols-outlined text-green-500">check_circle</span>
                                 </div>
@@ -46,53 +71,7 @@
                                 Competencia</label>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <!-- Active Card -->
-                                <button
-                                    class="group relative flex flex-col items-start gap-3 p-4 rounded-xl border-2 border-[#0d7ff2] bg-[#0d7ff2]/30 cursor-pointer transition-all">
-                                    <div
-                                        class="w-10 h-10 rounded-lg bg-[#0d7ff2]/10 flex items-center justify-center text-[#0d7ff2]">
-                                        <span class="material-symbols-outlined">trophy</span>
-                                    </div>
-                                    <div class="text-left">
-                                        <h3 class="font-bold text-[#0d7ff2] text-base">Torneo Apertura</h3>
-                                        <p class="text-xs text-[#5f668c]  mt-1">Fase Regular • 16
-                                            clubs</p>
-                                    </div>
-                                    <div class="absolute top-4 right-4 text-[#0d7ff2]">
-                                        <span class="material-symbols-outlined filled">radio_button_checked</span>
-                                    </div>
-                                </button>
-                                <!-- Inactive Card -->
-                                <button
-                                    class="group relative flex flex-col items-start gap-3 p-4 rounded-xl border border-[#e5e7eb]  bg-white  hover:border-[#0d7ff2]/50 hover:bg-blue-50 cursor-pointer transition-all">
-                                    <div
-                                        class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 ">
-                                        <span class="material-symbols-outlined">trophy</span>
-                                    </div>
-                                    <div class="text-left">
-                                        <h3 class="font-bold text-[#111218]  text-base">Copa Nacional
-                                        </h3>
-                                        <p class="text-xs text-[#5f668c]  mt-1">Eliminatorias • 32
-                                            clubs</p>
-                                    </div>
-                                    <div class="absolute top-4 right-4 text-gray-300 group-hover:text-[#0d7ff2]/50">
-                                        <span class="material-symbols-outlined">radio_button_unchecked</span>
-                                    </div>
-                                </button>
-                                <!-- Inactive Card -->
-                                <button
-                                    class="group relative flex flex-col items-start gap-3 p-4 rounded-xl border border-[#e5e7eb]  bg-white  hover:border-[#0d7ff2]/50 hover:bg-blue-50  cursor-pointer transition-all">
-                                    <div
-                                        class="w-10 h-10 rounded-lg bg-gray-100  flex items-center justify-center text-gray-500 ">
-                                        <span class="material-symbols-outlined">workspace_premium</span>
-                                    </div>
-                                    <div class="text-left">
-                                        <h3 class="font-bold text-[#111218]  text-base">Supercopa</h3>
-                                        <p class="text-xs text-[#5f668c]  mt-1">Final Única</p>
-                                    </div>
-                                    <div class="absolute top-4 right-4 text-gray-300 group-hover:text-[#0d7ff2]/50">
-                                        <span class="material-symbols-outlined">radio_button_unchecked</span>
-                                    </div>
-                                </button>
+                                <ItemCompetencia v-if="competencia.idCompetencia" :competencia="competencia" />
                             </div>
                         </div>
                     </div>
@@ -111,7 +90,7 @@
                             <div class="flex-1 w-full">
                                 <label class="flex items-center gap-2 text-sm font-bold text-[#0d7ff2] mb-2">
                                     <span class="material-symbols-outlined text-lg">home</span>
-                                    club Local
+                                    Club Local
                                 </label>
                                 <div class="relative">
                                     <select
@@ -152,7 +131,7 @@
                             <div class="flex-1 w-full">
                                 <label class="flex items-center gap-2 text-sm font-bold text-[#ef4444] mb-2">
                                     <span class="material-symbols-outlined text-lg">flight</span>
-                                    club Visitante
+                                    Club Visitante
                                 </label>
                                 <div class="relative">
                                     <select

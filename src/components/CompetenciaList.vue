@@ -37,7 +37,7 @@
             </div>
             <!-- Competitions List -->
             <div class="flex flex-col gap-4" v-for="competencia of competencias" :key="competencia.idCompetencia">
-                <CompetenciaCard :competencia="competencia" />
+                <CompetenciaCard :competencia="{ ...competencia, idTorneo: torneo.idTorneo }" />
 
                 <!-- Placeholder for empty state simulation -->
                 <div

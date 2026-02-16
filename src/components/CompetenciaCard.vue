@@ -20,17 +20,22 @@
         <div class="flex items-center gap-2 w-full sm:w-auto">
             <button
                 class="flex-1 sm:flex-none h-9 px-4 rounded text-sm font-semibold border border-slate-200 hover:bg-white transition-colors">Resultados</button>
-            <button
+            <button @click="navigateTo(`/${props.competencia.idTorneo}/${props.competencia.idCompetencia}`)"
                 class="flex-1 sm:flex-none h-9 px-4 rounded text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-colors">Gestionar</button>
         </div>
     </div>
 </template>
 <script setup>
+import { useRouter } from 'vue-router';
+
 const props = defineProps({
     competencia: {
         type: Object,
         default: () => ({})
     }
 });
-
+const router = useRouter();
+const navigateTo = (path) => {
+    router.push(path);
+};
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen flex flex-col">
+    <div class="max-h-dvh flex flex-col">
         <!-- Header Navigation (Minimal for Login) -->
         <header class="flex items-center justify-between px-10 py-6">
             <div class="flex items-center gap-3">
@@ -113,12 +113,24 @@
             <div class="absolute -top-24 -left-24 w-96 h-96 bg-[#55a6f6]/10 rounded-full blur-3xl"></div>
             <div class="absolute top-1/2 -right-24 w-64 h-64 bg-[#55a6f6]/5 rounded-full blur-2xl"></div>
         </div>
+        <div v-if="showModal"
+            class="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 backdrop-blur-sm p-4 transition-all">
+
+            <div class="absolute inset-0" @click="showModal = false"></div>
+
+            <div class="relative z-10">
+                <ModalMessage :showModal="showModal" @closeModal="showModal = false" titulo="Error"
+                    mensaje="Credenciales incorrectas, por favor intente nuevamente" />
+            </div>
+        </div>
     </div>
 </template>
 <script setup>
 import axios from 'axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import ModalMessage from '../components/modal/ModalMessage.vue';
+const showModal = ref(false)
 const router = useRouter();
 const email = ref('');
 const dni = ref('');
@@ -135,6 +147,7 @@ const login = async () => {
         }
     } catch (error) {
         console.error(error);
+        showModal.value = true
     }
 
 }

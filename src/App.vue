@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 // Configuración: 30 minutos en milisegundos
-const TIMEOUT_DURATION = 3 * 60 * 1000;
+const TIMEOUT_DURATION = 45 * 60 * 1000;
 let logoutTimer = null;
 
 // Eventos que detectan actividad del usuario

@@ -29,6 +29,16 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: "/:idTorneo/:idCompetencia",
+    name: "detalle-competencia",
+    component: () => import("./views/CompetenciaView.vue"),
+    meta: { requiresAuth: true },
+    props: (route) => ({
+      idTorneo: route.params.idTorneo,
+      competencia: route.params.competencia,
+    }),
+  },
+  {
     path: "/arbitros",
     component: () => import("./views/ArbitrosLayout.vue"),
     meta: { requiresAuth: true },
@@ -170,7 +180,7 @@ function parseJwt(token) {
         .map(function (c) {
           return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
         })
-        .join("")
+        .join(""),
     );
     return JSON.parse(jsonPayload);
   } catch (error) {

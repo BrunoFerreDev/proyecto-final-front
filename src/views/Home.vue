@@ -219,6 +219,14 @@ const fetchClubes = async () => {
                     </div>
                     <span class="text-sm font-bold text-[#1c1c0d] text-center">Registrar club</span>
                   </button>
+                    <button @click.prevent="navigateTo('/nuevo-partido')"
+                    class="flex flex-col items-center justify-center p-4 rounded-2xl border-gray-50 bg-white border hover:border-primary transition-all group shadow-sm h-32">
+                    <div
+                      class="size-10 rounded-full bg-[#f4f4e6] flex items-center justify-center mb-2 group-hover:bg-primary transition-colors">
+                      <IconCalendar />
+                    </div>
+                    <span class="text-sm font-bold text-[#1c1c0d] text-center">Alta Usuario</span>
+                  </button>
                   <button @click.prevent="navigateTo('/nuevo-partido')"
                     class="flex flex-col items-center justify-center p-4 rounded-2xl border-gray-50 bg-white border hover:border-primary transition-all group shadow-sm h-32">
                     <div

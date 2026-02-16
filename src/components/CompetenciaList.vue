@@ -18,23 +18,7 @@
                     Añadir Competencia
                 </button>
             </div>
-            <!-- Metrics Summary -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-                <div class="p-4 rounded-lg bg-slate-50 border border-slate-100">
-                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Total Sub-ligas
-                    </p>
-                    <p class="text-2xl font-bold text-slate-900">{{ torneo.competenciasAsociadas }}</p>
-                </div>
-                <div class="p-4 rounded-lg bg-slate-50 border border-slate-100">
-                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Equipos Inscritos
-                    </p>
-                    <p class="text-2xl font-bold text-slate-900">50</p>
-                </div>
-                <div class="p-4 rounded-lg bg-slate-50 border border-slate-100">
-                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Próxima Fecha</p>
-                    <p class="text-lg font-bold text-[#0d7ff2]">12 Mayo, 2024</p>
-                </div>
-            </div>
+
             <!-- Competitions List -->
             <div class="flex flex-col gap-4" v-for="competencia of competencias" :key="competencia.idCompetencia">
                 <CompetenciaCard :competencia="{ ...competencia, idTorneo: torneo.idTorneo }" />

@@ -10,7 +10,7 @@
                 <h4 class="font-bold text-slate-900">{{ props.competencia.nombre }}</h4>
                 <div class="flex gap-3 text-sm text-slate-500 mt-1">
                     <span class="flex items-center gap-1"><span
-                            class="material-symbols-outlined text-[14px]">groups</span> 20
+                            class="material-symbols-outlined text-[14px]">groups</span>{{ competencia.cantidadClub }}
                         Equipos</span>
                     <span class="flex items-center gap-1 text-emerald-600 font-medium">● En
                         Juego</span>
@@ -20,7 +20,7 @@
         <div class="flex items-center gap-2 w-full sm:w-auto">
             <button
                 class="flex-1 sm:flex-none h-9 px-4 rounded text-sm font-semibold border border-slate-200 hover:bg-white transition-colors">Resultados</button>
-            <button @click="navigateTo(`/${props.competencia.idTorneo}/${props.competencia.idCompetencia}`)"
+            <button @click="navigateTo(`/torneo/${props.competencia.idTorneo}/competencia/${props.competencia.idCompetencia}`)"
                 class="flex-1 sm:flex-none h-9 px-4 rounded text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-colors">Gestionar</button>
         </div>
     </div>

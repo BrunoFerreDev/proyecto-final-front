@@ -1,19 +1,83 @@
+<script setup>
+import axios from 'axios';
+import { ref, onMounted, watch } from 'vue';
+
+// Recibimos el ID de la competencia desde el componente padre
+const props = defineProps({
+    idCompetencia: {
+        type: Number,
+        required: true
+    }
+});
+
+const posiciones = ref([]);
+const loading = ref(true);
+const error = ref(null);
+
+// Función para obtener datos
+const fetchTabla = async () => {
+    loading.value = true;
+    try {
+        // Ajusta la URL a tu endpoint real de Spring Boot
+        const response = await axios.get(`http://localhost:8080/api/competencias/${props.idCompetencia}/tabla-posiciones`,{
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        });
+        posiciones.value = response.data;
+    } catch (err) {
+        console.error(err);
+        error.value = "No se pudieron cargar los datos.";
+    } finally {
+        loading.value = false;
+    }
+};
+
+// Cargar al montar
+onMounted(() => {
+    fetchTabla();
+});
+
+// Recargar si cambia la competencia
+watch(() => props.idCompetencia, () => {
+    fetchTabla();
+});
+
+// Utilidad para color de diferencia de gol
+const getGoalDiffClass = (diff) => {
+    if (diff > 0) return 'text-emerald-500';
+    if (diff < 0) return 'text-red-500';
+    return 'text-slate-400';
+};
+</script>
+
 <template>
     <div class="space-y-6">
         <div class="flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <h3 class="text-lg font-bold text-slate-900 ">Tabla de Posiciones</h3>
-                <span
-                    class="px-2 py-0.5 rounded bg-slate-100  text-[10px] font-bold text-slate-500 uppercase">Actualizado
-                    hace 2h</span>
+                <h3 class="text-lg font-bold text-slate-900">Tabla de Posiciones</h3>
+                <span class="px-2 py-0.5 rounded bg-slate-100 text-[10px] font-bold text-slate-500 uppercase">
+                    En Vivo
+                </span>
             </div>
-
+            <button @click="fetchTabla" class="text-xs text-blue-600 hover:underline">
+                Actualizar
+            </button>
         </div>
-        <div class="overflow-x-auto scrollbar-hide">
+
+        <div v-if="loading" class="py-10 text-center text-slate-500 text-sm">
+            Cargando estadísticas...
+        </div>
+
+        <div v-else-if="error" class="py-10 text-center text-red-500 text-sm">
+            {{ error }}
+        </div>
+
+        <div v-else class="overflow-x-auto scrollbar-hide">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr
-                        class="text-[11px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100 ">
+                    <tr class="text-[11px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
                         <th class="py-3 pl-4 w-12 text-center">Pos</th>
                         <th class="py-3">Equipo</th>
                         <th class="py-3 text-center w-12">PJ</th>
@@ -24,185 +88,69 @@
                         <th class="py-3 text-center w-12">GC</th>
                         <th class="py-3 text-center w-12">DG</th>
                         <th class="py-3 text-center w-16 text-[#1f44f9]">PTS</th>
-                        <th class="py-3 pr-4 text-center w-32">Forma</th>
-                    </tr>
+                        </tr>
                 </thead>
                 <tbody class="text-sm font-medium">
-                    <!-- Top Team -->
-                    <tr class="border-b border-slate-50 /50 hover:bg-slate-50/50  transition-colors">
+                    <tr v-for="(equipo, index) in posiciones" :key="equipo.idClub"
+                        class="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+                        
                         <td class="py-4 pl-4 text-center">
-                            <div
-                                class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[11px] font-bold mx-auto">
-                                1</div>
+                            <div :class="[
+                                'w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold mx-auto',
+                                index === 0 ? 'bg-emerald-500 text-white' : // Campeón
+                                index >= posiciones.length - 3 ? 'bg-red-100 text-red-600' : // Descenso (ejemplo)
+                                'bg-slate-100 text-slate-500' // Resto
+                            ]">
+                                {{ index + 1 }}
+                            </div>
                         </td>
+
                         <td class="py-4">
                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-slate-100 p-1 flex items-center justify-center">
-                                    <img class="w-full h-full object-contain" data-alt="Team crest of FC Los Galacticos"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOAi8eY8SilXYxufx251XWXDiIIOFO2LgrNd_-5oEIIoGivB7pESm51KZ7ja-kIgFGvUmV0lQ_SZOWffk3xvGO5ccmg8ljhZh9QPbV6W6sBau3OgBD1OdkQiUe95FwM4-tzbJ50S9U93rONnYzPrNJ7_aJfhuclU-ZBqCjpVMFlVguVlNDTLdK1GtcCLemqIKFGaY8BImBYaMxzy9YuBh2GSpoWnfs9jtY85lcnJbnfmLK6xgY4t9Cifd5DTw0lgCNSyi7EjtdBgU" />
+                                <div class="w-8 h-8 rounded-full bg-slate-100 p-1 flex items-center justify-center shrink-0">
+                                    <img 
+                                        class="w-full h-full object-contain" 
+                                        :src="`https://ui-avatars.com/api/?name=${equipo.nombreClub}&background=random`" 
+                                        :alt="equipo.nombreClub" 
+                                    />
                                 </div>
-                                <span class="font-bold text-slate-900 ">FC Los
-                                    Galácticos</span>
+                                <span class="font-bold text-slate-900 truncate max-w-[150px] md:max-w-none">
+                                    {{ equipo.nombreClub }}
+                                </span>
                             </div>
                         </td>
-                        <td class="py-4 text-center text-slate-600 ">12</td>
-                        <td class="py-4 text-center text-slate-600 ">10</td>
-                        <td class="py-4 text-center text-slate-600 ">1</td>
-                        <td class="py-4 text-center text-slate-600 ">1</td>
-                        <td class="py-4 text-center text-slate-600 ">28</td>
-                        <td class="py-4 text-center text-slate-600 ">8</td>
-                        <td class="py-4 text-center font-bold text-emerald-500">+20</td>
-                        <td class="py-4 text-center font-black text-[#1f44f9] text-lg">31</td>
-                        <td class="py-4 pr-4">
-                            <div class="flex justify-center gap-1">
-                                <span
-                                    class="w-5 h-5 rounded-full bg-emerald-500 text-[9px] text-white flex items-center justify-center font-bold">G</span>
-                                <span
-                                    class="w-5 h-5 rounded-full bg-emerald-500 text-[9px] text-white flex items-center justify-center font-bold">G</span>
-                                <span
-                                    class="w-5 h-5 rounded-full bg-slate-300 text-[9px] text-white flex items-center justify-center font-bold">E</span>
-                                <span
-                                    class="w-5 h-5 rounded-full bg-emerald-500 text-[9px] text-white flex items-center justify-center font-bold">G</span>
-                                <span
-                                    class="w-5 h-5 rounded-full bg-emerald-500 text-[9px] text-white flex items-center justify-center font-bold">G</span>
-                            </div>
+
+                        <td class="py-4 text-center text-slate-600">{{ equipo.partidosJugados }}</td>
+                        <td class="py-4 text-center text-slate-600">{{ equipo.partidosGanados }}</td>
+                        <td class="py-4 text-center text-slate-600">{{ equipo.partidosEmpatados }}</td>
+                        <td class="py-4 text-center text-slate-600">{{ equipo.partidosPerdidos }}</td>
+                        <td class="py-4 text-center text-slate-600">{{ equipo.golesFavor }}</td>
+                        <td class="py-4 text-center text-slate-600">{{ equipo.golesContra }}</td>
+                        
+                        <td class="py-4 text-center font-bold" :class="getGoalDiffClass(equipo.diferenciaGol)">
+                            {{ equipo.diferenciaGol > 0 ? '+' : '' }}{{ equipo.diferenciaGol }}
                         </td>
-                    </tr>
-                    <!-- Second Team -->
-                    <tr class="border-b border-slate-50 /50 hover:bg-slate-50/50  transition-colors">
-                        <td class="py-4 pl-4 text-center">
-                            <div
-                                class="w-6 h-6 rounded-full bg-slate-200  text-slate-600  flex items-center justify-center text-[11px] font-bold mx-auto">
-                                2</div>
+
+                        <td class="py-4 text-center font-black text-[#1f44f9] text-lg">
+                            {{ equipo.puntos }}
                         </td>
-                        <td class="py-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-slate-100 p-1 flex items-center justify-center">
-                                    <img class="w-full h-full object-contain" data-alt="Team crest of Athletic City FC"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZLGOm99K6LjDfi0hSnlMG8K32XJv1EmqhSe1C3Mc9nAOKf9UCceqU5fASkde3XdjZgYMYO5tTMrLleghoaefMmtIJ_ULF8N1N7hGE4-vaP3IO6hWDeBuebxr4q8-t3ai23Ga_YuQFgivHAs2QelSBeVl74ll10E7tqYf0Gv2bjggBplbPeQbyiiQyEDBJz54tZjNAvVEVp5PqbcJmdmy5RWLdxc6suThgpA_K9FQVX7GfFHMJJ-OPsfOzAukapSx7GiwfwS0kX78" />
-                                </div>
-                                <span class="font-bold text-slate-900 ">Athletic City
-                                    FC</span>
-                            </div>
-                        </td>
-                        <td class="py-4 text-center text-slate-600 ">12</td>
-                        <td class="py-4 text-center text-slate-600 ">9</td>
-                        <td class="py-4 text-center text-slate-600 ">2</td>
-                        <td class="py-4 text-center text-slate-600 ">1</td>
-                        <td class="py-4 text-center text-slate-600 ">24</td>
-                        <td class="py-4 text-center text-slate-600 ">10</td>
-                        <td class="py-4 text-center font-bold text-emerald-500">+14</td>
-                        <td class="py-4 text-center font-black text-[#1f44f9] text-lg">29</td>
-                        <td class="py-4 pr-4">
-                            <div class="flex justify-center gap-1">
-                                <span
-                                    class="w-5 h-5 rounded-full bg-emerald-500 text-[9px] text-white flex items-center justify-center font-bold">G</span>
-                                <span
-                                    class="w-5 h-5 rounded-full bg-red-500 text-[9px] text-white flex items-center justify-center font-bold">P</span>
-                                <span
-                                    class="w-5 h-5 rounded-full bg-emerald-500 text-[9px] text-white flex items-center justify-center font-bold">G</span>
-                                <span
-                                    class="w-5 h-5 rounded-full bg-slate-300 text-[9px] text-white flex items-center justify-center font-bold">E</span>
-                                <span
-                                    class="w-5 h-5 rounded-full bg-emerald-500 text-[9px] text-white flex items-center justify-center font-bold">G</span>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Third Team -->
-                    <tr class="border-b border-slate-50 /50 hover:bg-slate-50/50  transition-colors">
-                        <td class="py-4 pl-4 text-center">
-                            <div
-                                class="w-6 h-6 rounded-full bg-slate-200  text-slate-600  flex items-center justify-center text-[11px] font-bold mx-auto">
-                                3</div>
-                        </td>
-                        <td class="py-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-slate-100 p-1 flex items-center justify-center">
-                                    <img class="w-full h-full object-contain" data-alt="Team crest of Sportivo del Este"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXFHljFQT9oCeezw4PLh2eNTC83EiTiFEgRPknQVozOi0FAYcHu4BbaCb16uASdDqqujICVmtOMmuZ2ILTxkBUCS1rg3darm50-F4u-fh-YFBy-2VhU_bcU0cFkPUPrbK_hgDkGzuqgwVWrhL38ki9no20bRIjzV-2w3RRZwN8y52oFW3YBoyRL30g4lgya0RyezF3biVoQutUxsOajD6DJGAaScYOl6XWnRpL_MVVznAkVNaGaABJS8Gqm3JSBs6pEVZ57sx43o4" />
-                                </div>
-                                <span class="font-bold text-slate-900 ">Sportivo del
-                                    Este</span>
-                            </div>
-                        </td>
-                        <td class="py-4 text-center text-slate-600 ">12</td>
-                        <td class="py-4 text-center text-slate-600 ">8</td>
-                        <td class="py-4 text-center text-slate-600 ">2</td>
-                        <td class="py-4 text-center text-slate-600 ">2</td>
-                        <td class="py-4 text-center text-slate-600 ">21</td>
-                        <td class="py-4 text-center text-slate-600 ">12</td>
-                        <td class="py-4 text-center font-bold text-emerald-500">+9</td>
-                        <td class="py-4 text-center font-black text-[#1f44f9] text-lg">26</td>
-                        <td class="py-4 pr-4">
-                            <div class="flex justify-center gap-1">
-                                <span
-                                    class="w-5 h-5 rounded-full bg-emerald-500 text-[9px] text-white flex items-center justify-center font-bold">G</span>
-                                <span
-                                    class="w-5 h-5 rounded-full bg-emerald-500 text-[9px] text-white flex items-center justify-center font-bold">G</span>
-                                <span
-                                    class="w-5 h-5 rounded-full bg-red-500 text-[9px] text-white flex items-center justify-center font-bold">P</span>
-                                <span
-                                    class="w-5 h-5 rounded-full bg-red-500 text-[9px] text-white flex items-center justify-center font-bold">P</span>
-                                <span
-                                    class="w-5 h-5 rounded-full bg-emerald-500 text-[9px] text-white flex items-center justify-center font-bold">G</span>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Last Team (Example for zone) -->
-                    <tr class="border-b border-slate-50 /50 hover:bg-slate-50/50  transition-colors">
-                        <td class="py-4 pl-4 text-center">
-                            <div
-                                class="w-6 h-6 rounded-full bg-red-100  text-red-600 flex items-center justify-center text-[11px] font-bold mx-auto">
-                                20</div>
-                        </td>
-                        <td class="py-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-slate-100 p-1 flex items-center justify-center">
-                                    <img class="w-full h-full object-contain"
-                                        data-alt="Team crest of Rayo Vallecano Juniors"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUNoYLB7_Va8tzVyWDo1d4ZYMHL5Vp_IxKsRWhvLL8yolCP3HUF2q0kKR92Qp_O7xWB-MLGwf5GNNlDkW7XAnvQiwMdzxQDo8HJ5-dWH77YOJjdQXyAURoahhmrojoiY03L_JDGSClwb-ljsNxJtlvWitmOWE5fB6WUTvR2vwk2WJCGUFBCz-QXlDCQRKAH8rl6oY-_GGfMjFPftH4PO2QNUZxRObQfmLpwjjDUzOz6543hdjNWU56b62EpC39Yn3gjWx2XwQJ7Z8" />
-                                </div>
-                                <span class="font-bold text-slate-900 ">Rayo Juniors</span>
-                            </div>
-                        </td>
-                        <td class="py-4 text-center text-slate-600 ">12</td>
-                        <td class="py-4 text-center text-slate-600 ">1</td>
-                        <td class="py-4 text-center text-slate-600 ">2</td>
-                        <td class="py-4 text-center text-slate-600 ">9</td>
-                        <td class="py-4 text-center text-slate-600 ">6</td>
-                        <td class="py-4 text-center text-slate-600 ">29</td>
-                        <td class="py-4 text-center font-bold text-red-500">-23</td>
-                        <td class="py-4 text-center font-black text-[#1f44f9] text-lg">5</td>
-                        <td class="py-4 pr-4">
-                            <div class="flex justify-center gap-1">
-                                <span
-                                    class="w-5 h-5 rounded-full bg-red-500 text-[9px] text-white flex items-center justify-center font-bold">P</span>
-                                <span
-                                    class="w-5 h-5 rounded-full bg-red-500 text-[9px] text-white flex items-center justify-center font-bold">P</span>
-                                <span
-                                    class="w-5 h-5 rounded-full bg-red-500 text-[9px] text-white flex items-center justify-center font-bold">P</span>
-                                <span
-                                    class="w-5 h-5 rounded-full bg-slate-300 text-[9px] text-white flex items-center justify-center font-bold">E</span>
-                                <span
-                                    class="w-5 h-5 rounded-full bg-red-500 text-[9px] text-white flex items-center justify-center font-bold">P</span>
-                            </div>
-                        </td>
-                    </tr>
+
+                        </tr>
                 </tbody>
             </table>
         </div>
-        <div class="flex justify-between items-center pt-4 border-t border-slate-100 ">
+
+        <div class="flex justify-between items-center pt-4 border-t border-slate-100">
             <div class="flex gap-4">
                 <div class="flex items-center gap-2 text-xs text-slate-500 font-medium">
                     <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
-                    Clasificación Liguilla
+                    Líder
                 </div>
                 <div class="flex items-center gap-2 text-xs text-slate-500 font-medium">
-                    <span class="w-3 h-3 rounded-full bg-red-400"></span>
-                    Descenso
+                    <span class="w-3 h-3 rounded-full bg-red-100 border border-red-200"></span>
+                    Zona Baja
                 </div>
             </div>
-
         </div>
     </div>
 </template>

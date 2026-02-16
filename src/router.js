@@ -29,13 +29,13 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: "/:idTorneo/:idCompetencia",
+    path: "/torneo/:idTorneo/competencia/:idCompetencia",
     name: "detalle-competencia",
     component: () => import("./views/CompetenciaView.vue"),
     meta: { requiresAuth: true },
     props: (route) => ({
       idTorneo: route.params.idTorneo,
-      competencia: route.params.competencia,
+      idCompetencia: route.params.idCompetencia,
     }),
   },
   {

@@ -1,22 +1,8 @@
 <template>
     <form @submit.prevent="verificarGuardado"
-        class="p-6 md:p-10 flex flex-col gap-10 bg-white  rounded-xl shadow-sm border border-gray-200 ">
+        class="p-6 md:p-10 flex flex-col gap-10 bg-white  rounded-xl shadow-sm border border-gray-200">
 
-        <div class="flex flex-col sm:flex-row items-center gap-6">
-            <div class="relative group">
-                <div
-                    class="size-32 rounded-xl bg-gray-100  flex items-center justify-center border-2 border-dashed border-gray-300  overflow-hidden">
-                    <img v-if="persona.fotoUrl" :src="persona.fotoUrl" class="w-full h-full object-cover"
-                        alt="Perfil" />
-                    <span v-else class="material-symbols-outlined text-4xl text-gray-400">add_a_photo</span>
-                </div>
-            </div>
-            <div class="text-center sm:text-left w-full">
-                <h3 class="text-lg font-bold text-gray-800 ">Foto de Perfil</h3>
-                <p class="text-sm text-[#5f668c] mb-2">URL de la imagen (JPG o PNG).</p>
-                <input v-model="persona.fotoUrl" type="url" placeholder="https://..."
-                    class="w-full rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 text-sm py-2" />
-            </div>
+        <div class="flex flex-col sm:flex-row items-start gap-6">
 
         </div>
 
@@ -25,50 +11,82 @@
                 <span class="material-symbols-outlined">badge</span>
                 <h2 class="text-lg font-bold">1. Información General</h2>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-6 gap-6 ">
+                <!-- Foto -->
+                <div class="flex flex-col gap-2 col-span-1 md:col-span-2 mx-auto">
+                    <h3 class="text-lg font-bold text-gray-800 ">Foto de Perfil</h3>
+                    <div @click="seleccionarImagen"
+                        class="size-56 rounded-xl bg-gray-100 flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden cursor-pointer hover:bg-gray-50 transition-colors relative">
 
-                <div class="flex flex-col gap-2">
-                    <label class="text-sm font-semibold text-gray-700 ">Nombre</label>
-                    <input v-model="persona.nombre" required
-                        class="rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full"
-                        placeholder="Ej. Lionel" type="text" />
+                        <img v-if="persona.fotoUrl" :src="persona.fotoUrl" class="w-full h-full object-cover"
+                            alt="Perfil" />
+
+                        <span v-else class="material-symbols-outlined text-4xl text-gray-400">
+                            add_a_photo
+                        </span>
+                        <input ref="fileInput" type="file" accept="image/*" class="hidden"
+                            @change="alSeleccionarArchivo" />
+                    </div>
+                    <span @click="limpiarImagen" v-if="persona.fotoUrl" class="cursor-pointer w-full bg-red-50 py-2 text-center inline-flex items-center justify-center gap-1 rounded-lg text-sm font-medium text-red-600 hover:bg-red-100 transition-colors">
+                        <span class="material-symbols-outlined text-red-600">delete</span>
+                        Limpiar imagen</span>
                 </div>
+                <!-- Datos -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 col-span-1 md:col-span-4">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-semibold text-gray-700 ">Nombre</label>
+                        <input v-model="persona.nombre" required
+                            class="rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full"
+                            placeholder="Ej. Lionel" type="text" />
+                    </div>
 
-                <div class="flex flex-col gap-2">
-                    <label class="text-sm font-semibold text-gray-700 ">Apellido</label>
-                    <input v-model="persona.apellido" required
-                        class="rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full"
-                        placeholder="Ej. Messi" type="text" />
-                </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-semibold text-gray-700 ">Apellido</label>
+                        <input v-model="persona.apellido" required
+                            class="rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full"
+                            placeholder="Ej. Messi" type="text" />
+                    </div>
 
-                <div class="flex flex-col gap-2">
-                    <label class="text-sm font-semibold text-gray-700 ">DNI / Pasaporte</label>
-                    <input v-model="persona.dni" required
-                        class="rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full"
-                        placeholder="Documento de identidad" type="text" />
-                </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-semibold text-gray-700 ">DNI / Pasaporte</label>
+                        <input v-model="persona.dni" required
+                            class="rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full"
+                            placeholder="Documento de identidad" type="text" />
+                    </div>
 
-                <div class="flex flex-col gap-2">
-                    <label class="text-sm font-semibold text-gray-700 ">Fecha de Nacimiento</label>
-                    <input v-model="persona.fechaNacimiento" required
-                        class="rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full"
-                        type="date" />
-                </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-semibold text-gray-700 ">Fecha de Nacimiento</label>
+                        <input v-model="persona.fechaNacimiento" required
+                            class="rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full"
+                            type="date" />
+                    </div>
 
-                <div class="flex flex-col gap-2 md:col-span-2">
-                    <label class="text-sm font-semibold text-gray-700 ">Nacionalidad</label>
-                    <select v-model="persona.nacionalidad"
-                        class="rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full">
-                        <option value="Argentina">Argentina</option>
-                        <option value="España">España</option>
-                        <option value="Uruguay">Uruguay</option>
-                        <option value="Brasil">Brasil</option>
-                        <option value="Colombia">Colombia</option>
-                        <option value="Otro">Otro</option>
-                    </select>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-semibold text-gray-700 ">Nacionalidad</label>
+                        <select v-model="persona.nacionalidad"
+                            class="rounded-lg border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 w-full">
+                            <option value="Argentina">Argentina</option>
+                            <option value="España">España</option>
+                            <option value="Uruguay">Uruguay</option>
+                            <option value="Brasil">Brasil</option>
+                            <option value="Colombia">Colombia</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-semibold text-gray-700 ">Correo Electrónico</label>
+                        <input v-model="persona.email" class="rounded-lg border-gray-300 focus:ring-blue-600 w-full"
+                            placeholder="email@ejemplo.com" type="email" />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-semibold text-gray-700 ">Teléfono de Contacto</label>
+                        <input v-model="persona.telefono" class="rounded-lg border-gray-300 focus:ring-blue-600 w-full"
+                            placeholder="+54 9 11..." type="tel" />
+                    </div>
                 </div>
             </div>
         </div>
+
         <div>
             <div class="flex items-center gap-2 mb-6 text-blue-600">
                 <span class="material-symbols-outlined">assignment_ind</span>
@@ -198,24 +216,7 @@
 
         </div>
 
-        <div>
-            <div class="flex items-center gap-2 mb-6 text-blue-600">
-                <span class="material-symbols-outlined">contact_mail</span>
-                <h2 class="text-lg font-bold">4. Información de Contacto</h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="flex flex-col gap-2">
-                    <label class="text-sm font-semibold text-gray-700 ">Correo Electrónico</label>
-                    <input v-model="persona.email" class="rounded-lg border-gray-300 focus:ring-blue-600 w-full"
-                        placeholder="email@ejemplo.com" type="email" />
-                </div>
-                <div class="flex flex-col gap-2">
-                    <label class="text-sm font-semibold text-gray-700 ">Teléfono de Contacto</label>
-                    <input v-model="persona.telefono" class="rounded-lg border-gray-300 focus:ring-blue-600 w-full"
-                        placeholder="+54 9 11..." type="tel" />
-                </div>
-            </div>
-        </div>
+
 
         <div class="flex flex-col sm:flex-row justify-end gap-4 mt-4 pt-8 border-t border-gray-100 :border-[#2a2d3d]">
             <button type="button" @click="resetForm"
@@ -245,7 +246,8 @@ const persona = reactive({
     fotoUrl: '',
     email: '',
     telefono: '',
-
+    fotoUrl: null,
+    archivo: null, // Aquí guardaremos el archivo real para enviarlo al backend luego
     // Discriminador de Tipo (JUGADOR | ARBITRO | CUERPO_TECNICO)
     tipoPersona: 'JUGADOR',
 
@@ -315,6 +317,41 @@ const verificarGuardado = () => {
         resetForm();
     }
 }
+// Referencia al input del DOM para poder hacerle click programáticamente
+const fileInput = ref(null);
+
+
+// Función que se ejecuta al hacer click en el div
+const seleccionarImagen = () => {
+    fileInput.value.click();
+};
+
+// Función que se ejecuta cuando el usuario selecciona un archivo
+const alSeleccionarArchivo = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+        // 1. Guardamos el archivo por si necesitas enviarlo al servidor luego
+        persona.archivo = file;
+
+        // 2. Creamos la vista previa
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            // Asignamos el resultado base64 a la URL para mostrarla
+            persona.fotoUrl = e.target.result;
+        };
+
+        // Leemos el archivo como Data URL
+        reader.readAsDataURL(file);
+    }
+};
+const limpiarImagen = () => {
+    persona.fotoUrl = null;
+    persona.archivo = null;
+    fileInput.value.value = null; // Limpiar el input para permitir subir la misma imagen si se desea
+};
+
 </script>
 
 <style scoped>

@@ -28,7 +28,7 @@
                             liga</p>
                     </div>
                     <!-- Login Form -->
-                    <form action="#" class="space-y-6" onsubmit="return false;">
+                    <form @submit="verificarFormulario" class="space-y-6">
                         <!-- Username/Email Field -->
                         <div class="space-y-2">
                             <label class="text-sm font-semibold text-[#111418]  ml-1" for="username">
@@ -41,7 +41,7 @@
                                 </div>
                                 <input
                                     class="block w-full pl-11 pr-4 py-3.5 bg-slate-50  border border-slate-200  rounded-lg text-slate-900  placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#55a6f6]/20 focus:border-[#55a6f6] transition-all text-sm"
-                                    id="username" placeholder="ejemplo@correo.com" type="email" required
+                                    id="username" placeholder="ejemplo@correo.com" type="email" name="email"
                                     v-model="email" />
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                                 href="#">¿Olvidaste tu contraseña?</a>
                         </div>
                         <!-- Submit Button -->
-                        <button @click="login"
+                        <button @click.prevent="verificarFormulario"
                             class="w-full bg-[#55a6f6] hover:bg-[#55a6f6]/90 text-white font-bold py-4 rounded-lg shadow-lg shadow-[#55a6f6]/25 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
                             type="submit">
                             <span>Iniciar Sesión</span>
@@ -119,8 +119,8 @@
             <div class="absolute inset-0" @click="showModal = false"></div>
 
             <div class="relative z-10">
-                <ModalMessage :showModal="showModal" @closeModal="showModal = false" titulo="Error"
-                    mensaje="Credenciales incorrectas, por favor intente nuevamente" />
+                <ModalMessage :showModal="showModal" @closeModal="showModal = false" :titulo="tituloError"
+                    :mensaje="mensajeError" />
             </div>
         </div>
     </div>
@@ -134,7 +134,10 @@ const showModal = ref(false)
 const router = useRouter();
 const email = ref('');
 const dni = ref('');
+const mensajeError = ref('');
+const tituloError = ref('');
 const login = async () => {
+
     try {
         const response = await axios.post('http://localhost:8080/api/auth/login', {
             email: email.value,
@@ -147,9 +150,20 @@ const login = async () => {
         }
     } catch (error) {
         console.error(error);
+        mensajeError.value = 'Credenciales incorrectas, por favor intente nuevamente';
+        tituloError.value = 'Error';
         showModal.value = true
     }
+}
+const verificarFormulario = () => {
+    if (!email.value || !dni.value) {
+        mensajeError.value = 'Por favor, complete todos los campos';
+        tituloError.value = 'Error';
+        showModal.value = true;
 
+    } else {
+        login()
+    }
 }
 // ... después de recibir el token del backend en el login
 // localStorage.setItem('token', token);

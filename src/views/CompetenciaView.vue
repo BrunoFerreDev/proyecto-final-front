@@ -13,8 +13,9 @@
             <span class="text-slate-900 ">{{ competencia.nombre }}</span>
         </nav>
         <!-- Header Section -->
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
-            <div>
+        <!-- class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8" -->
+        <div class="flex flex-col md:flex-row md:items-center items-start justify-between gap-6 mb-8">
+            <div class="md:col-span-2 flex flex-col gap-2">
                 <div class="flex items-center gap-3 mb-2">
                     <span
                         class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#1f44f9]/10 text-[#1f44f9] border border-[#1f44f9]/20 uppercase tracking-wider">Temporada
@@ -23,7 +24,7 @@
                         class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 border border-emerald-200 uppercase tracking-wider">{{
                             torneo.estado }}</span>
                 </div>
-                <h2 class="text-4xl font-black text-slate-900  tracking-tight">Competencia : {{ competencia.nombre }}
+                <h2 class="text-2xl font-black text-slate-900  tracking-tight">Competencia : {{ competencia.nombre }}
                 </h2>
                 <h2 class="text-xl pt-2 font-bold text-slate-600  tracking-tight">Torneo :
                     {{ torneo.nombre }}
@@ -33,14 +34,14 @@
                     {{ competencia.categoria }}
                 </p>
             </div>
-            <div class="flex gap-3">
-                <button
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-white  border-slate-200  rounded-lg text-sm font-bold text-slate-700  hover:bg-slate-50 transition-colors shadow-sm">
+            <div class="flex max-w-4xl justify-end gap-3">
+                <!-- <button
+                    class="inline-flex items-center gap-2 px-4 py-4 bg-white  border-slate-200  rounded-lg text-sm font-bold text-slate-700  hover:bg-slate-50 transition-colors shadow-sm">
                     <span class="material-symbols-outlined text-[20px]">download</span>
                     Reporte PDF
-                </button>
+                </button> -->
                 <button @click.prevent="showModalInscribirClub"
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-[#1f44f9] text-white rounded-lg text-sm font-bold hover:bg-[#1f44f9]/90 transition-colors shadow-md">
+                    class="inline-flex items-center gap-2 px-4 py-4 bg-[#1f44f9] text-white rounded-lg text-sm font-bold hover:bg-[#1f44f9]/90 transition-colors shadow-md">
                     <span class="material-symbols-outlined text-[20px]">add</span>
                     Inscribir Equipo
                 </button>
@@ -48,13 +49,13 @@
         </div>
         <!-- Dashboard Quick Stats -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <StatsCard titulo="Partidos Jugados" valor="120" fontSize="text-2xl" icon="sports_soccer"
+            <StatsCard titulo="Partidos Jugados" :valor="stats.totalPartidos" fontSize="text-2xl" icon="sports_soccer"
                 color="bg-blue-100 text-blue-700" />
-            <StatsCard titulo="Goles Anotados" valor="350" fontSize="text-2xl" icon="emoji_events"
+            <StatsCard titulo="Goles Anotados" :valor="stats.totalGoles" fontSize="text-2xl" icon="emoji_events"
                 color="bg-green-100 text-green-700" />
-            <StatsCard titulo="Promedio de Goles por Partido" valor="2.9" fontSize="text-2xl" icon="insights"
-                color="bg-yellow-100 text-yellow-700" />
-            <StatsCard titulo="Equipo Líder" valor="FC Los Galácticos" fontSize="text-2xl" icon="emoji_events"
+            <StatsCard titulo="Promedio de Goles por Partido" :valor="stats.promedioGoles.toFixed(1)"
+                fontSize="text-2xl" icon="insights" color="bg-yellow-100 text-yellow-700" />
+            <StatsCard titulo="Equipo Líder" :valor="stats.equipoLider" fontSize="text-2xl" icon="emoji_events"
                 color="bg-purple-100 text-purple-700" />
         </div>
         <!-- Main Content Area with Tabs -->
@@ -81,7 +82,7 @@
             </div>
             <div class="p-6">
                 <!-- Tab Content: Clasificación (Example view shown) -->
-                <TablePosiciones v-if="activeTab === 'tabla'" />
+                <TablePosiciones v-if="activeTab === 'tabla'" :idCompetencia="competenciaId" />
                 <!-- Tab Content: Fixture -->
                 <Fixture v-if="activeTab === 'fixture'" :competencias="competencia" />
                 <!-- Tab Content: Programar Partidos -->
@@ -129,13 +130,42 @@ const fetchCompetencia = async () => {
         });
         const data = response.data;
         competencia.value = data;
-        console.log(competencia.value);
         torneo.value = competencia.value.torneo;
+        fetchStats();
     } catch (error) {
         console.error('Error fetching competencia:', error);
     }
 }
 
+const stats = ref({
+    totalPartidos: 0,
+    totalGoles: 0,
+    promedioGoles: 0,
+    equipoLider: '-'
+});
+const loading = ref(true);
+
+const fetchStats = async () => {
+    loading.value = true;
+    try {
+        const response = await axios.get(`http://localhost:8080/api/competencias/resumen`, {
+            params: {
+                idCompetencia: competencia.value.idCompetencia
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        });
+        stats.value = response.data;
+        console.log(stats.value);
+        
+    } catch (error) {
+        console.error("Error cargando stats", error);
+    } finally {
+        loading.value = false;
+    }
+};
 onMounted(() => {
     fetchCompetencia();
 });

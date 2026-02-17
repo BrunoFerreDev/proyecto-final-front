@@ -50,11 +50,11 @@
                   data-alt="Portrait of manager Juan Perez" style="
                     background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCaPki45_TNOnxsN26zmYRcuAOSwUpC2vD4KWih5i6dVGWTDwztnIsXBpUsiUzqnaqAGBL7U7dkcEby2NugShFSCjq1J2cfzvclaYR9Ldc-UpDNWAsP2UQ0q4hi1OiXOjNA-heRk9cO_Z-jTetA7Rvfh6XiUdEHUUp2PP68v0HFqcOCz_FlRbpWGvlpb5jt-lr3Zy3_SDuQAM-7GpCC52gwLYuwdvZqdMcd6g0OfQx35MIJns89sGYo--YIL1_sxJufAM4ODKcHtns');
                   "></div>
-                <span class="text-sm text-slate-600">{{ club.ciudad }}</span>
+                <span class="text-sm text-slate-600">{{ club.localidad.nombre + ", " + club.localidad.provincia }}</span>
               </div>
             </td>
             <td class="px-6 py-4">
-              <div class="w-full max-w-[140px]">
+              <div class="w-full max-w-35">
                 <div class="flex justify-between text-xs mb-1">
                   <span class="font-medium text-slate-700">Fundado el: {{ club.fundacion }}</span>
                 </div>

@@ -29,12 +29,9 @@ const navigateToMatchDetails = (idPartido) => {
                 </h2>
                 <span class="px-3 py-1 bg-[#9e9d47]/20 text-black text-xs font-bold rounded-full">Jornada 12</span>
             </div>
-            <button class="text-sm font-bold text-[#1c1c0d] hover:text-black transition-colors">
-                Ver histórico
-            </button>
         </div>
 
-        <div class="overflow-hidden rounded-3xl border-gray-50 bg-white shadow-sm">
+        <div class="overflow-hidden rounded border-gray-50 bg-white shadow-sm">
             <div class="overflow-x-auto">
                 <table class="w-full min-w-175">
                     <thead class="bg-[#f8f8f5] border-b">
@@ -44,16 +41,15 @@ const navigateToMatchDetails = (idPartido) => {
                                 Fecha</th>
                             <th class="px-6 py-4 text-center text-black text-sm font-semibold uppercase tracking-wider">
                                 Encuentro</th>
-                            <th
-                                class="px-6 py-4 text-center text-black text-sm font-semibold uppercase tracking-wider w-32">
-                                Marcador</th>
+
                             <th
                                 class="px-6 py-4 text-right text-black text-sm font-semibold uppercase tracking-wider w-32">
                                 Detalles</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        <tr v-for="partido in matches" :key="partido.idPartido" @click="navigateToMatchDetails(partido.idPartido)"
+                        <tr v-for="partido in matches" :key="partido.idPartido"
+                            @click="navigateToMatchDetails(partido.idPartido)"
                             class="group hover:bg-[#fcfcf8] transition-colors">
                             <td class="px-6 py-4 text-sm font-medium text-black">
                                 {{ formatDate(partido.fecha) }}
@@ -61,7 +57,8 @@ const navigateToMatchDetails = (idPartido) => {
                             <td class="px-6 py-4">
                                 <div class="flex items-center justify-center gap-4">
                                     <div class="flex items-center gap-3 justify-end w-[40%]">
-                                        <span class="text-[#1c1c0d] font-bold text-base">{{ partido.clubLocal.nombre
+                                        <span class="text-[#1c1c0d] font-bold text-base min-w-36 w-full">{{
+                                            partido.clubLocal.nombre
                                             }}</span>
                                         <div class="size-10 rounded-full bg-gray-100 bg-center bg-cover border border-gray-200"
                                             :style="{ backgroundImage: `url('${partido.clubLocal.logo || ''}')` }">
@@ -72,17 +69,13 @@ const navigateToMatchDetails = (idPartido) => {
                                         <div class="size-10 rounded-full bg-gray-100 bg-center bg-cover border border-gray-200"
                                             :style="{ backgroundImage: `url('${partido.clubVisitante.logo || ''}')` }">
                                         </div>
-                                        <span class="text-[#1c1c0d] font-bold text-base">{{ partido.clubVisitante.nombre
+                                        <span class="text-[#1c1c0d] font-bold text-base min-w-36 w-full">{{
+                                            partido.clubVisitante.nombre
                                             }}</span>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 text-center">
-                                <span
-                                    class="inline-block px-4 py-2 bg-gray-100 rounded-lg text-xl font-bold text-[#1c1c0d]">
-                                    {{ partido.golesLocal }} - {{ partido.golesVisitante }}
-                                </span>
-                            </td>
+
                             <td class="px-6 py-4 text-right">
                                 <button class="text-black hover:text-blue-600 transition-colors">
                                     <IconEye />

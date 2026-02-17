@@ -16,9 +16,9 @@
             <span>Añadir Registro</span>
         </button>
     </div>
-    <div
+    <!-- <div
         class="bg-white rounded-xl border border-[#e7edf4] p-4 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
-        <!-- Search Input -->
+
         <div class="w-full md:max-w-md relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#49739c]">
                 <IconSearch />
@@ -27,7 +27,7 @@
                 class="block w-full pl-10 pr-3 py-2.5 border-none rounded-lg bg-[#f0f4f8] text-[#0d141c] placeholder-[#49739c] focus:ring-2 focus:ring-[#0d7ff2] focus:bg-white transition-all text-sm"
                 placeholder="Buscar por nombre, licencia o email..." type="text" />
         </div>
-    </div>
+    </div> -->
     <div class="bg-white rounded-xl border border-[#e7edf4] overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
             <TableArbitros :arbitros="arbitros" :page="pagination.page" :total-pages="pagination.totalPages"

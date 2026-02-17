@@ -1,7 +1,7 @@
 <template>
     <!-- Filters & Stats Toolbar -->
     <div
-        class="flex flex-col lg:flex-row gap-4 justify-between items-center bg-white  p-4 rounded-xl border border-slate-200  shadow-sm">
+        class="flex flex-col lg:flex-row gap-4 justify-center items-center bg-white  p-4 rounded-xl border border-slate-200  shadow-sm">
         <!-- Search -->
         <div class="w-full max-w-xl">
             <label class="relative block">
@@ -14,7 +14,7 @@
             </label>
         </div>
         <!-- Chips/Filters -->
-        <div class="w-full lg:w-auto flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0 no-scrollbar">
+        <!-- <div class="w-full lg:w-auto flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0 no-scrollbar">
             <button
                 class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0d7ff2]/10 text-[#0d7ff2] border border-[#0d7ff2]/20 transition-colors whitespace-nowrap">
                 <IconCheck />
@@ -30,7 +30,7 @@
                 <IconAlertSquareRounded />
                 <span class="text-sm font-medium">Pendientes (6)</span>
             </button>
-        </div>
+        </div> -->
     </div>
 </template>
 <script setup>

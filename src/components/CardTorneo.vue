@@ -17,12 +17,17 @@
             <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">lists</span> {{
                 props.torneo.competenciasAsociadas }}
                 Competencias</span>
-            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">groups</span> 50
-                Equipos</span>
+            <span class="flex items-center gap-1"><span
+                    class="material-symbols-outlined text-[16px]">calendar_month</span> Fecha Inicio: {{
+                        props.torneo.fechaInicio
+                }}
+            </span>
         </div>
     </div>
 </template>
 <script setup>
+import { onMounted } from 'vue';
+
 const props = defineProps({
     torneo: {
         type: Object,
@@ -32,6 +37,9 @@ const props = defineProps({
         type: Boolean,
         default: false
     }
+})
+onMounted(() => {
+    console.log('Torneo:', props.torneo);
 })
 
 </script>

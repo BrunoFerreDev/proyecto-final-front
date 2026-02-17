@@ -83,7 +83,6 @@ const fetchCuerpoTecnico = async (categoria) => {
     });
     cuerpoTecnico.value = data;
     console.log(cuerpoTecnico.value);
-
   } catch (error) {
     console.error(error);
   }
@@ -193,7 +192,7 @@ onUnmounted(() => {
     <!-- Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <StatsCard :valor="pagination.totalElements" titulo="Total Jugadores" fontSize="text-2xl" />
-      <StatsCard v-for="ct in cuerpoTecnico" :key="ct.id" titulo="Miembro Cuerpo Técnico"
+      <StatsCard v-for="ct in cuerpoTecnico" :key="ct.id" :titulo="ct.rol"
         :valor="ct.nombre + ' ' + ct.apellido" fontSize="text-lg" />
     </div>
     <!-- Filters & Actions -->

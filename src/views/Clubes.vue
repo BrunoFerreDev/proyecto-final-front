@@ -96,7 +96,7 @@ const navigateTo = (path) => {
           <span>Añadir Nuevo club</span>
         </button>
       </div>
-      <FilterClubes />
+      <!-- <FilterClubes /> -->
       <!-- Table Container -->
       <TableClubes
         :clubs="clubes"

@@ -26,14 +26,22 @@
                 <p class="text-[10px] uppercase font-bold text-[#5f668c] leading-none mb-1">
                   Ubicación
                 </p>
-                <p class="text-sm font-bold">{{ club.ciudad }}</p>
+                <p class="text-sm font-bold">{{ localidad.nombre }}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 px-4 py-3 bg-background-light  rounded-lg border border-[#e5e7eb] ">
+              <span class="material-symbols-outlined text-[#516dfb]">location_on</span>
+              <div>
+                <p class="text-[10px] uppercase font-bold text-[#5f668c] leading-none mb-1">
+                  Ubicación
+                </p>
+                <p class="text-sm font-bold">{{ localidad.provincia }}</p>
               </div>
             </div>
           </div>
         </div>
         <div class="flex flex-col gap-3 shrink-0">
-          <button
-          @click.prevent="navigateToEdit(club.idClub)"
+          <button @click.prevent="navigateToEdit(club.idClub)"
             class="w-full px-6 py-2.5 bg-[#516dfb] text-white text-sm font-bold rounded-lg flex items-center justify-center gap-2 shadow-lg shadow-[#516dfb]/20">
             <span class="material-symbols-outlined text-sm">edit</span> Editar
             Perfil
@@ -53,74 +61,14 @@
             <div class="flex items-center gap-3">
               <span class="material-symbols-outlined text-[#516dfb]">assignment_ind</span>
               <h3 class="font-bold text-[#111218]  uppercase tracking-wider text-sm">
-                Cuerpo Técnico
+                Cuerpo Técnico Primera División
               </h3>
             </div>
-            <span class="text-[10px] font-bold text-[#5f668c] bg-white  px-2 py-1 rounded border border-[#e5e7eb] ">5
+            <span class="text-[10px] font-bold text-[#5f668c] bg-white  px-2 py-1 rounded border border-[#e5e7eb] ">{{ cuerpoTecnico.length }}
               MIEMBROS</span>
           </div>
-          <div class="p-6 space-y-6">
-            <div class="flex items-center gap-4 group p-3 -m-3 hover:bg-[#516dfb]/5 rounded-xl transition-colors">
-              <div class="h-16 w-16 rounded-full border-2 border-[#516dfb]/20 p-0.5 overflow-hidden">
-                <img class="w-full h-full object-cover rounded-full bg-slate-100"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoG-GnLfc0bJ8aQ9N6Nt-8loAV-dBRbmy8ogRXvnrY8dwAUdy2rChwE94xsPSyh69qATdqWhP-Z7rq0xH1mpi1vLtqi92OZFNk-jv86RBUJdX0sUNHVoi-m37uyAUhbhNBs6bOJEKV_RQ6aGLnwY4tdl519Yy1FIgZEtptqcNAzltWFviBhUpQ69IoIKb6pnlsnmy9x0j-k_ecF9xMXD8Fo6fDmixV17pNVscKENVGy28hx0sWKC-c9EC1992NAYv6d6sg8RIVGCs" />
-              </div>
-              <div>
-                <p class="text-base font-bold text-[#111218]  group-hover:text-[#516dfb] transition-colors">
-                  Marco Rivera
-                </p>
-                <p class="text-xs font-bold text-[#516dfb] uppercase tracking-wide">
-                  Director Técnico
-                </p>
-                <p class="text-[10px] text-[#5f668c] mt-1">
-                  Desde 2022 • Nacionalidad: Argentina
-                </p>
-              </div>
-            </div>
-            <div class="space-y-4 pt-4 border-t border-[#e5e7eb] ">
-              <div class="flex items-center gap-4">
-                <div class="h-12 w-12 rounded-full overflow-hidden">
-                  <img class="w-full h-full object-cover bg-slate-100"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBP_DYVeaLdsY6PRENQWu6eUMqPjgY-Byt3AV69iABmIq-YXnr243W41ot2JySYAjPdjI5rWijdvcZ0ZfGygAFU3GBmeO1vUtehRzaT8Kdvc8L6equgDu1H7YHLLzDPxFLl9NUIZ83gFIdYVAqCPwFPVIzHGD1OmtpCPTPsHVsEElvlnbwj2VuqoN1_qCxAJEL7yFP7G_EmS-5amcGardONhxJJsswxi1-WUhDQuFKAsBOtEljs592ug4W2Hlr73ky0BYHlP4at15U" />
-                </div>
-                <div class="flex-1">
-                  <p class="text-sm font-bold text-[#111218] ">
-                    Adrián Lopez
-                  </p>
-                  <p class="text-xs text-[#5f668c]">Asistente Técnico</p>
-                </div>
-                <span class="material-symbols-outlined text-[#e5e7eb] ">info</span>
-              </div>
-              <div class="flex items-center gap-4">
-                <div class="h-12 w-12 rounded-full overflow-hidden">
-                  <img class="w-full h-full object-cover bg-slate-100"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzxkWV3Iz0Ge7gjbDvoD_bsqPSZ0L-TRa4bEOZPV_coiZSZuIsoOrF1mnk7O5wQ5Oq0esCikfvWkB4cgIQPrk0l45xeGkzoxnsZrO6usGPPe7Sevf2NjCsRsjZOM3D01g9ueSthLovbEsdzE7NU_GD83WTvTloeA1chi_x36MBS_29a3rLdby-4u8Nuclga5szurtB4J5xVA_r8urNrThMYObkaxCN6OftukoTi5qGmyRMNx6OCAH6Tuvkryuey8eJuLOEVU7OVyw" />
-                </div>
-                <div class="flex-1">
-                  <p class="text-sm font-bold text-[#111218] ">
-                    Luis Llopis
-                  </p>
-                  <p class="text-xs text-[#5f668c]">Prep. de Porteros</p>
-                </div>
-                <span class="material-symbols-outlined text-[#e5e7eb] ">info</span>
-              </div>
-              <div class="flex items-center gap-4">
-                <div class="h-12 w-12 rounded-full overflow-hidden flex items-center justify-center bg-slate-100 ">
-                  <span class="material-symbols-outlined text-[#5f668c]">person</span>
-                </div>
-                <div class="flex-1">
-                  <p class="text-sm font-bold text-[#111218] ">
-                    Dra. Clara Méndez
-                  </p>
-                  <p class="text-xs text-[#5f668c]">Servicios Médicos</p>
-                </div>
-                <span class="material-symbols-outlined text-[#e5e7eb] ">info</span>
-              </div>
-            </div>
-            <button
-              class="w-full py-3 text-xs font-bold text-[#5f668c] hover:text-[#516dfb] border-t border-dashed border-[#e5e7eb] mt-2">
-              Ver organigrama completo
-            </button>
+          <div class="p-6 space-y-6 flex flex-col gap-8">
+            <CTCard v-for="miembro in cuerpoTecnico" :key="miembro.idPersona" :miembro="miembro" />
           </div>
         </div>
       </div>
@@ -234,10 +182,13 @@
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import CTCard from '../components/CTCard.vue';
 const API_BASE_URL = `http://localhost:8080/api`;
 const router = useRouter();
 const idClub = router.currentRoute.value.params.idClub;
 const club = ref({});
+const localidad = ref({});
+const cuerpoTecnico = ref([]);
 onMounted(() => {
   console.log(idClub);
   fetchClub();
@@ -256,12 +207,30 @@ const fetchClub = async () => {
     }
     );
     club.value = data;
+    localidad.value = club.value.localidad;
     console.log(club.value);
-
+    fetchCuerpoTecnico();
   } catch (error) {
     console.error(error);
   }
 };
+const fetchCuerpoTecnico = async () => {
+  try {
+    const { data } = await axios.get(`${API_BASE_URL}/cuerpo-tecnico`, {
+      params: {
+        idClub: idClub,
+        categoria: 'PRIMERA_DIVISION'
+      },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    cuerpoTecnico.value = data;
+    console.log(cuerpoTecnico.value);
+  } catch (error) {
+    console.error(error);
+  }
+}
 const navigateToEdit = (id) => {
   router.push(`/club/editar/${id}`);
 }

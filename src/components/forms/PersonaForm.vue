@@ -313,7 +313,6 @@ const verificarGuardado = () => {
     if (confirm("¿Estas seguro de guardar la persona?")) {
         guardarPersona();
     } else {
-        alert("Operacion cancelada");
         resetForm();
     }
 }

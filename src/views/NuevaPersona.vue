@@ -58,8 +58,6 @@ const nuevaPersona = async () => {
           }
         }
       );
-
-      alert("¡Persona creada y asignada correctamente!");
       resetForm();
     }
   } catch (error) {

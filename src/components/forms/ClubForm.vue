@@ -10,8 +10,9 @@
                     <div
                         class="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden border-2 border-dashed border-gray-300 transition-all group-hover:border-[#1f44f9]">
 
-                        <img v-if="imagePreview" :src="imagePreview" class="w-full h-full object-cover" alt="Escudo del club" />
-                        
+                        <img v-if="imagePreview" :src="imagePreview" class="w-full h-full object-cover"
+                            alt="Escudo del club" />
+
                         <div v-else class="text-gray-400 flex flex-col items-center">
                             <span class="material-symbols-outlined !text-4xl">shield</span>
                             <span class="text-[10px] mt-1 font-bold uppercase">Sin Escudo</span>
@@ -97,8 +98,9 @@
                 </div>
             </div>
         </section>
-        
-        <div class="flex flex-col-reverse sm:flex-row items-center justify-end gap-4 mt-4 pt-6 border-t border-slate-200">
+
+        <div
+            class="flex flex-col-reverse sm:flex-row items-center justify-end gap-4 mt-4 pt-6 border-t border-slate-200">
             <button type="button" @click="verificarCancelacion"
                 class="w-full sm:w-auto px-8 h-12 rounded-full border border-slate-200 text-gray-700 font-bold hover:bg-slate-50 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-slate-200">
                 Cancelar
@@ -146,7 +148,7 @@ const guardarClub = async () => {
     try {
         // Usamos FormData para enviar texto + archivos binarios (Multipart)
         const formData = new FormData();
-        
+
         // Enviamos el objeto club como un Blob de tipo JSON
         formData.append('club', new Blob([JSON.stringify(club)], {
             type: "application/json"
@@ -163,13 +165,11 @@ const guardarClub = async () => {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
-        
+
         console.log(clubPost);
-        alert("Club creado exitosamente");
         resetForm();
 
     } catch (error) {
-        alert("Error al crear el club");
         console.error("Error", error);
     }
 };
@@ -180,14 +180,14 @@ const resetForm = () => {
     club.fundacion = '';
     club.isActivo = true;
     club.estado = 'ACTIVO';
-    
+
     // Limpiamos la imagen
     selectedFile.value = null;
     if (imagePreview.value) {
         URL.revokeObjectURL(imagePreview.value); // Liberamos memoria
         imagePreview.value = null;
     }
-    
+
     // Limpiar el input file visualmente si es necesario
     const fileInput = document.querySelector('input[type="file"]');
     if (fileInput) fileInput.value = '';

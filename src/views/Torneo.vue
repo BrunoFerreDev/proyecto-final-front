@@ -58,7 +58,6 @@ const manejarBusqueda = async (termino) => {
     torneo.value = {};
     competencias.value = [];
     partidos.value = [];
-    alert("No se encontro el torneo");
   } finally {
     cargandoTorneo.value = false;
     console.log(torneo.value);
@@ -128,15 +127,12 @@ const crearFixtureAutomatico = async () => {
         }
       });
       if (response.status == 200 || response.status == 201) {
-        alert("Fixture creado correctamente");
         fetchPartidos();
       }
     } catch (error) {
       console.log(error);
-      alert("Error al crear el fixture automatico");
     }
   } else {
-    alert("No se creo el fixture automatico");
   }
 }
 

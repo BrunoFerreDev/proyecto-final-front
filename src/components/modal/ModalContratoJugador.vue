@@ -180,7 +180,6 @@ const verificarGuardado = () => {
     if (confirm("¿Estas seguro de guardar el contrato?")) {
         guardarContrato();
     } else {
-        alert("Operacion cancelada");
         resetForm();
     }
 }

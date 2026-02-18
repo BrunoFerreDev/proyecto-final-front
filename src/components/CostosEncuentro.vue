@@ -57,7 +57,6 @@ const loadData = async () => {
 
     } catch (error) {
         console.error("Error cargando datos:", error);
-        alert("Error al conectar con la API. Revisa la consola.");
     } finally {
         loading.value = false;
     }
@@ -119,7 +118,6 @@ const saveChanges = async () => {
     });
 
     if (cambios.length === 0) {
-        alert("No hay cambios pendientes para guardar.");
         saving.value = false;
         return;
     }
@@ -134,11 +132,9 @@ const saveChanges = async () => {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             }
         });
-        alert("Datos guardados correctamente");
         await loadData(); // Recargar para limpiar el estado "sucio"
     } catch (error) {
         console.error("Error guardando:", error);
-        alert("Error al guardar los cambios.");
     } finally {
         saving.value = false;
     }

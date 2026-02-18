@@ -122,7 +122,6 @@ const torneo = reactive({
 const guardarTorneo = async () => {
     // Validación simple de fechas
     if (torneo.fechaInicio > torneo.fechaFinal) {
-        alert("La fecha de inicio no puede ser mayor a la final");
         return;
     }
 
@@ -140,7 +139,6 @@ const guardarTorneo = async () => {
         
         console.log("Respuesta del servidor:", data);
         location.href = '/torneo'; // Redirige a la lista de torneos después de guardar
-        alert("Torneo creado exitosamente (Simulación)");
     } catch (error) {
         console.error("Error al guardar", error);
     }
@@ -150,7 +148,6 @@ const verificarGuardado = () => {
     if (confirm("¿Estas seguro de guardar el torneo?")) {
         guardarTorneo();
     } else {
-        alert("Operacion cancelada");
         resetForm();
     }
 }

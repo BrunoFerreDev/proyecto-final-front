@@ -43,14 +43,13 @@
                     <div class="relative">
                         <input :value="club.nombre"
                             class="w-full rounded-lg border-gray-300 focus:ring-[#1f44f9] focus:border-[#1f44f9] h-11 px-4"
-                            type="text" readonly=""/>
+                            type="text" readonly="" />
                     </div>
                 </div>
                 <div class="flex flex-col gap-1.5">
                     <label class="text-sm font-bold text-[#111218] ">Fecha de Fundación</label>
                     <div class="relative">
-                        <input :value="club.fundacion"
-                        readonly=""
+                        <input :value="club.fundacion" readonly=""
                             class="w-full rounded-lg border-gray-300 focus:ring-[#1f44f9] focus:border-[#1f44f9] h-11 px-4"
                             type="date" />
                     </div>
@@ -69,8 +68,7 @@
                     <div class="relative">
                         <span
                             class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 !text-xl">location_on</span>
-                        <input :value="club.ciudad"
-                            readonly=""
+                        <input :value="club.ciudad" readonly=""
                             class="w-full pl-10 rounded-lg border-gray-300 focus:ring-[#1f44f9] focus:border-[#1f44f9] h-11"
                             placeholder="Ej: Buenos Aires" type="text" />
                     </div>
@@ -177,11 +175,9 @@ const guardarClub = async () => {
         });
 
         console.log(clubPost);
-        alert("Club creado exitosamente");
         resetForm();
 
     } catch (error) {
-        alert("Error al crear el club");
         console.error("Error", error);
     }
 };

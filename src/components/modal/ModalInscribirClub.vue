@@ -21,13 +21,14 @@
                 <p class="text-sm font-medium text-gray-700  mb-2">Buscar clubes existentes</p>
                 <label class="flex flex-col w-full">
                     <div
-                        class="flex w-full items-stretch rounded-lg h-12 bg-background-light  border border-transparent focus-within:border-[#516dfb] transition-all">
+                        class="flex w-full items-stretch rounded-lg h-12 bg-background-light  border border-gray-200 focus-within:border-[#516dfb] transition-all">
                         <div class="text-[#5f668c] flex items-center justify-center pl-4 rounded-l-lg">
                             <span class="material-symbols-outlined">search</span>
                         </div>
                         <input
                             class="form-input flex w-full min-w-0 flex-1 border-none bg-transparent focus:ring-0 text-[#111218]  placeholder:text-[#5f668c] px-4 text-base font-normal"
-                            placeholder="Buscar por nombre, ciudad o código..." value="Real" />
+                            placeholder="Buscar por nombre, ciudad o código..." v-model="inputBusqueda"
+                            @keyup.enter.prevent="buscarClubes" />
                     </div>
                 </label>
             </div>
@@ -35,50 +36,28 @@
             <div class="px-6 flex justify-between items-end">
                 <h3 class="text-[#111218]  text-md font-bold leading-tight tracking-[-0.015em] pt-4">
                     Resultados de búsqueda</h3>
-                <p class="text-xs text-[#5f668c] ">4 clubes encontrados</p>
+                <p class="text-xs text-[#5f668c] ">{{ clubEncontrado.length }} clubes encontrados</p>
             </div>
-            <!-- ImageGrid: Search Results -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6">
-                <!-- Club 1 -->
-                <div
-                    class="flex flex-col gap-3 text-center p-3 rounded-xl border border-[#516dfb] bg-[#516dfb]/5  transition-all cursor-pointer relative group">
-                    <div class="absolute top-2 right-2 text-[#516dfb]">
-                        <span class="material-symbols-outlined fill-1">check_circle</span>
-                    </div>
-                    <div class="px-2">
-                        <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-full border-2 border-[#516dfb]"
-                            data-alt="Logotipo circular del Real Madrid CF"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDvOM_L8hX6E9jtR0uFvDiy5_EvWuDTTLTkNlPEdoRbRqc5M7f88msAophB6BTcy91ML1emjZyN71YelrQblkKqZOzw5EHWrnNtnPtsL9pUBjL9sk4AYQiYylbYaL-eQb-Vkbf__7mPfNbKpGbmw0I9lddVe3MNL0jybY-omJrjWdrw9p5X1lyBkpZ_oQ3xcO5X7rEEPNDcWyIQp3Av5zhquXK8LluCc2JV8rsz0GybwgiYcM-WVDmbv33dfLo7EgaTKbKiAUrGycs");'>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-[#111218]  text-sm font-semibold truncate">Real Madrid CF</p>
-                        <p class="text-[#5f668c]  text-xs truncate">Madrid</p>
-                    </div>
-                </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4" v-if="clubEncontrado.length > 0">
+
+                <ClubGrid v-for="club in clubEncontrado" :key="club.idClub" :club="club" @selectClub="selectClub"
+                    :selected="clubesParaInscribir.some(c => c.idClub === club.idClub)" />
+
             </div>
             <!-- Selected Section -->
-            <div class="bg-[#516dfb]/5  p-6 mx-6 rounded-xl mb-6">
+            <div class="bg-[#516dfb]/5  p-6 mx-6 rounded-xl mb-6 mt-2">
                 <div class="flex items-center justify-between mb-4">
                     <h4 class="text-sm font-bold text-gray-800 flex items-center gap-2">
                         <span class="material-symbols-outlined text-[#516dfb] scale-90">verified</span>
-                        Clubes seleccionados para inscribir (2)
+                        Clubes seleccionados para inscribir ({{ clubesParaInscribir.length }})
                     </h4>
-                    <button class="text-xs text-[#516dfb] font-semibold hover:underline">Limpiar todos</button>
+                    <button @click="clubesParaInscribir = []"
+                        class="text-xs text-[#516dfb] font-semibold hover:underline">Limpiar todos</button>
                 </div>
-                <div class="flex flex-wrap gap-2">
+                <div class="inline-flex flex-wrap gap-5 justify-around" v-if="clubesParaInscribir.length > 0"
+                    v-for="club in clubesParaInscribir" :key="club.idClub">
                     <!-- Selection Chip 1 -->
-                    <div
-                        class="flex items-center gap-2 bg-white border border-[#516dfb]/30 rounded-full pl-1.5 pr-3 py-1.5 shadow-sm">
-                        <div class="size-6 bg-center bg-no-repeat bg-cover rounded-full"
-                            data-alt="Escudo pequeño Madrid"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAz6ZyYCexfGuy54CQZVHmJC9uFsy4-A4_oBnyKMB_Ilya-AJ4uT1w04BDw4EDFFJTfwAgvXxnpDlqnZnyuef4A0TsDFramdWDELjpr19iypIAHO0eLU6sAfGIjVWy6W6lUWQjamAiGjnKQE9U8VIlJq7r05rA93YFMQdfWlgbzF66v63syNfU1Hrt2-HfrEtkQXW1tl7P9oL-0b6J24twdFdfguO499oI9QiAtK3N9S7wdWpa_FY-35lzNrMGbXrAD5LMRHus-MuI");'>
-                        </div>
-                        <span class="text-sm font-medium text-gray-700">Real Madrid CF</span>
-                        <button class="text-gray-400 hover:text-red-500 transition-colors">
-                            <span class="material-symbols-outlined !text-lg">cancel</span>
-                        </button>
-                    </div>
+                    <ClubItem :club="club" @removeClub="removeClub" />
                 </div>
             </div>
         </div>
@@ -96,6 +75,11 @@
     </div>
 </template>
 <script setup>
+import { ref } from 'vue';
+import ClubItem from './ClubItem.vue';
+import ClubGrid from './ClubGrid.vue';
+import axios from 'axios';
+const clubEncontrado = ref({})
 const props = defineProps({
     modalInscribirClub: {
         type: Boolean,
@@ -103,8 +87,54 @@ const props = defineProps({
     }
 });
 const emit = defineEmits('closeModal');
-
+const inputBusqueda = ref('');
 const closeModal = () => {
     emit('closeModal');
+}
+const clubesParaInscribir = ref([]);
+const selectClub = (club) => {
+    // Buscamos si el club ya existe en el array por su ID (o nombre si no tiene ID)
+    const index = clubesParaInscribir.value.findIndex(c => c.nombre === club.nombre);
+
+    if (index === -1) {
+        // Si no existe, lo agregamos
+        clubesParaInscribir.value.push(club);
+        console.log("Club agregado:", club.nombre);
+    } else {
+        // Opcional: Si el usuario hace click de nuevo, lo removemos (toggle)
+        clubesParaInscribir.value.splice(index, 1);
+        console.log("Club removido:", club.nombre);
+    }
+}
+const removeClub = (club) => {
+    const index = clubesParaInscribir.value.findIndex(c => c.nombre === club.nombre);
+    if (index !== -1) {
+        clubesParaInscribir.value.splice(index, 1);
+        console.log("Club removido desde chip:", club.nombre);
+    }
+}
+const buscarClubes = async () => {
+    // Lógica para buscar clubes según el inputBusqueda.value
+    if (!inputBusqueda.value.trim()) {
+        clubEncontrado.value = {};
+        return;
+    }
+    try {
+        const response = await axios.get(`http://localhost:8080/api/club/buscar`, {
+            params: {
+                nombre: inputBusqueda.value
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        clubEncontrado.value = response.data;
+        console.log(clubEncontrado.value);
+
+    } catch (error) {
+        console.error('Error al buscar clubes:', error)
+        clubEncontrado.value = {};
+    }
 }
 </script>

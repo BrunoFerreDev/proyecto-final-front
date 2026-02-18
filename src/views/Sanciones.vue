@@ -7,8 +7,31 @@ import {
     IconUsersGroup,
     IconUser
 } from '@tabler/icons-vue';
-import CardSancion from '../components/CardSancion.vue'
+import SectionSanciones from '../components/SectionSanciones.vue'
 import { IconRefresh } from '@tabler/icons-vue';
+import { ref } from 'vue';
+const textoInput = ref('');
+// 2. Variable que se envía al hijo (solo cambia al confirmar o esperar)
+const filtroConfirmado = ref('');
+let timeout = null;
+const temporada = ref('');
+// Lógica: Se ejecuta al presionar ENTER
+const buscarInmediatamente = () => {
+    // Cancelamos el temporizador pendiente (para que no busque dos veces)
+    clearTimeout(timeout);
+    // Actualizamos inmediatamente
+    filtroConfirmado.value = textoInput.value;
+};
+const getYears = () => {
+    const anioActual = new Date().getFullYear();
+    const startYear = anioActual - 5; // Año de inicio fijo
+    const years = [];
+    for (let year = anioActual; year >= startYear; year--) {
+        years.push(year);
+    }
+    return years;
+
+}
 </script>
 
 <template>
@@ -49,11 +72,13 @@ import { IconRefresh } from '@tabler/icons-vue';
                             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
                                 <IconCalendar />
                             </span>
-                            <select
+                            <select v-model="temporada"
                                 class="w-full h-12 pl-11 pr-10 appearance-none rounded-lg border border-slate-200 bg-slate-50  text-slate-800  focus:outline-none focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all cursor-pointer">
-                                <option>2023 - 2024</option>
-                                <option>2022 - 2023</option>
-                                <option>2021 - 2022</option>
+                                <option value="" disabled selected>Seleccionar temporada</option>
+                                <template v-for="anio in getYears()" :key="anio">
+                                    <option :value="anio">{{ anio }}</option>
+
+                                </template>
                             </select>
                             <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
                                 <IconChevronDown />
@@ -70,16 +95,17 @@ import { IconRefresh } from '@tabler/icons-vue';
                             </span>
                             <input
                                 class="w-full h-12 pl-11 pr-4 rounded-lg border border-slate-200  bg-slate-50  text-slate-800  placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
-                                placeholder="Buscar jugador por nombre o ID..." value="" />
+                                v-model="textoInput" @input="manejarEscritura" @keydown.enter="buscarInmediatamente"
+                                type="text" placeholder="Buscar (Espere 3s o presione Enter)..." />
                         </div>
                     </div>
                     <div class="lg:col-span-3 flex gap-2 flex-col lg:flex-row items-center justify-end">
-                        <button
+                        <button @click="buscarInmediatamente"
                             class=" bg-[#0d7ff2] hover:bg-blue-600 text-white rounded-lg text-sm font-bold shadow-sm transition-all p-3.5 inline-flex items-center gap-2">
                             <IconSearch />
                             Buscar
                         </button>
-                        <button
+                        <button @click.prevent="() => { textoInput = ''; buscarInmediatamente(); }"
                             class=" bg-[#0d7ff2] hover:bg-blue-600 text-white rounded-lg text-sm font-bold shadow-sm transition-all p-3.5 inline-flex items-center gap-2">
                             <IconRefresh />
                             Limpiar
@@ -87,8 +113,11 @@ import { IconRefresh } from '@tabler/icons-vue';
                     </div>
                 </div>
             </div>
-            <CardSancion />
+            <SectionSanciones :valor="filtroConfirmado" />
 
         </div>
     </main>
 </template>
+
+
+<!--  -->

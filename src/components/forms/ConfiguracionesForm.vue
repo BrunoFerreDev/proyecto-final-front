@@ -117,7 +117,6 @@ const verificarGuardado = () => {
     if (confirm("¿Estas seguro de guardar la configuración?")) {
         guardarConfiguracion();
     } else {
-        alert("Operacion cancelada");
         resetForm();
     }
 }

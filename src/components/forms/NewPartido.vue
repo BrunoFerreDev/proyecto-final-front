@@ -77,7 +77,6 @@ const verificarGuardado = () => {
     if (confirm("¿Estas seguro de guardar el partido?")) {
         guardarPartido();
     } else {
-        alert("Operacion cancelada");
         resetForm();
     }
 }

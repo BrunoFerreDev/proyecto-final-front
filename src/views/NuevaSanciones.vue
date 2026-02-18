@@ -330,11 +330,9 @@ const guardarSancion = async () => {
         if (response.status === 201 || response.status === 200) {
             console.log("Sanción registrada:", response.data);
             // await sancionApi.crear(payload);
-            alert("Sanción registrada correctamente");
             resetForm();
         } else {
             console.error("Error al registrar", response.data);
-            alert("Error al registrar sanción");
         }
     } catch (error) {
         console.error("Error al registrar", error);
@@ -371,6 +369,11 @@ const buscarEntidad = async () => {
         const response = await axios.get(`${BASIC_URL}/personas/buscar-dni`, {
             params: {
                 dni: dni.value
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
             }
         });
         const entidadEncontrada = response.data;

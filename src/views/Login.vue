@@ -152,7 +152,9 @@ const login = async () => {
         console.error(error);
         mensajeError.value = 'Credenciales incorrectas, por favor intente nuevamente';
         tituloError.value = 'Error';
-        showModal.value = true
+        showModal.value = true;
+        localStorage.removeItem('token');
+        router.push("/")
     }
 }
 const verificarFormulario = () => {

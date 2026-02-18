@@ -117,7 +117,6 @@ const guardarDesignacion = async () => {
 
         // 2. Si llega aquí, es un código 2xx (Éxito)
         if (response.status === 200 || response.status === 201) {
-            alert("Designación guardada correctamente");
             // Aquí podrías redirigir o limpiar el formulario
         }
 
@@ -129,20 +128,14 @@ const guardarDesignacion = async () => {
             // Spring Boot suele enviar el mensaje en: error.response.data.message
             // O a veces directamente en: error.response.data (si devolviste solo un String)
             const mensajeError = error.response.data.message || error.response.data || "Error desconocido en el servidor";
-
-            // 4. Mostramos el error específico ("MAXIMA DE ARBITROS ALCANZADO")
-            alert("No se pudo guardar: " + mensajeError);
-
             // Opcional: Lógica específica si quieres validar por texto
             if (mensajeError.includes("MAXIMA DE ARBITROS")) {
                 console.warn("Límite de árbitros excedido");
             }
         } else if (error.request) {
             // El servidor no respondió (problema de red)
-            alert("Error de conexión con el servidor.");
         } else {
             // Error en la configuración de la petición
-            alert("Ocurrió un error inesperado.");
         }
     }
 };
@@ -169,7 +162,6 @@ const pushArbitro = (idArbitro, rol) => {
                 rol: rol,
             });
         } else {
-            alert("No puedes asignar más de 4 árbitros");
         }
     }
 

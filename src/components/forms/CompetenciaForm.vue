@@ -237,7 +237,6 @@ const guardarCompetencia = async () => {
         if (response.status === 200) {
             competencia.idCompetencia = response.data.idCompetencia;
         }
-        alert("Competencia guardada exitosamente");
         router.push({ name: 'Torneos' });
     } catch (error) {
         console.error("Error fatal:", error);
@@ -265,7 +264,6 @@ const verificarGuardado = () => {
     if (confirm("¿Estas seguro de guardar la competencia?")) {
         guardarConfiguraciones();
     } else {
-        alert("Operacion cancelada");
         resetForm();
     }
 }

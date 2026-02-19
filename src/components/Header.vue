@@ -1,13 +1,24 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { IconSearch, IconMenu2, IconX } from '@tabler/icons-vue';
 import { RouterLink } from 'vue-router';
 // import axios from 'axios'; // No se usa en este fragmento
 import CerrarSesionModal from './modal/CerrarSesionModal.vue';
-
+const props = defineProps({
+    persona: {
+        type: Object,
+        required: true
+    }
+});
 // Estado para el menú móvil
 const isMobileMenuOpen = ref(false);
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
+
+const isRouteActive = (path) => {
+    return route.path === path || route.path.startsWith(path + '/');
+};
 const menuItems = [
     { label: 'Dashboard', to: '/inicio' },
     { label: 'Torneos', to: '/torneo' },
@@ -21,11 +32,14 @@ const toggleMenu = () => {
 };
 
 const showModal = ref(false);
-
+onMounted(() => {
+    console.log("Persona en Header:", props.persona);
+})
 </script>
 
 <template>
-    <header class="relative flex items-center justify-between whitespace-nowrap px-4 md:px-8 py-4 shrink-0 z-20 bg-white border-b border-gray-100">
+    <header
+        class="relative flex items-center justify-between whitespace-nowrap px-4 md:px-8 py-4 shrink-0 z-20 bg-white border-b border-gray-100">
 
         <div class="flex items-center gap-4 lg:gap-12">
             <div class="flex items-center gap-3">
@@ -34,18 +48,19 @@ const showModal = ref(false);
                     style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAXdMDFebob232Jvpxzh6DyfpL6brj2_do9ycliOBPD16NxxiwdSfPYMNmDJ7HttCbCFOsXmP2JjEAsypfFTNGK9ObO4WggE_W4vm_MPZPIGVGH6O36faJJVVqO9_GfX0rHxutmMq1jhxsMrzM3T85O6xuKypF6sHMVCOZARJh5EYbCb9Y8vayfZZyeAqbtL5UiYvAXW0Pi-NJh1nsZFyWc9ZC5eeIVbvKB_QA8TCp4JzaSMhc0rdcQuejrIK8F5IEC4Rb_arvo8ao");'>
                 </div>
                 <div class="flex flex-col">
-                    <h1 class="text-base font-bold leading-tight">Admin Panel</h1>
-                    <p class="text-xs md:text-sm font-normal text-gray-500">Gestión de Fútbol 11</p>
+                    <h1 class="text-base font-bold leading-tight">Administración</h1>
+                    <p class="text-xs md:text-sm  ">Usuario: <span class="font-bold text-gray-600">{{ persona.email }}</span>
+                    </p>
                 </div>
             </div>
 
             <nav class="hidden lg:flex items-center gap-2">
-                <RouterLink v-for="item in menuItems" :key="item.to" :to="item.to" v-slot="{ isActive }">
+                <RouterLink v-for="item in menuItems" :key="item.to" :to="item.to">
                     <a :class="[
-                        'flex items-center gap-2 px-4 py-2 rounded-full transition-colors',
-                        isActive
-                            ? 'bg-[#0d7ff2] text-white'
-                            : 'text-[#1c1c0d] hover:bg-[#0d7ff2] hover:text-white'
+                        'flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200',
+                        isRouteActive(item.to)
+                            ? 'bg-[#0d7ff2] text-white shadow-md scale-105'
+                            : 'text-[#1c1c0d] hover:bg-[#0d7ff2]/10 hover:text-[#0d7ff2]'
                     ]">
                         <span class="text-sm font-medium">{{ item.label }}</span>
                     </a>
@@ -54,8 +69,9 @@ const showModal = ref(false);
         </div>
 
         <div class="flex items-center gap-3 md:gap-6">
-            <label class="hidden md:flex flex-col w-full max-w-xs h-10">
-                <div class="flex w-full items-stretch rounded-full h-full border bg-white overflow-hidden transition-shadow focus-within:ring-2 ring-[#0d7ff2]/20">
+            <!-- <label class="hidden md:flex flex-col w-full max-w-xs h-10">
+                <div
+                    class="flex w-full items-stretch rounded-full h-full border bg-white overflow-hidden transition-shadow focus-within:ring-2 ring-[#0d7ff2]/20">
                     <div class="flex items-center justify-center pl-3 bg-transparent text-gray-500">
                         <IconSearch size="18" />
                         <input
@@ -63,7 +79,7 @@ const showModal = ref(false);
                             placeholder="Buscar..." />
                     </div>
                 </div>
-            </label>
+            </label> -->
 
             <div class="flex items-center gap-3">
                 <div class="flex items-center gap-2 pl-2 md:border-l border-[#0d7ff2] md:border-gray-200">
@@ -71,7 +87,7 @@ const showModal = ref(false);
                         style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCa1-cZYPR9gKwXCSNGvUiaC_JFndu5jphSFZTQqF1YLnYpzUjCZgfEw971KH_-TpPmslg4WdW814Uk49QVCLHVAts7qVtM5WSZtea1_xHJEna9w8wpEbJExYpxlW-R5lrPpHRci7qkZSN1y-WkFBXPCVA-eCow12RLsG6xYdc0TVJsyhhESmrdVwkWtLz5NaD4H20RB8VsGjBT90-cLTE2EbvoO3YFq-l_-S7uxyaq4CX3Bwtf779XNtp58XT6PwtNPIv_zBiCyrc'); background-size: cover;">
                     </div>
                     <div class="hidden sm:flex flex-col">
-                        <span class="text-sm font-bold leading-none mb-0.5 text-[#1c1c0d]">Admin User</span>
+                        <span class="text-sm font-bold leading-none mb-0.5 text-[#1c1c0d]">{{ persona.nombre }}</span>
                         <span @click="showModal = true"
                             class="text-xs leading-none text-gray-500 cursor-pointer hover:text-red-500">
                             Cerrar sesión
@@ -91,18 +107,17 @@ const showModal = ref(false);
             leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 -translate-y-2">
             <div v-if="isMobileMenuOpen"
                 class="absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 lg:hidden flex flex-col p-4 gap-2 z-50">
-                <RouterLink v-for="item in menuItems" :key="item.to" :to="item.to" v-slot="{ isActive }"
-                    @click="isMobileMenuOpen = false">
+                <RouterLink v-for="item in menuItems" :key="item.to" :to="item.to" @click="isMobileMenuOpen = false">
                     <a :class="[
-                        'flex items-center gap-3 px-4 py-3 rounded-xl transition-colors',
-                        isActive
-                            ? 'bg-[#0d7ff2] text-white'
+                        'flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200',
+                        isRouteActive(item.to)
+                            ? 'bg-[#0d7ff2] text-white shadow-md'
                             : 'text-[#1c1c0d] hover:bg-gray-100'
                     ]">
                         <span class="text-base font-medium">{{ item.label }}</span>
                     </a>
                 </RouterLink>
-                 <div class="sm:hidden mt-2 pt-2 border-t border-gray-100">
+                <div class="sm:hidden mt-2 pt-2 border-t border-gray-100">
                     <button @click="showModal = true"
                         class="w-full text-left px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl text-sm font-medium">
                         Cerrar sesión
@@ -112,11 +127,11 @@ const showModal = ref(false);
         </transition>
     </header>
 
-    <div v-if="showModal" 
-         class="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 backdrop-blur-sm p-4 transition-all">
-         
+    <div v-if="showModal"
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 backdrop-blur-sm p-4 transition-all">
+
         <div class="absolute inset-0" @click="showModal = false"></div>
-        
+
         <div class="relative z-10">
             <CerrarSesionModal :showModalLogout="showModal" @closeModalLogout="showModal = false" :club="club" />
         </div>

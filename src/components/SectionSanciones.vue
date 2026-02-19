@@ -17,9 +17,11 @@ const size = ref(5);
 const totalElements = ref(0);
 const totalPages = ref(0);
 const sanciones = ref([]);
-const entidad = ref([]);
+const sancionado = ref([]);
 // Petición al Backend
 const fetchSanciones = async () => {
+    console.log(props.valor);
+
     if (props.valor === '') {
         sanciones.value = [];
         return;
@@ -29,28 +31,14 @@ const fetchSanciones = async () => {
             `http://localhost:8080/api/sanciones/buscar`, {
             params: {
                 valor: props.valor, // Usamos el valor que viene del padre
-                page: page.value,   // Añadimos paginación a la query
-                size: size.value
             },
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
-        const data = response.data;
-        entidad.value = data[0].clubDTO
-        console.log(entidad.value);
-
-        // Asumiendo que tu backend devuelve una Page de Spring Boot:
-        // Ajusta esto según la respuesta real de tu backend (content, totalElements, etc.)
-        if (data.content) {
-            sanciones.value = data.content;
-            totalElements.value = data.totalElements;
-            totalPages.value = data.totalPages;
-        } else {
-            // Si el backend devuelve el array directo
-            sanciones.value = data;
-        }
+        sanciones.value = response.data
+        sancionado.value = sanciones.value[0].sancionado; // Guardamos la sancionado para mostrar su nombre y tipo en el header
 
     } catch (error) {
         console.error('Error al cargar las sanciones:', error);
@@ -83,7 +71,7 @@ const handlePageChange = (newPage) => {
 
 <template>
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mx-4">
-        <SancionHeader v-if="sanciones.length > 0" :titulo="entidad.nombre" :tipoEntidad="entidad.localidad.provincia"
+        <SancionHeader v-if="sanciones.length > 0" :titulo="sancionado.nombre" :tipoEntidad="sancionado.tipoEntidad"
             :cantidad="sanciones.length" />
 
         <div class="overflow-x-auto">

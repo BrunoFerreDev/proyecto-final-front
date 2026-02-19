@@ -154,34 +154,34 @@ const handleImageUpload = (event) => {
 
 const guardarClub = async () => {
     try {
-        // Usamos FormData para enviar texto + archivos binarios (Multipart)
+        // 1. Preparamos el FormData solo para el archivo binario
         const formData = new FormData();
 
-        // Enviamos el objeto club como un Blob de tipo JSON
-        formData.append('club', new Blob([JSON.stringify(club)], {
-            type: "application/json"
-        }));
-
-        // Si el usuario seleccionó una imagen, la adjuntamos
         if (selectedFile.value) {
+            // El nombre 'escudo' debe ser idéntico al que definiste en @RequestPart("escudo")
             formData.append('escudo', selectedFile.value);
         }
 
-        const clubPost = await axios.post('http://localhost:8080/api/club', formData, {
+        // 2. Construimos la URL con el idClub como RequestParam
+        // Agregamos '/actualizar-imagen' que es el valor definido en tu @PutMapping
+        const url = `http://localhost:8080/api/club/actualizar-imagen?idClub=${club.value.idClub}`;
+
+        // 3. Realizamos la petición PUT
+        const response = await axios.put(url, formData, {
             headers: {
-                // Axios configurará automáticamente el 'Content-Type': 'multipart/form-data'
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
+                // No hace falta setear 'Content-Type': 'multipart/form-data', 
+                // Axios lo hace automáticamente al detectar el FormData.
             }
         });
 
-        console.log(clubPost);
+        console.log("Escudo actualizado:", response.data);
         resetForm();
 
     } catch (error) {
-        console.error("Error", error);
+        console.error("Error al cargar la imagen:", error);
     }
 };
-
 const resetForm = () => {
     club.nombre = '';
     club.ciudad = '';

@@ -110,22 +110,22 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: "/club/plantilla/:idClub",
+    path: "/clubes/plantilla/:idClub",
     component: () => import("./views/Plantilla.vue"),
     meta: { requiresAuth: true },
   },
   {
-    path: "/club/editar/:idClub",
+    path: "/clubes/editar/:idClub",
     component: () => import("./views/EditClubView.vue"),
     meta: { requiresAuth: true },
   },
   {
-    path: "/club/:idClub/ficha",
+    path: "/clubes/:idClub/ficha",
     component: () => import("./views/FichaClub.vue"),
     meta: { requiresAuth: true },
   },
   {
-    path: "/arbitro/:idPersona/ficha",
+    path: "/arbitros/:idPersona/ficha",
     name: "ficha-arbitro",
     component: () => import("./views/FichaPersona.vue"),
     meta: { requiresAuth: true },
@@ -135,7 +135,7 @@ const routes = [
     }),
   },
   {
-    path: "/jugador/:idPersona/ficha",
+    path: "/jugadores/:idPersona/ficha",
     name: "ficha-jugador",
     component: () => import("./views/FichaPersona.vue"),
     meta: { requiresAuth: true },

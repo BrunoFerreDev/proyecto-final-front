@@ -48,6 +48,10 @@ const props = defineProps({
     competencias: {
         type: Object,
         required: true
+    },
+    idTorneo: {
+        type: Number,
+        required: true
     }
 })
 const partidos = ref([]);
@@ -83,4 +87,27 @@ const fetchPartidos = async () => {
 onMounted(() => {
     fetchPartidos();
 });
+const crearFixtureAutomatico = async () => {
+    if (confirm("¿Estas seguro de crear el fixture automatico?")) {
+        try {
+            const response = await axios.post('http://localhost:8080/api/competencias/crear-fixture', null, {
+                params: {
+                    idTorneo: props.idTorneo,
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+            if (response.status == 200 || response.status == 201) {
+                fetchPartidos();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    } else {
+    }
+}
+
 </script>

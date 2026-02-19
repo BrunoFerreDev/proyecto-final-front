@@ -1,6 +1,7 @@
 <script setup>
+import axios from "axios";
 import Header from "./components/Header.vue";
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -8,7 +9,29 @@ const router = useRouter();
 // Configuración: 30 minutos en milisegundos
 const TIMEOUT_DURATION = 45 * 60 * 1000;
 let logoutTimer = null;
+const persona = ref({});
+const fetchAutenticado = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/');
+      return;
+    }
 
+    const response = await axios.get('http://localhost:8080/api/personas/autenticado', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    const userData = response.data;
+    console.log("Usuario autenticado:", userData);
+    persona.value = userData;
+    console.log(persona.value);
+
+  } catch (error) {
+    console.error("Error de autenticación:", error);
+  }
+}
 // Eventos que detectan actividad del usuario
 const activityEvents = [
   'mousedown',
@@ -64,10 +87,13 @@ onUnmounted(() => {
   });
   clearTimeout(logoutTimer);
 });
+onMounted(() => {
+  fetchAutenticado();
+});
 </script>
 
 <template>
-  <Header v-if="!$route.meta.hideHeader" />
+  <Header v-if="!$route.meta.hideHeader" :persona="persona" />
   <main class="w-full overflow-y-auto">
     <RouterView />
   </main>

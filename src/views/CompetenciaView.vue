@@ -2,7 +2,8 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             v-if="modalInscribirClub">
-            <ModalInscribirClub :modalInscribirClub="modalInscribirClub" @closeModal="modalInscribirClub = false" />
+            <ModalInscribirClub :modalInscribirClub="modalInscribirClub" @closeModal="modalInscribirClub = false"
+                :idCompetencia="competenciaId" />
         </div>
         <!-- Breadcrumbs -->
         <nav class="flex mb-6 text-sm font-medium text-slate-500 gap-2 items-center">
@@ -55,7 +56,7 @@
                 color="bg-green-100 text-green-700" />
             <StatsCard titulo="Promedio de Goles por Partido" :valor="stats.promedioGoles.toFixed(1)"
                 fontSize="text-2xl" icon="insights" color="bg-yellow-100 text-yellow-700" />
-            <StatsCard titulo="Equipo Líder" :valor="stats.equipoLider" fontSize="text-2xl" icon="emoji_events"
+            <StatsCard titulo="Equipo Líder" :valor="stats.equipoLider == null ? stats.equipoLider : 'Sin Equipo Líder'" fontSize="text-2xl" icon="emoji_events"
                 color="bg-purple-100 text-purple-700" />
         </div>
         <!-- Main Content Area with Tabs -->
@@ -84,7 +85,7 @@
                 <!-- Tab Content: Clasificación (Example view shown) -->
                 <TablePosiciones v-if="activeTab === 'tabla'" :idCompetencia="competenciaId" />
                 <!-- Tab Content: Fixture -->
-                <Fixture v-if="activeTab === 'fixture'" :competencias="competencia" />
+                <Fixture v-if="activeTab === 'fixture'" :competencias="competencia" :idTorneo="torneoId" />
                 <!-- Tab Content: Programar Partidos -->
                 <NewPartido v-if="activeTab === 'programar'" />
             </div>
@@ -150,7 +151,7 @@ const fetchStats = async () => {
     try {
         const response = await axios.get(`http://localhost:8080/api/competencias/resumen`, {
             params: {
-                idCompetencia: competencia.value.idCompetencia
+                idCompetencia: competenciaId
             },
             headers: {
                 'Content-Type': 'application/json',
@@ -158,8 +159,6 @@ const fetchStats = async () => {
             },
         });
         stats.value = response.data;
-        console.log(stats.value);
-        
     } catch (error) {
         console.error("Error cargando stats", error);
     } finally {

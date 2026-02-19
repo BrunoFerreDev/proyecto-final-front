@@ -26,6 +26,7 @@ const loadData = async () => {
             }
         });
         localidades.value = responseLoc.data;
+        console.log(localidades.value);
 
         // 2. Obtener Costos Existentes
         const responseCostos = await axios.get('/api/costos/obtener', {

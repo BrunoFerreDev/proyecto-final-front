@@ -41,6 +41,7 @@ const fetchClub = async () => {
     }
     );
     club.value = data;
+    console.log(club.value);
   } catch (error) {
     console.error(error);
   }
@@ -162,11 +163,10 @@ onUnmounted(() => {
     <!-- PageHeading -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="flex gap-4 items-center">
-        <div
-          class="size-16 rounded-xl bg-white border border-slate-200 p-2 shadow-sm flex items-center justify-center shrink-0">
-          <!-- Placeholder Team Logo -->
-          <span class="material-symbols-outlined text-4xl text-[#0d7ff2]">shield</span>
-        </div>
+        <picture>
+          <img :src="club?.escudo" alt="Escudo del Club"
+            class="size-16 rounded-xl bg-white border border-slate-200 p-2 shadow-sm flex items-center justify-center shrink-0">
+        </picture>
         <div>
           <h1 class="text-3xl font-black leading-tight tracking-tight text-slate-900">
             Plantilla: {{ club?.nombre }}
@@ -192,8 +192,8 @@ onUnmounted(() => {
     <!-- Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <StatsCard :valor="pagination.totalElements" titulo="Total Jugadores" fontSize="text-2xl" />
-      <StatsCard v-for="ct in cuerpoTecnico" :key="ct.id" :titulo="ct.rol"
-        :valor="ct.nombre + ' ' + ct.apellido" fontSize="text-lg" />
+      <StatsCard v-for="ct in cuerpoTecnico" :key="ct.id" :titulo="ct.rol" :valor="ct.nombre + ' ' + ct.apellido"
+        fontSize="text-lg" />
     </div>
     <!-- Filters & Actions -->
     <div

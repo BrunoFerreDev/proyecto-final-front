@@ -302,43 +302,46 @@ const clubData = reactive({
 const dni = ref('');
 const entidad = ref({})
 const guardarSancion = async () => {
-    // Preparar Payload
-    const payload = {
-        ...sancion,
-        // Discriminador para backend saber qué tipo de sanción es
-        entidad: activeTab.value
+    // 1. Preparar el objeto JSON tal cual lo espera el Swagger
+    // Asegúrate de que el objeto 'sancion' tenga las claves: idEntidad, tipoSancion, cantidad, fechaHecho, descripcionGeneral
+    const dataToSend = {
+        ...sancion, 
+        entidad: activeTab.value // Ej: "JUGADOR"
     };
 
-    // Si es Club, agregamos los campos extra
+    // Si es Club, agregamos los campos extra (mantengo tu lógica original)
     if (activeTab.value === 'CLUB') {
-        Object.assign(payload, {
+        Object.assign(dataToSend, {
             resolucion: clubData.resolucion,
             motivo: clubData.motivo
         });
     }
 
-    console.log("Enviando sanción al backend:", payload);
+    console.log("Enviando sanción al backend:", dataToSend);
 
     try {
-        const response = await axios.post(`${BASIC_URL}/sanciones`, {
-            payload, headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
+        // 2. La llamada corregida: (URL, BODY, CONFIG)
+        const response = await axios.post(
+            `${BASIC_URL}/sanciones`, // Primer argumento: URL
+            dataToSend,               // Segundo argumento: El JSON (Body)
+            {                         // Tercer argumento: Configuración (Headers)
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
             }
-        });
+        );
+
         if (response.status === 201 || response.status === 200) {
-            console.log("Sanción registrada:", response.data);
-            // await sancionApi.crear(payload);
+            console.log("Sanción registrada exitosamente:", response.data);
             resetForm();
-        } else {
-            console.error("Error al registrar", response.data);
-        }
+        } 
     } catch (error) {
-        console.error("Error al registrar", error);
+        console.error("Error al registrar sanción:", error);
+        // Tip: Imprime error.response.data para ver qué dice el backend
+        if (error.response) console.error("Detalle del error:", error.response.data);
     }
 };
-
 const resetForm = () => {
     sancion.tipoSancion = '';
     sancion.cantidad = 0;

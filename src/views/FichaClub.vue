@@ -4,8 +4,7 @@
       <div class="flex flex-col md:flex-row gap-8 items-center md:items-start">
         <div
           class="h-40 w-40 bg-slate-50  rounded-2xl border border-[#e5e7eb]  flex items-center justify-center p-6 shadow-inner">
-          <img alt="Escudo del Club" class="w-full h-full object-contain"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbxlq6EZlzWasE7aUPSMJQbqxxfr3KZJZV70uItMt5Y-ukJMnkD5AOcnMxUe06PhwBFH_xV1tl3AdqKWCkeUOz6qxPbZ3_ej_yKggMEH1IqBie_C4JBbm-gZPz6dB40DUSdMGNHxcagUxvv3qQyFgJp9x3fJC1CtY6qkrxfQpvVoZrtMrzMJVSPxuY2KOoZfUttnl2E3th0UiVvsCtjEznK6FMCLzx9T68432snD6KTv8awFhjf-M4qWq52WkHIWU2qbVQmpKOIrU" />
+          <img alt="Escudo del Club" class="w-full h-full object-contain" :src="imgUrl" />
         </div>
         <div class="flex-1 text-center md:text-left">
           <div class="flex flex-col md:flex-row md:items-center gap-4 mb-2">
@@ -64,7 +63,8 @@
                 Cuerpo Técnico Primera División
               </h3>
             </div>
-            <span class="text-[10px] font-bold text-[#5f668c] bg-white  px-2 py-1 rounded border border-[#e5e7eb] ">{{ cuerpoTecnico.length }}
+            <span class="text-[10px] font-bold text-[#5f668c] bg-white  px-2 py-1 rounded border border-[#e5e7eb] ">{{
+              cuerpoTecnico.length }}
               MIEMBROS</span>
           </div>
           <div class="p-6 space-y-6 flex flex-col gap-8">
@@ -193,6 +193,7 @@ onMounted(() => {
   console.log(idClub);
   fetchClub();
 })
+const imgUrl = club.value.escudo ? club.value.escudo : 'https://lh3.googleusercontent.com/aida-public/AB6AXuBbxlq6EZlzWasE7aUPSMJQbqxxfr3KZJZV70uItMt5Y-ukJMnkD5AOcnMxUe06PhwBFH_xV1tl3AdqKWCkeUOz6qxPbZ3_ej_yKggMEH1IqBie_C4JBbm-gZPz6dB40DUSdMGNHxcagUxvv3qQyFgJp9x3fJC1CtY6qkrxfQpvVoZrtMrzMJVSPxuY2KOoZfUttnl2E3th0UiVvsCtjEznK6FMCLzx9T68432snD6KTv8awFhjf-M4qWq52WkHIWU2qbVQmpKOIrU';
 const fetchClub = async () => {
   // TODO: Implementar llamada a API para obtener club
   try {
@@ -232,6 +233,6 @@ const fetchCuerpoTecnico = async () => {
   }
 }
 const navigateToEdit = (id) => {
-  router.push(`/club/editar/${id}`);
+  router.push(`/clubes/editar/${id}`);
 }
 </script>

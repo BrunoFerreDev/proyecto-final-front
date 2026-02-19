@@ -5,7 +5,7 @@
         <div class="flex flex-wrap justify-between items-start gap-3 p-6 border-b border-gray-100 ">
             <div class="flex min-w-72 flex-col gap-1">
                 <p class="text-[#111218]  tracking-light text-2xl font-bold leading-tight">Inscripción de
-                    Clubes</p>1
+                    Clubes</p>
                 <p class="text-[#5f668c]  text-sm font-normal">Torneo Apertura 2024 - Liga Fútbol 11
                 </p>
             </div>
@@ -67,7 +67,7 @@
                 class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-11 px-5 bg-gray-100  text-gray-700  text-sm font-semibold transition-colors hover:bg-gray-200">
                 Cancelar
             </button>
-            <button @click="closeModal"
+            <button @click="inscribirClubes"
                 class="flex min-w-[160px] cursor-pointer items-center justify-center rounded-lg h-11 px-6 bg-[#516dfb] text-white text-sm font-bold shadow-lg shadow-[#516dfb]/25 hover:bg-blue-600 transition-all">
                 Inscribir Clubes
             </button>
@@ -75,7 +75,7 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import ClubItem from './ClubItem.vue';
 import ClubGrid from './ClubGrid.vue';
 import axios from 'axios';
@@ -84,6 +84,10 @@ const props = defineProps({
     modalInscribirClub: {
         type: Boolean,
         default: false
+    },
+    idCompetencia: {
+        type: Number,
+        required: true
     }
 });
 const emit = defineEmits('closeModal');
@@ -94,20 +98,22 @@ const closeModal = () => {
 const clubesParaInscribir = ref([]);
 const selectClub = (club) => {
     // Buscamos si el club ya existe en el array por su ID (o nombre si no tiene ID)
-    const index = clubesParaInscribir.value.findIndex(c => c.nombre === club.nombre);
+    const index = clubesParaInscribir.value.findIndex(c => c.idClub === club.idClub);
 
     if (index === -1) {
         // Si no existe, lo agregamos
         clubesParaInscribir.value.push(club);
         console.log("Club agregado:", club.nombre);
+        console.log(clubesParaInscribir.value);
+
     } else {
         // Opcional: Si el usuario hace click de nuevo, lo removemos (toggle)
         clubesParaInscribir.value.splice(index, 1);
-        console.log("Club removido:", club.nombre);
+        console.log("Club removido:", club);
     }
 }
 const removeClub = (club) => {
-    const index = clubesParaInscribir.value.findIndex(c => c.nombre === club.nombre);
+    const index = clubesParaInscribir.value.findIndex(c => c.idClub === club.idClub);
     if (index !== -1) {
         clubesParaInscribir.value.splice(index, 1);
         console.log("Club removido desde chip:", club.nombre);
@@ -131,10 +137,45 @@ const buscarClubes = async () => {
         });
         clubEncontrado.value = response.data;
         console.log(clubEncontrado.value);
-
     } catch (error) {
         console.error('Error al buscar clubes:', error)
         clubEncontrado.value = {};
     }
 }
+const inscribirClubes = async () => {
+    try {
+        // Convertimos el Set a Array para que Axios pueda repetir el parámetro (clubes=1&clubes=2...)
+        const listaClubes = [...new Set(clubesParaInscribir.value.map(c => c.idClub))];
+
+        // Fíjate que corregí 'comptencias' por 'competencias' en la URL también
+        const response = await axios.post(
+            'http://localhost:8080/api/competencias/inscribir-club',
+            null, // <--- IMPORTANTE: El cuerpo va como null porque usas @RequestParam
+            {
+                params: {
+                    clubes: listaClubes,
+                    idCompetencia: props.idCompetencia,
+                },
+                // Esto asegura que se envíe como ?clubes=1&clubes=2 (sin corchetes [])
+                paramsSerializer: {
+                    indexes: null
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            }
+        );
+
+        const data = response.data;
+        alert(data.message || 'Clubes inscritos exitosamente');
+        console.log('Respuesta del servidor:', data);
+        closeModal(); // Cerramos el modal después de inscribir
+    } catch (error) {
+        console.error("Error al inscribir clubes:", error);
+    }
+}
+onMounted(() => {
+    console.log("Modal abierto para competencia ID:", props.idCompetencia);
+});
 </script>

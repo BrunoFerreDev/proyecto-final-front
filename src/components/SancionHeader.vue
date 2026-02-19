@@ -14,10 +14,6 @@
             </div>
         </div>
         <div class="flex gap-4 text-center sm:text-right">
-            <div>
-                <p class="text-xs uppercase tracking-wide text-slate-500 font-semibold">Club Actual</p>
-                <p class="font-bold text-slate-900 ">{{ titulo }}</p>
-            </div>
             <div class="w-px bg-slate-200 h-10"></div>
             <div>
                 <p class="text-xs uppercase tracking-wide text-slate-500 font-semibold">Sanciones Activas

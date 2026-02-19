@@ -55,19 +55,19 @@ const getClasePuntoEstado = (estado) => {
             <thead>
                 <tr class="bg-slate-50 border-b border-slate-200">
                     <th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                        Codigo Sancion
+                    </th>
+                    <th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-slate-500">
                         Fecha Hecho
                     </th>
                     <th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-slate-500">
                         Tipo Sancion
                     </th>
                     <th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                        Descripcion
-                    </th>
-                    <th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                        Codigo Sancion
-                    </th>
-                    <th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-slate-500">
                         Duración
+                    </th>
+                    <th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                        Descripcion
                     </th>
                     <th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-slate-500">
                         Estado
@@ -80,6 +80,15 @@ const getClasePuntoEstado = (estado) => {
             <tbody class="divide-y divide-slate-100 bg-white">
 
                 <tr v-for="sancion in sanciones" :key="sancion.id" class="hover:bg-slate-50 transition-colors group">
+
+                    <td class="py-4 px-6 text-sm text-slate-600">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-mono bg-slate-100 px-1 rounded w-fit text-slate-500 mb-1">
+                                {{ sancion.codigo.slice(0, 20) }}{{ sancion.codigo.length > 20 ? '...' : '' }}
+                            </span>
+                            <span class="text-xs text-slate-500">{{ sancion.tipoEntidad }}</span>
+                        </div>
+                    </td>
                     <td class="py-4 px-6 text-sm font-medium text-slate-900 whitespace-nowrap">
                         {{ formatearFecha(sancion.fechaHecho) }}
                     </td>
@@ -87,10 +96,14 @@ const getClasePuntoEstado = (estado) => {
                     <td class="py-4 px-6 text-sm text-slate-600">
                         <div class="flex flex-col">
                             <span class="font-medium text-slate-900">{{ sancion.tipoSancion }}</span>
-                            <span class="text-xs text-slate-400">{{ sancion.subtitulo }}</span>
+                            <!-- <span class="text-xs text-slate-400">{{ sancion.subtitulo }}</span> -->
                         </div>
                     </td>
 
+                    <td class="py-4 px-6 text-sm font-medium text-slate-900">
+                        {{ sancion.cantidad }}
+                    </td>
+                    
                     <td class="py-4 px-6">
                         <div class="flex items-center gap-2">
                             <div class="w-3 h-4 rounded-sm shadow-sm" :class="getColorTarjeta(sancion.tipoSancion)"
@@ -101,20 +114,6 @@ const getClasePuntoEstado = (estado) => {
                             </span>
                         </div>
                     </td>
-
-                    <td class="py-4 px-6 text-sm text-slate-600">
-                        <div class="flex flex-col">
-                            <span class="text-xs font-mono bg-slate-100 px-1 rounded w-fit text-slate-500 mb-1">
-                                {{ sancion.codigo }}
-                            </span>
-                            <span class="text-xs text-slate-500">{{ sancion.tipoEntidad }}</span>
-                        </div>
-                    </td>
-
-                    <td class="py-4 px-6 text-sm font-medium text-slate-900">
-                        {{ sancion.cantidad }}
-                    </td>
-
                     <td class="py-4 px-6">
                         <span
                             class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold border"

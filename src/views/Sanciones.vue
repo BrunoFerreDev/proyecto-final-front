@@ -95,7 +95,7 @@ const getYears = () => {
                             </span>
                             <input
                                 class="w-full h-12 pl-11 pr-4 rounded-lg border border-slate-200  bg-slate-50  text-slate-800  placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all"
-                                v-model="textoInput" @input="manejarEscritura" @keydown.enter="buscarInmediatamente"
+                                v-model="textoInput"  @keyup.enter="buscarInmediatamente"
                                 type="text" placeholder="Buscar (Espere 3s o presione Enter)..." />
                         </div>
                     </div>

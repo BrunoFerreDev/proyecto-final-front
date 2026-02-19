@@ -27,7 +27,6 @@ const navigateToMatchDetails = (idPartido) => {
                 <h2 class="text-[#1c1c0d] text-2xl font-bold leading-tight">
                     Resultados Última Jornada
                 </h2>
-                <span class="px-3 py-1 bg-[#9e9d47]/20 text-black text-xs font-bold rounded-full">Jornada 12</span>
             </div>
         </div>
 
@@ -59,19 +58,19 @@ const navigateToMatchDetails = (idPartido) => {
                                     <div class="flex items-center gap-3 justify-end w-[40%]">
                                         <span class="text-[#1c1c0d] font-bold text-base min-w-36 w-full">{{
                                             partido.clubLocal.nombre
-                                            }}</span>
+                                        }}</span>
                                         <div class="size-10 rounded-full bg-gray-100 bg-center bg-cover border border-gray-200"
-                                            :style="{ backgroundImage: `url('${partido.clubLocal.logo || ''}')` }">
+                                            :style="{ backgroundImage: `url('${partido.clubLocal.escudo || ''}')` }">
                                         </div>
                                     </div>
                                     <span class="text-black text-xs font-bold">VS</span>
                                     <div class="flex items-center gap-3 w-[40%]">
                                         <div class="size-10 rounded-full bg-gray-100 bg-center bg-cover border border-gray-200"
-                                            :style="{ backgroundImage: `url('${partido.clubVisitante.logo || ''}')` }">
+                                            :style="{ backgroundImage: `url('${partido.clubVisitante.escudo || ''}')` }">
                                         </div>
                                         <span class="text-[#1c1c0d] font-bold text-base min-w-36 w-full">{{
                                             partido.clubVisitante.nombre
-                                            }}</span>
+                                        }}</span>
                                     </div>
                                 </div>
                             </td>

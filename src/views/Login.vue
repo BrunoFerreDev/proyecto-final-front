@@ -16,8 +16,8 @@
         </header>
         <!-- Main Content Container -->
         <main
-            class="flex-1 flex items-center justify-center px-4 py-12 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-[#55a6f6]/10 via-background-light to-background-light  ">
-            <div class="w-full max-w-[440px]">
+            class="flex-1 flex items-center justify-center px-4 py-12 bg-[radial-gradient(circle_at_top_right,var(--tw-gradient-stops))] from-[#55a6f6]/10 via-background-light to-background-light  ">
+            <div class="w-full max-w-110">
                 <!-- Login Card -->
                 <div
                     class="bg-white  rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100  p-8 md:p-10">
@@ -65,18 +65,6 @@
                                 </button>
                             </div>
                         </div>
-                        <!-- Extra Options -->
-                        <div class="flex items-center justify-between">
-                            <label class="flex items-center gap-2 cursor-pointer group">
-                                <input
-                                    class="w-4 h-4 rounded border-slate-300  text-[#55a6f6] focus:ring-[#55a6f6] bg-white "
-                                    type="checkbox" />
-                                <span
-                                    class="text-xs font-medium text-slate-600  group-hover:text-slate-800  transition-colors">Recordarme</span>
-                            </label>
-                            <a class="text-xs font-semibold text-[#55a6f6] hover:underline underline-offset-4"
-                                href="#">¿Olvidaste tu contraseña?</a>
-                        </div>
                         <!-- Submit Button -->
                         <button @click.prevent="verificarFormulario"
                             class="w-full bg-[#55a6f6] hover:bg-[#55a6f6]/90 text-white font-bold py-4 rounded-lg shadow-lg shadow-[#55a6f6]/25 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
@@ -84,21 +72,18 @@
                             <span>Iniciar Sesión</span>
                             <span class="material-symbols-outlined text-lg">login</span>
                         </button>
+                        <!-- Extra Options -->
+                        <div class="flex items-center justify-end">
+                            <a class="text-xs font-semibold text-[#55a6f6] hover:underline underline-offset-4"
+                                href="#">¿Olvidaste tu contraseña?</a>
+                        </div>
                     </form>
-                    <!-- Alternate Option -->
-                    <div class="mt-8 pt-8 border-t border-slate-100  text-center">
-                        <p class="text-sm text-slate-500 ">
-                            ¿No tienes una cuenta de administrador?
-                            <a class="font-bold text-[#55a6f6] hover:text-[#55a6f6]/80 transition-colors"
-                                href="#">Solicitar
-                                acceso</a>
-                        </p>
-                    </div>
+
                 </div>
                 <!-- Footer Text -->
                 <div class="mt-8 text-center space-y-4">
                     <p class="text-xs text-slate-400 ">
-                        © 2024 Sistema de Gestión de Ligas. Todos los derechos reservados.
+                        © {{ new Date().getFullYear() }} Sistema de Gestión de Ligas. Todos los derechos reservados.
                     </p>
                     <div class="flex justify-center gap-4 text-xs font-medium text-slate-400">
                         <a class="hover:text-[#55a6f6]" href="#">Términos</a>

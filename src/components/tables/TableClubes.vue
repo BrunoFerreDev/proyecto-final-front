@@ -40,7 +40,7 @@
               <div class="flex flex-col">
                 <span class="text-sm font-bold text-slate-900">{{
                   club.nombre
-                  }}</span>
+                }}</span>
                 <span class="text-xs text-slate-400">ID: {{ club.idClub }}</span>
               </div>
             </td>
@@ -68,12 +68,12 @@
             </td>
             <td class="px-6 py-4 text-right">
               <div class="flex items-center justify-end gap-1">
-                <button type="button" @click.prevent="navigateTo('/club/plantilla/' + club.idClub)"
+                <button type="button" @click.prevent="navigateTo('/clubes/plantilla/' + club.idClub)"
                   class="p-2 text-slate-400 text-[#0d7ff2] bg-[#0d7ff2]/5 rounded-lg transition-colors"
                   title="Gestionar Jugadores">
                   <IconUsersGroup />
                 </button>
-                <button @click.prevent="navigateTo('/club/' + club.idClub + '/ficha')"
+                <button @click.prevent="navigateTo('/clubes/' + club.idClub + '/ficha')"
                   class="p-2 text-slate-400 text-[#0d7ff2] bg-[#0d7ff2]/5 rounded-lg transition-colors"
                   title="Editar club">
                   <IconEdit />
@@ -117,7 +117,6 @@ const props = defineProps({
 const tipo = ref("Clubes");
 // Definimos el evento para avisar al padre
 const emit = defineEmits(["page-change"]);
-
 const navigateTo = (path) => {
   router.push(path);
 };

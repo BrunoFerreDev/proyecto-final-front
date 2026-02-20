@@ -32,9 +32,7 @@ const toggleMenu = () => {
 };
 
 const showModal = ref(false);
-onMounted(() => {
-    console.log("Persona en Header:", props.persona);
-})
+
 </script>
 
 <template>

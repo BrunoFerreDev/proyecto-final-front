@@ -1,20 +1,16 @@
 <script setup>
 import { useRouter } from 'vue-router';
-import CostosEncuentro from '../components/CostosEncuentro.vue';
 import Designacion from '../components/Designacion.vue';
 import DetalleEncuentro from '../components/DetalleEncuentro.vue';
 import PartidoHeading from '../components/PartidoHeading.vue';
 import PreviewDesignacion from '../components/PreviewDesignacion.vue';
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 const router = useRouter();
 const idPartido = router.currentRoute.value.params.idPartido;
 const competencia = ref({});
 const partido = ref({});
 const torneo = ref({});
-const nombreLocal = ref('');
-const nombreVisitante = ref('');
-const categoria = ref('');
 const fetchPartido = async () => {
     try {
         const response = await axios.get(`http://localhost:8080/api/partidos/${idPartido}`, {
@@ -25,17 +21,22 @@ const fetchPartido = async () => {
             }
         });
         partido.value = response.data;
-        nombreLocal.value = partido.value.clubLocal.nombre;
-        nombreVisitante.value = partido.value.clubVisitante.nombre;
-        categoria.value = partido.value.competenciaDTO.categoria;
+        competencia.value = partido.value.competenciaDTO;
+        torneo.value = competencia.value.torneo
         console.log(partido.value);
     } catch (error) {
         console.error(error);
     }
 }
 onMounted(() => {
-    fetchPartido();
+    console.log(partido.value)
 })
+watch(() => idPartido, (newId) => {
+    if (newId) {
+        fetchPartido();
+    }
+}, { immediate: true });
+
 </script>
 
 <template>
@@ -51,15 +52,14 @@ onMounted(() => {
             <span class="material-symbols-outlined text-xs text-gray-400">chevron_right</span>
             <span class="text-[#516dfb] font-semibold">Programación Partido #{{ partido.idPartido }}</span>
         </div>
-        <PartidoHeading :partido="partido" :nombreLocal="nombreLocal" :nombreVisitante="nombreVisitante"
-            :categoria="categoria" />
+        <PartidoHeading :partido="partido" :nombreLocal="partido.clubLocal.nombre"
+            :nombreVisitante="partido.clubVisitante.nombre" :categoria="competencia.categoria" />
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div class="lg:col-span-8 space-y-8">
-                <DetalleEncuentro :partido="partido" />
-                <Designacion :idPartido="partido.idPartido" />
-                <!-- <CostosEncuentro /> -->
+            <div class="lg:col-span-12 space-y-8">
+                <DetalleEncuentro :partido="partido" v-if="!partido.fecha || !partido.hora" />
+                <Designacion :idPartido="partido.idPartido" v-if="!partido.existeDesignacion" />
+                <PreviewDesignacion :partido="partido" />
             </div>
-            <PreviewDesignacion />
         </div>
     </main>
 </template>

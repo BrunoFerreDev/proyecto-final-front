@@ -24,10 +24,7 @@ const fetchAutenticado = async () => {
       }
     });
     const userData = response.data;
-    console.log("Usuario autenticado:", userData);
     persona.value = userData;
-    console.log(persona.value);
-
   } catch (error) {
     console.error("Error de autenticación:", error);
   }

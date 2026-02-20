@@ -3,7 +3,7 @@
         <div class="bg-[#516dfb]/5 px-6 py-4 border-b border-[#dbdde6] flex items-center justify-between">
             <h2 class="text-lg font-bold flex items-center gap-2">
                 <span class="material-symbols-outlined text-[#516dfb]">sports</span>
-                2. Designación Arbitral
+                Designación Arbitral
             </h2>
             <button @click.prevent="guardarDesignacion" type="button"
                 class="cursor-pointer px-6 py-2.5 bg-[#516dfb] text-white text-sm font-bold rounded-lg flex items-center justify-center gap-2 ">Guardar
@@ -97,6 +97,9 @@ const fetchArbitros = async (page, size) => {
                 page: page,
                 size: size,
                 tipo: 2
+            },
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
         // Retornamos el contenido o un array vacío por seguridad
@@ -109,15 +112,23 @@ const fetchArbitros = async (page, size) => {
 const guardarDesignacion = async () => {
 
     try {
+        console.log(arbitros.value);
+
         // 1. Hacemos la petición
         const response = await axios.post("http://localhost:8080/api/designaciones/cargar", {
             idPartido: props.idPartido,
-            arbitros: dataAenviar.value.arbitros
+            arbitros: arbitros.value
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
         });
 
         // 2. Si llega aquí, es un código 2xx (Éxito)
         if (response.status === 200 || response.status === 201) {
             // Aquí podrías redirigir o limpiar el formulario
+            alert("Designación guardada exitosamente");
         }
 
     } catch (error) {
@@ -137,6 +148,9 @@ const guardarDesignacion = async () => {
         } else {
             // Error en la configuración de la petición
         }
+    } finally {
+        // Código que se ejecuta siempre, haya error o no (opcional)
+        location.reload(); // Recarga la página para mostrar cambios o limpiar el formulario, según tu necesidad
     }
 };
 const pushArbitro = (idArbitro, rol) => {

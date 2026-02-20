@@ -56,8 +56,8 @@
                 color="bg-green-100 text-green-700" />
             <StatsCard titulo="Promedio de Goles por Partido" :valor="stats.promedioGoles.toFixed(1)"
                 fontSize="text-2xl" icon="insights" color="bg-yellow-100 text-yellow-700" />
-            <StatsCard titulo="Equipo Líder" :valor="stats.equipoLider == null ? stats.equipoLider : 'Sin Equipo Líder'" fontSize="text-2xl" icon="emoji_events"
-                color="bg-purple-100 text-purple-700" />
+            <StatsCard titulo="Equipo Líder" :valor="stats.equipoLider == null ? stats.equipoLider : 'Sin Equipo Líder'"
+                fontSize="text-2xl" icon="emoji_events" color="bg-purple-100 text-purple-700" />
         </div>
         <!-- Main Content Area with Tabs -->
         <div class="bg-white rounded-2xl border border-slate-200  shadow-sm overflow-hidden">
@@ -79,6 +79,13 @@
                         <span class="material-symbols-outlined text-[20px]">schedule</span>
                         Programar Partidos
                     </button>
+                    <button :class="checkActive('inscriptos')" @click="() => {
+                        fetchClubesInscriptos();
+                        activeTab = 'inscriptos'
+                    }" class="flex items-center gap-2 py-4 text-sm ">
+                        <span class="material-symbols-outlined text-[20px]">shield</span>
+                        Clubes Inscritos
+                    </button>
                 </nav>
             </div>
             <div class="p-6">
@@ -87,20 +94,24 @@
                 <!-- Tab Content: Fixture -->
                 <Fixture v-if="activeTab === 'fixture'" :competencias="competencia" :idTorneo="torneoId" />
                 <!-- Tab Content: Programar Partidos -->
-                <NewPartido v-if="activeTab === 'programar'" />
+                <NewPartido v-if="activeTab === 'programar'" :idCompetencia="competenciaId" />
+                <TableClubes v-if="activeTab === 'inscriptos'" :clubs="clubesInscriptos" :page="page"
+                    :total-pages="totalPages" :total-elements="totalElements" :size="size"
+                    @page-change="handlePageChange" />
             </div>
         </div>
     </main>
 </template>
 <script setup>
 import StatsCard from '@/components/StatsCard.vue'
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import TablePosiciones from '../components/tables/TablePosiciones.vue';
 import Fixture from '../components/Fixture.vue';
 import NewPartido from '../components/forms/NewPartido.vue';
+import ModalInscribirClub from '../components/modal/ModalInscribirClub.vue';
+import TableClubes from '../components/tables/TableClubes.vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import ModalInscribirClub from '../components/modal/ModalInscribirClub.vue';
 const activeTab = ref('tabla')
 const router = useRouter()
 const competenciaId = router.currentRoute.value.params.idCompetencia
@@ -108,6 +119,13 @@ const torneoId = router.currentRoute.value.params.idTorneo
 const competencia = ref([])
 const modalInscribirClub = ref(false)
 const torneo = ref({})
+const clubesInscriptos = ref([])
+
+const page = ref(0); // Spring Boot usa 0-indexed por defecto
+const size = ref(5); // Cantidad de items por página
+const totalElements = ref(0);
+const totalPages = ref(0);
+
 const showModalInscribirClub = () => {
     modalInscribirClub.value = true;
 }
@@ -164,6 +182,40 @@ const fetchStats = async () => {
     } finally {
         loading.value = false;
     }
+};
+const fetchClubesInscriptos = async () => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/competencias/traer-clubes`, {
+            params: {
+                idComptencia: competencia.value.idCompetencia,
+                size: size.value,
+                page: page.value
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        });
+        const data = response.data;
+        clubesInscriptos.value = data.content;
+        totalElements.value = data.totalElements;
+        totalPages.value = data.totalPages;
+
+        return response.data;
+    } catch (error) {
+        console.error("Error cargando clubes inscriptos", error);
+        return [];
+    }
+};
+watch([page, size], () => {
+    fetchClubesInscriptos();
+});
+
+// --- EVENTOS ---
+// Esta función recibe el evento del hijo (TableClubes)
+const handlePageChange = (newPage) => {
+    page.value = newPage;
+    // No hace falta llamar a fetchClubes aquí, el 'watch' lo hará.
 };
 onMounted(() => {
     fetchCompetencia();

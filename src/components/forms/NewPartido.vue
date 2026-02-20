@@ -11,22 +11,23 @@
         <!-- Team Selection -->
         <div class="space-y-2">
             <label class="text-sm font-semibold text-gray-700">Club Local</label>
-            <select class="w-full h-12 rounded-lg border bg-white focus:ring-[#0d7ff2] focus:border-[#0d7ff2]">
-                <option disabled selected value="">
-                    Seleccionar club...
+            <select class="w-full h-12 rounded-lg border bg-white focus:ring-[#0d7ff2] focus:border-[#0d7ff2]"
+                v-model="idLocal">
+                <option value="" disabled>Seleccionar club...</option>
+                <option v-for="club in opcionesLocal" :key="club.idClub" :value="club.idClub">
+                    {{ club.nombre }}
                 </option>
-                <option value="1">Real Madrid FC</option>
-                <option value="2">Atlético Sur</option>
             </select>
         </div>
+
         <div class="space-y-2">
             <label class="text-sm font-semibold text-gray-700">Club Visitante</label>
-            <select class="w-full h-12 rounded-lg border bg-white focus:ring-[#0d7ff2] focus:border-[#0d7ff2]">
-                <option disabled selected value="">
-                    Seleccionar club...
+            <select class="w-full h-12 rounded-lg border bg-white focus:ring-[#0d7ff2] focus:border-[#0d7ff2]"
+                v-model="idVisitante">
+                <option value="" disabled>Seleccionar club...</option>
+                <option v-for="club in opcionesVisitante" :key="club.idClub" :value="club.idClub">
+                    {{ club.nombre }}
                 </option>
-                <option value="1">Dep. Libertad</option>
-                <option value="2">Los Pumas</option>
             </select>
         </div>
         <!-- Date & Time -->
@@ -73,6 +74,60 @@
     </form>
 </template>
 <script setup>
+import { IconPlus } from '@tabler/icons-vue';
+import { IconDeviceFloppy } from '@tabler/icons-vue';
+import axios from 'axios';
+import { computed, onMounted, ref, watch } from 'vue';
+
+const props = defineProps({
+    // Aquí podrías recibir props como lista de clubes, etc.
+    idCompetencia: {
+        type: Number,
+        required: true
+    }
+});
+
+const clubes = ref([]);
+const idLocal = ref('');
+const idVisitante = ref('');
+const clubesFilter = ref('');
+const fetchClubesInscriptos = async () => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/competencias/traer-clubes`, {
+            params: {
+                idComptencia: props.idCompetencia,
+                size: 0,
+                page: 0
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        });
+        const data = response.data;
+        clubes.value = data.content;
+        console.log(clubes.value);
+
+        return response.data;
+    } catch (error) {
+        console.error("Error cargando clubes inscriptos", error);
+        return [];
+    }
+};
+onMounted(() => {
+    fetchClubesInscriptos();
+});
+// Opciones para el select LOCAL (filtramos al que ya es visitante)
+const opcionesLocal = computed(() => {
+    if (!idVisitante.value) return clubes.value;
+    return clubes.value.filter(club => club.idClub !== idVisitante.value);
+});
+
+// Opciones para el select VISITANTE (filtramos al que ya es local)
+const opcionesVisitante = computed(() => {
+    if (!idLocal.value) return clubes.value;
+    return clubes.value.filter(club => club.idClub !== idLocal.value);
+});
 const verificarGuardado = () => {
     if (confirm("¿Estas seguro de guardar el partido?")) {
         guardarPartido();

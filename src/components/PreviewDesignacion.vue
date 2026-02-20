@@ -1,64 +1,114 @@
+<script setup>
+import { onMounted, ref, watch } from 'vue';
+import ClubDesignacionHeader from './ClubDesignacionHeader.vue';
+import ItemArbitroDesignacion from './ItemArbitroDesignacion.vue';
+import axios from 'axios';
+import TableDesignacion from './tables/TableDesignacion.vue';
+import CompetenciaInfo from './CompetenciaInfo.vue';
+const props = defineProps({
+    partido: {
+        type: Object,
+        required: true
+    }
+})
+const designados = ref([]);
+const formatearFechaCompleta = (fechaString) => {
+    if (!fechaString) return "";
+
+    const fecha = new Date(fechaString);
+
+    // Formato de la fecha: "jueves 19 de febrero"
+    const fechaParte = fecha.toLocaleDateString('es-AR', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long'
+    });
+
+    // Formato de la hora: "15:41"
+    const horaParte = fecha.toLocaleTimeString('es-AR', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false // Formato 24hs usado en Argentina
+    });
+
+    return `${fechaParte} a las ${horaParte} hs`;
+};
+const fetchArbitros = async () => {
+    try {
+        const response = await axios.get("http://localhost:8080/api/designaciones/traer", {
+            params: {
+                idPartido: props.partido.idPartido
+            },
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
+            }
+        });
+        const data = response.data;
+        console.log("Designados:", data);
+        designados.value = data;
+    } catch (error) {
+        console.error("Error fetching arbitros:", error);
+    }
+}
+// 2. Vigilamos la prop. Si cambia o se carga tarde, se dispara.
+watch(() => props.partido?.idPartido, (newId) => {
+    if (newId) {
+        fetchArbitros();
+    }
+}, { immediate: true });
+</script>
+
 <template>
-    <div class="lg:col-span-4 space-y-6">
-        <div class="bg-[#516dfb] text-white rounded-xl p-6 shadow-lg shadow-[#516dfb]/20 relative overflow-hidden">
-            <div class="relative z-10">
-                <p class="text-white/70 text-sm font-medium mb-1">Resumen del Costo Total</p>
-                <h3 class="text-4xl font-black mb-6">$ 2,800.00</h3>
-                <div class="space-y-3 mb-6 border-t border-white/20 pt-4">
-                    <div class="flex justify-between items-center text-xs opacity-90">
-                        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-white"></span>
-                            Total Honorarios</span>
-                        <span class="font-bold">$ 1,400.00</span>
+    <div
+        class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+        <!-- Card Header: Tournament & Matchday -->
+        <CompetenciaInfo :partido="partido" />
+        <div class="p-6 lg:p-10">
+            <!-- Matchup Section -->
+            <ClubDesignacionHeader :local="partido.clubLocal" :visitante="partido.clubVisitante" />
+            <!-- Logistics Row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-50 rounded-xl p-6 border border-slate-100">
+                <!-- Date & Time -->
+                <div class="flex items-center gap-4 border-b md:border-b-0 md:border-r border-slate-200 pb-4 md:pb-0">
+                    <div class="w-12 h-12 rounded-lg bg-[#1f44f9]/10 flex items-center justify-center text-[#1f44f9]">
+                        <span class="material-symbols-outlined">calendar_today</span>
                     </div>
-                    <div class="flex justify-between items-center text-xs opacity-90">
-                        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-white"></span>
-                            Total Logística</span>
-                        <span class="font-bold">$ 450.00</span>
+                    <div>
+                        <p class="text-xs text-slate-500 font-medium">Fecha y Hora</p>
+                        <p class="text-[#1f44f9] font-black text-md uppercase tracking-wider">{{ formatearFechaCompleta(partido.hora) }}</p>
                     </div>
-                    <div class="flex justify-between items-center text-xs opacity-90">
-                        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-white"></span>
-                            Total Viáticos</span>
-                        <span class="font-bold">$ 800.00</span>
+                </div>
+                <!-- Venue -->
+                <div class="flex items-center gap-4 border-b md:border-b-0 md:border-r border-slate-200 pb-4 md:pb-0">
+                    <div class="w-12 h-12 rounded-lg bg-[#1f44f9]/10 flex items-center justify-center text-[#1f44f9]">
+                        <span class="material-symbols-outlined">location_on</span>
                     </div>
-                    <div class="flex justify-between items-center text-xs opacity-90">
-                        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-white"></span>
-                            Gastos Operativos</span>
-                        <span class="font-bold">$ 150.00</span>
+                    <div>
+                        <p class="text-xs text-slate-500 font-medium">Estadio</p>
+                        <p class="text-slate-900 font-bold truncate">Estadio Municipal El Fortín</p>
+                        <a class="text-[#1f44f9] text-xs font-semibold hover:underline flex items-center gap-1"
+                            href="#">
+                            Ver ubicación <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Match Type -->
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-[#1f44f9]/10 flex items-center justify-center text-[#1f44f9]">
+                        <span class="material-symbols-outlined">groups</span>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-medium">Categoría</p>
+                        <p class="text-slate-900 font-bold italic">Fútbol 11 - Primera</p>
+                        <p class="text-slate-400 text-xs">Reglamento Oficial AFA</p>
                     </div>
                 </div>
             </div>
-            <div class="absolute -right-10 -bottom-10 opacity-10">
-                <span class="material-symbols-outlined text-[160px]">payments</span>
-            </div>
         </div>
-        <div class="bg-yellow-50 border-yellow-200 rounded-xl p-4 flex gap-3">
-            <span class="material-symbols-outlined text-yellow-600">warning</span>
-            <div>
-                <p class="text-xs font-bold text-yellow-800 uppercase mb-1">Nota de Validación</p>
-                <p class="text-sm text-yellow-700">Los costos individuales de cada arbitro se calcula automaticamente,
-                    verificar el los costos de traslado en caso de error</p>
-            </div>
-        </div>
-        <div class="bg-white rounded-xl border border-[#dbdde6] p-6 shadow-sm">
-            <h4 class="text-sm font-bold mb-4 flex items-center gap-2 uppercase text-gray-400 tracking-wider">
-                <span class="material-symbols-outlined text-sm">settings</span>
-                Ajustes de Facturación
-            </h4>
-            <div class="space-y-4">
-                <label class="flex items-center gap-3 cursor-pointer group ">
-                    <input class="rounded border-gray-300 text-[#516dfb] focus:ring-[#516dfb] h-5 w-5" type="checkbox"
-                        checked disabled />
-                    <span class="text-sm text-gray-600  group-hover:text-[#516dfb] transition-colors">Generar
-                        órdenes de pago automáticas</span>
-                </label>
-            </div>
+        <div v-if="designados.length > 0" class="px-6 pb-6">
+            <!-- Footer: Referee Assignment -->
+            <TableDesignacion :designaciones="designados" />
         </div>
     </div>
 </template>
-<style scoped>
-input,
-select {
-    background-color: transparent;
-    border: 1px solid #dbdde6;
-}
-</style>

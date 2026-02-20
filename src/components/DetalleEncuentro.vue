@@ -64,7 +64,7 @@ const props = defineProps({
 })
 
 const formatHora = (hora) => {
-    const horaCompleta = new Date(hora).toTimeString().slice(0, 5)
+    const horaCompleta = new Date(hora).toTimeString().slice(0, 15)
     return horaCompleta
 }
 </script>

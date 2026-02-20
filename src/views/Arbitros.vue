@@ -3,10 +3,10 @@ import { IconSearch, IconPlus } from "@tabler/icons-vue";
 import TableArbitros from "../components/tables/TableArbitros.vue";
 import { useRouter } from "vue-router";
 import { onMounted, ref, watch } from "vue";
-import axios from "axios";
+import apiClient from "../api/axios";
 import { IconChevronRight } from "@tabler/icons-vue";
 
-const API_URL = `http://localhost:8080/api`;
+
 const arbitros = ref([]);
 const router = useRouter();
 
@@ -32,12 +32,8 @@ const fetchArbitros = async () => {
       tipo: 2,
     };
 
-    const response = await axios.get(`${API_URL}/personas`, {
+    const response = await apiClient.get(`/personas`, {
       params,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
     });
 
     arbitros.value = response.data.content;

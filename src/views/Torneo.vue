@@ -7,7 +7,7 @@ import {
 } from "@tabler/icons-vue";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import axios from "axios";
+import apiClient from "../api/axios";
 import CardCompetencia from "../components/CardCompetencia.vue";
 import PartidoItem from "../components/PartidoItem.vue";
 import SearchTorneo from "../components/forms/SearchTorneo.vue";
@@ -41,13 +41,7 @@ const manejarBusqueda = async (termino) => {
   try {
     cargandoTorneo.value = true;
     // EJEMPLO 1: Si filtras desde el Backend (Recomendado)
-    const respuesta = await axios.get(`http://localhost:8080/api/torneos/${termino}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
-      }
-    });
+    const respuesta = await apiClient.get(`/torneos/${termino}`);
     torneo.value = {
       ...respuesta.data,
     };
@@ -66,15 +60,10 @@ const manejarBusqueda = async (termino) => {
 };
 const fetchCompetencias = async (idTorneo) => {
   try {
-    const response = await axios.get(
-      `http://localhost:8080/api/competencias`, {
+    const response = await apiClient.get(
+      `/competencias`, {
       params: {
         idTorneo: idTorneo
-      },
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     }
     );
@@ -88,18 +77,13 @@ const fetchCompetencias = async (idTorneo) => {
 const fetchPartidos = async () => {
   cargandoPartidos.value = true;
   try {
-    const response = await axios.get(
-      'http://localhost:8080/api/partidos', {
+    const response = await apiClient.get(
+      '/partidos', {
       params: {
         idCompetencia: competencias.value[0].idCompetencia,
         fecha: fechaTorneo.value,
         page: 0,
         size: 10,
-      },
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     }
     );
@@ -116,14 +100,9 @@ const fetchPartidos = async () => {
 const crearFixtureAutomatico = async () => {
   if (confirm("¿Estas seguro de crear el fixture automatico?")) {
     try {
-      const response = await axios.post('http://localhost:8080/api/competencias/crear-fixture', null, {
+      const response = await apiClient.post('/competencias/crear-fixture', null, {
         params: {
           idTorneo: torneo.value.idTorneo
-        },
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
       });
       if (response.status == 200 || response.status == 201) {
@@ -162,7 +141,7 @@ const showModalInscribirClub = () => {
               data-alt="Abstract dynamic soccer pattern blue and white" style="
                 background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCfWzIQNlYK_6YyxcgzE0BFpjqjMxS-D5VlZXijbVJpb5zA0PbrIFIbUalBocXEttI08BGa9c3i1tmUCK-LdGXTxnckLS7fEzTjGFnfuc-za8yB2CkXGAKxuX7oQF_iStVRecZg9JfmR9gcLydyYyFyxo4upd3jVUzJ66DT0x62hG3R6fIF1rijbK59DU_XpdxFgYctPzMuAv-Ap-srSmAVX-NPlB2DH0s3aBOljhk1nQlt-YRGMAZTLY-5j_0-qQMVVyQJ3ngjiPY');
               ">
-              <div class="w-full h-full bg-gradient-to-t from-black/50 to-transparent md:hidden rounded-xl"></div>
+              <div class="w-full h-full bg-linear-to-t from-black/50 to-transparent md:hidden rounded-xl"></div>
             </div>
             <!-- Tournament Info -->
             <div class="flex items-start justify-between w-full px-4 min-h-34 gap-4 py-4">

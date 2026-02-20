@@ -1,56 +1,26 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
-import axios from "axios";
 // Importa tu componente hijo
 import TableClubes from "../components/tables/TableClubes.vue";
 import FilterClubes from "../components/FilterClubes.vue";
 import { IconPlus } from "@tabler/icons-vue";
+import { useClubes } from "../composables/useClubes";
+
 const router = useRouter();
-const API_BASE_URL = "http://localhost:8080/api";
 
 // --- ESTADO ---
-const clubes = ref([]);
 const page = ref(0); // Spring Boot usa 0-indexed por defecto
 const size = ref(5); // Cantidad de items por página
-const totalElements = ref(0);
-const totalPages = ref(0);
-const loading = ref(false); // Opcional: para mostrar un spinner
+
+const { clubes, loading, totalElements, totalPages, fetchClubes } = useClubes();
 
 // --- PETICIÓN AL BACKEND ---
-const fetchClubes = async () => {
-  loading.value = true;
-  try {
-    // Axios serializa los params automáticamente
-    const response = await axios.get(`${API_BASE_URL}/club`, {
-      params: {
-        page: page.value,
-        size: size.value,
-      },
-      headers:{
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    });
-
-    // Asignación de datos
-    clubes.value = response.data.content;
-    // Actualización de variables de paginación
-    totalElements.value = response.data.totalElements;
-    totalPages.value = response.data.totalPages;
-    console.log(clubes.value);
-    
-  } catch (error) {
-    console.error("Error al cargar clubes:", error);
-  } finally {
-    loading.value = false;
-  }
-};
-
+// Usando el hook useClubes para obtener datos paginados
 // --- WATCHERS ---
 // Esto es la magia: cada vez que 'page' cambie, se ejecuta fetchClubes automáticamente.
-// También vigilamos 'size' por si decides agregar un selector de "items por página".
 watch([page, size], () => {
-  fetchClubes();
+  fetchClubes(page.value, size.value);
 });
 
 // --- EVENTOS ---
@@ -62,7 +32,7 @@ const handlePageChange = (newPage) => {
 
 // Carga inicial
 onMounted(() => {
-  fetchClubes();
+  fetchClubes(page.value, size.value);
 });
 const navigateTo = (path) => {
   router.push(path);

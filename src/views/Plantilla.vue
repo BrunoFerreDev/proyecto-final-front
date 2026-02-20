@@ -3,7 +3,7 @@ import TableJugadores from "../components/tables/TableJugadores.vue";
 import { useRouter } from "vue-router";
 import { onMounted, onUnmounted, ref, watch } from "vue";
 import StatsCard from "../components/StatsCard.vue";
-import axios from "axios";
+import apiClient from "../api/axios";
 import ModalContratoCT from "../components/modal/ModalContratoCT.vue";
 import ModalContratoJugador from "../components/modal/ModalContratoJugador.vue";
 
@@ -28,15 +28,10 @@ const cuerpoTecnico = ref({
 const fetchClub = async () => {
   // TODO: Implementar llamada a API para obtener club
   try {
-    const { data } = await axios.get(
-      `${API_BASE_URL}/club/informacion`, {
+    const { data } = await apiClient.get(
+      `/club/informacion`, {
       params: {
         idClub: idClub
-      },
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     }
     );
@@ -50,16 +45,11 @@ const fetchClub = async () => {
 const fetchJugadores = async () => {
   // TODO: Implementar llamada a API para obtener jugadores
   try {
-    const { data } = await axios.get(`${API_BASE_URL}/club/${idClub}/plantilla`, {
+    const { data } = await apiClient.get(`/club/${idClub}/plantilla`, {
       params: {
         page: pagination.value.page,
         size: pagination.value.size,
         sort: "categoriaMaxima," + selectedCategoaria.value,
-      },
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     });
     jugadores.value = data.content;
@@ -71,15 +61,10 @@ const fetchJugadores = async () => {
 };
 const fetchCuerpoTecnico = async (categoria) => {
   try {
-    const { data } = await axios.get(`${API_BASE_URL}/cuerpo-tecnico`, {
+    const { data } = await apiClient.get(`/cuerpo-tecnico`, {
       params: {
         idClub: idClub,
         categoria: categoria
-      },
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     });
     cuerpoTecnico.value = data;

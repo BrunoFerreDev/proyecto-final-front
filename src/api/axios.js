@@ -11,7 +11,21 @@ const apiClient = axios.create({
   },
 });
 
-// Interceptor opcional (útil para manejo de errores global o tokens)
+// Request interceptor to add the auth token header to every request
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Interceptor para manejo de errores global
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {

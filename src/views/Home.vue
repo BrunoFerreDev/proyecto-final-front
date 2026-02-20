@@ -1,6 +1,5 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import axios from "axios";
 
 // Iconos
 import {
@@ -17,75 +16,40 @@ import QuickActions from '../components/dashboard/QuickActions.vue';
 import ExpulsionsPanel from '../components/dashboard/ExpulsionsPanel.vue';
 import Pagination from '../components/Pagination.vue';
 import { watch } from "vue";
+import { usePersonas } from "../composables/usePersonas";
+import { useClubes } from "../composables/useClubes";
+import { usePartidos } from "../composables/usePartidos";
 
 // Estado
-const totalJugadores = ref(0);
-const totalClubes = ref(0);
-const totalPartidos = ref([]);
 const loading = ref(true);
 
-const API_URL = "http://localhost:8080/api";
-
-onMounted(async () => {
-  await Promise.all([fetchJugadores(), fetchClubes(), fetchUltimaJornada()]);
-  loading.value = false;
-});
-
-const getAuthHeaders = () => ({
-  Authorization: `Bearer ${localStorage.getItem('token')}`
-});
-
-const fetchJugadores = async () => {
-  try {
-    const { data } = await axios.get(`${API_URL}/personas`, {
-      params: { tipo: 1 },
-      headers: getAuthHeaders()
-    });
-    totalJugadores.value = data.totalElements;
-  } catch (error) {
-    console.error("Error fetching jugadores:", error);
-  }
-};
-
-const fetchClubes = async () => {
-  try {
-    const { data } = await axios.get(`${API_URL}/club`, {
-      params: { page: 0, size: 10 },
-      headers: getAuthHeaders()
-    });
-    totalClubes.value = data.totalElements;
-  } catch (error) {
-    console.error("Error fetching clubes:", error);
-  }
-};
-
-const fetchUltimaJornada = async () => {
-  try {
-    const { data } = await axios.get(`${API_URL}/partidos/ultimos-7-dias`, {
-      params: { page: pagination.value.page, size: pagination.value.size },
-      headers: getAuthHeaders()
-    });
-    totalPartidos.value = data.content || [];
-    pagination.value.totalPages = data.totalPages;
-    pagination.value.totalElements = data.totalElements;
-    console.log(data);
-
-  } catch (error) {
-    console.error("Error fetching partidos:", error);
-  }
-};
+const { totalElements: totalJugadores, fetchPersonas } = usePersonas();
+const { totalElements: totalClubes, fetchClubes } = useClubes();
+const { 
+  partidos: totalPartidos, 
+  fetchUltimaJornada, 
+  totalElements, 
+  totalPages 
+} = usePartidos();
 
 // Inicializamos la paginación
 const pagination = ref({
-  page: 0, // Frontend usa base 1
-  size: 5, // Tamaño de página (ajústalo según prefieras)
-  totalPages: 0,
-  totalElements: 0,
+  page: 0, 
+  size: 5, 
+});
+
+onMounted(async () => {
+  await Promise.all([
+    fetchPersonas(0, 1, 1), 
+    fetchClubes(0, 10), 
+    fetchUltimaJornada(pagination.value.page, pagination.value.size)
+  ]);
+  loading.value = false;
 });
 
 // CORRECCIÓN 3: Sintaxis correcta para vigilar propiedades dentro de un ref
 watch([() => pagination.value.page, () => pagination.value.size], () => {
-  fetchUltimaJornada();
+  fetchUltimaJornada(pagination.value.page, pagination.value.size);
 });
 
 // --- EVENTOS ---
@@ -112,7 +76,7 @@ const handlePageChange = (newPage) => {
 
             <div class="xl:col-span-2">
               <MatchesTable :matches="totalPartidos" />
-              <Pagination :page="pagination.page" :totalPages="pagination.totalPages" :totalElements="pagination.totalElements" :size="pagination.size" tipo="partidos"
+              <Pagination :page="pagination.page" :totalPages="totalPages" :totalElements="totalElements" :size="pagination.size" tipo="partidos"
                 @page-change="handlePageChange" />
             </div>
 

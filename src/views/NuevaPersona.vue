@@ -11,7 +11,7 @@ import { IconChevronRight } from "@tabler/icons-vue";
 import { ref } from "vue";
 
 import PersonaForm from "../components/forms/PersonaForm.vue";
-import axios from "axios";
+import apiClient from "../api/axios";
 
 const activePersona = ref("JUGADOR");
 const selectedTipo = ref("JUGADOR"); // Iniciado con un valor por defecto
@@ -28,16 +28,9 @@ const personaNueva = ref({
 const nuevaPersona = async () => {
   try {
     // 1. Intentamos crear la persona
-    const response = await axios.post(
-      "http://localhost:8080/api/personas",
-      personaNueva.value,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-      }
+    const response = await apiClient.post(
+      "/personas",
+      personaNueva.value
     );
 
     if (response && response.data) {
@@ -47,16 +40,9 @@ const nuevaPersona = async () => {
       console.log(idGenerado, tipoSeleccionado);
 
       // 3. Ejecutamos la actualización/asignación de tipo
-      await axios.put(
-        `http://localhost:8080/api/personas/${idGenerado}`,
-        { tipo: tipoSeleccionado },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-          }
-        }
+      await apiClient.put(
+        `/personas/${idGenerado}`,
+        { tipo: tipoSeleccionado }
       );
       resetForm();
     }

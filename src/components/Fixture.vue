@@ -34,8 +34,16 @@
         <div v-if="partidos.length == 0" class="flex items-center justify-center flex-col gap-2">
             <p>No hay partidos programados para esta competencia</p>
             <strong>Desea generar un fixture automatico?</strong>
-            <button @click.prevent="crearFixtureAutomatico"
-                class="bg-blue-500 text-white px-4 py-2 rounded">Generar</button>
+            <label v-if="verInputFecha" for="fechaInicio">Fecha de Inicio del campeonato:<input type="date"
+                    v-model="fechaInicio" class="border border-gray-200 rounded px-2 py-1"></label>
+            <button @click.prevent="verInputFecha = true" class="bg-blue-400 px-4 py-2 rounded"
+                v-if="!verInputFecha">Si</button>
+            <div class="flex gap-2">
+                <button @click.prevent="crearFixtureAutomatico" class="bg-blue-400 px-4 py-2 rounded"
+                    v-if="verInputFecha">Confirmar</button>
+                <button @click.prevent="verInputFecha = false" class="bg-red-400 px-4 py-2 rounded"
+                    v-if="verInputFecha">Cancelar</button>
+            </div>
         </div>
     </div>
 </template>
@@ -57,6 +65,8 @@ const props = defineProps({
 const partidos = ref([]);
 const fechaTorneo = ref(1);
 const cargandoPartidos = ref(true);
+const verInputFecha = ref(false);
+const fechaInicio = ref('');
 const fetchPartidos = async () => {
     cargandoPartidos.value = true;
     try {
@@ -88,11 +98,17 @@ onMounted(() => {
     fetchPartidos();
 });
 const crearFixtureAutomatico = async () => {
+    if (fechaInicio.value == '') {
+        alert("Debe ingresar una fecha de inicio");
+        return;
+    }
     if (confirm("¿Estas seguro de crear el fixture automatico?")) {
         try {
+
             const response = await axios.post('http://localhost:8080/api/competencias/crear-fixture', null, {
                 params: {
                     idTorneo: props.idTorneo,
+                    fechaInicio: fechaInicio.value.toString(),
                 },
                 headers: {
                     'Content-Type': 'application/json',

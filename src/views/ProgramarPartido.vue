@@ -1,26 +1,104 @@
 <script setup>
 import axios from 'axios';
-import { ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import ItemCompetencia from '../components/ItemCompetencia.vue';
 const buscador = ref('')
 const competencia = ref([])
+const clubesInscriptos = ref([])
+const idLocal = ref('')
+const idVisitante = ref('')
 const fetchCompetencia = async () => {
     try {
         const response = await axios.get('http://localhost:8080/api/competencias/traer', {
-            params: {
-                idCompetencia: buscador.value
-            },
+            params: { idCompetencia: buscador.value },
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
         });
-        const data = response.data;
-        competencia.value = data;
+        // Axios guarda la respuesta del servidor en .data
+        competencia.value = response.data;
     } catch (error) {
         console.error('Error fetching competencia:', error);
     }
 }
+
+const fetchClubesInscriptos = async (id) => {
+    try {
+        const response = await axios.get('http://localhost:8080/api/competencias/traer-clubes', {
+            params: {
+                idCompetencia: id,
+                page: 0,
+                size: 15
+            },
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+        });
+        // 2. CORRECCIÓN AQUÍ: Accedemos a response.data.content
+        // Añadimos un fallback de array vacío por seguridad
+        clubesInscriptos.value = response.data?.content || [];
+        console.log('Clubes inscriptos cargados:', clubesInscriptos.value);
+    } catch (error) {
+        console.error('Error fetching clubes inscriptos:', error);
+        clubesInscriptos.value = [];
+    }
+}
+const clubLocal = computed(() => {
+    return clubesInscriptos.value.find(club => club.idClub === idLocal.value)
+})
+const clubVisitante = computed(() => {
+    return clubesInscriptos.value.find(club => club.idClub === idVisitante.value)
+})
+const opcionesLocal = computed(() => {
+    if (!clubesInscriptos.value) return [];
+    if (!idVisitante.value) return clubesInscriptos.value;
+    return clubesInscriptos.value.filter(club => club.idClub !== idVisitante.value);
+});
+
+const opcionesVisitante = computed(() => {
+    if (!clubesInscriptos.value) return [];
+    if (!idLocal.value) return clubesInscriptos.value;
+    return clubesInscriptos.value.filter(club => club.idClub !== idLocal.value);
+});
+
+// 3. Observar cambios en el objeto competencia
+watch(competencia, (newVal) => {
+    if (newVal && newVal.idCompetencia) {
+        fetchClubesInscriptos(newVal.idCompetencia);
+    }
+}, { deep: true }); // deep: true por si cambian propiedades internas
+
+const arbitroPrincipal = ref(null);
+const buscadorArbitroPrincipal = ref('');
+const buscarArbitro = async () => {
+    try {
+        const response = await axios.get('http://localhost:8080/api/arbitros/buscar', {
+            params: { dni: buscadorArbitroPrincipal.value },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+        });
+        const data = response.data;
+        arbitroPrincipal.value = data.nombre + ' ' + data.apellido + ' / ' + data.dni;
+        return response.data; // Devolver datos del árbitro encontrado
+    } catch (error) {
+        console.error('Error buscando árbitro:', error);
+        return null; // Devolver null en caso de error
+    }
+}
+watch(arbitroPrincipal, async (newDni) => {
+    if (newDni) {
+        const arbitroData = await buscarArbitro(newDni);
+        if (arbitroData) {
+            console.log('Árbitro encontrado:', arbitroData);
+            // Aquí podrías asignar arbitroData a una variable para mostrar en la UI
+        } else {
+            console.log('No se encontró ningún árbitro con ese DNI.');
+        }
+    }
+});
 </script>
 
 <template>
@@ -93,12 +171,12 @@ const fetchCompetencia = async () => {
                                     Club Local
                                 </label>
                                 <div class="relative">
-                                    <select
+                                    <select v-model="idLocal"
                                         class="w-full appearance-none rounded-lg border border-[#e5e7eb]  bg-white  px-4 py-3 pr-8 text-[#111218]  focus:border-[#0d7ff2] focus:outline-none focus:ring-1 focus:ring-[#0d7ff2]">
                                         <option value="">Seleccionar club...</option>
-                                        <option value="fc_norte">FC Norte</option>
-                                        <option value="atletico_sur">Atlético Sur</option>
-                                        <option value="deportivo_este">Deportivo Este</option>
+                                        <option v-for="club in opcionesLocal" :key="club.idClub" :value="club.idClub">
+                                            {{ club.nombre }}
+                                        </option>
                                     </select>
                                     <div
                                         class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-[#5f668c]">
@@ -111,12 +189,10 @@ const fetchCompetencia = async () => {
                                     <div
                                         class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm overflow-hidden">
                                         <img alt="Logo" class="w-full h-full object-cover opacity-80"
-                                            data-alt="Blue soccer team logo abstract"
-                                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQ5ap942qU55f3EwV-_MkBV3Rkobb8hJ9-D5eIw853ErI8MyEQBKOdcV9sksXZ966jOguxqssC7Auf97NTYGmiHbKcEf3wBsCD4UeT2W_sIF74cEVO0TFOpdFPCcZJSsDh3zJXaD5IkDpC28fMLLyIFygeHjzZW35DFsrQm1GVd9mldPNAwp8z4vlCsGDj7SAPYtZvfFrzqEgfeYVNefw20n1CpCWdpuNpz-CRC1IoNhY27k6oss_Uac6GP7_eVmwSVlkdFYbB8X4" />
+                                            data-alt="Blue soccer team logo abstract" :src="clubLocal?.escudo || ''" />
                                     </div>
                                     <div>
-                                        <p class="font-bold text-[#111218] ">FC Norte</p>
-                                        <p class="text-xs text-[#5f668c]">Posición: 3°</p>
+                                        <p class="font-bold text-[#111218] ">{{ clubLocal?.nombre }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -134,12 +210,13 @@ const fetchCompetencia = async () => {
                                     Club Visitante
                                 </label>
                                 <div class="relative">
-                                    <select
+                                    <select v-model="idVisitante"
                                         class="w-full appearance-none rounded-lg border border-[#e5e7eb]  bg-white  px-4 py-3 pr-8 text-[#111218]  focus:border-[#0d7ff2] focus:outline-none focus:ring-1 focus:ring-[#0d7ff2]">
                                         <option value="">Seleccionar club...</option>
-                                        <option value="fc_norte">FC Norte</option>
-                                        <option value="atletico_sur">Atlético Sur</option>
-                                        <option value="deportivo_este">Deportivo Este</option>
+                                        <option v-for="club in opcionesVisitante" :key="club.idClub"
+                                            :value="club.idClub">
+                                            {{ club.nombre }}
+                                        </option>
                                     </select>
                                     <div
                                         class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-[#5f668c]">
@@ -153,11 +230,11 @@ const fetchCompetencia = async () => {
                                         class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm overflow-hidden">
                                         <img alt="Logo" class="w-full h-full object-cover opacity-80"
                                             data-alt="Red soccer team logo abstract"
-                                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAk47d0lFDBHJ-12blfkvf0qOW7mNpAvbAotMESS2g18b_WBGPwq9pupPdE49rH2mCE1G9KmsO0JOtvUakQ8HMWgAnGLhaIkQBs_eKysgGVYRY2VSK1YapfZJkuFZGE5TJGJKaKl_dGQGjafKk7QrVqtOk-3JbRvONFUuUs0EVrEmK35B77dmEwKhEnGDT0uKkOU9oV81jofvbcUmUABm7NeraCtZzQXrQD5ciRUNpcSfcwGZcLTAe-hrjfndBZ-82o9SUl__CID4Y" />
+                                            :src="clubVisitante?.escudo || ''" />
                                     </div>
                                     <div>
-                                        <p class="font-bold text-[#111218] ">Atlético Sur</p>
-                                        <p class="text-xs text-[#5f668c]">Posición: 5°</p>
+                                        <p class="font-bold text-[#111218] ">{{ clubVisitante?.nombre }}</p>
+                                        <p class="text-xs text-[#5f668c]">Posición: {{ clubVisitante?.posicion }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -225,44 +302,27 @@ const fetchCompetencia = async () => {
                         <div class="h-px bg-gray-100 md:col-span-2 my-2"></div>
                         <!-- Referee Main -->
                         <div>
-                            <label class="block text-sm font-semibold text-[#111218]  mb-2">Árbitro
-                                Principal</label>
+                            <label class="block text-sm font-semibold text-[#111218]  mb-2">Buscar Árbitro
+                                principal</label>
                             <div class="relative">
-                                <div
-                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#5f668c]">
-                                    <span class="material-symbols-outlined">person</span>
-                                </div>
-                                <select
-                                    class="w-full pl-10 pr-4 py-3 rounded-lg border border-[#e5e7eb] bg-white  text-[#111218]  appearance-none focus:ring-[#0d7ff2] focus:border-[#0d7ff2]">
-                                    <option value="">Asignar árbitro...</option>
-                                    <option value="ref1">Carlos Méndez (FIFA)</option>
-                                    <option value="ref2">Roberto Gómez</option>
-                                </select>
-                                <div
-                                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-[#5f668c]">
-                                    <span class="material-symbols-outlined">expand_more</span>
-                                </div>
+                                <span
+                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#5f668c]"><span
+                                        class="material-symbols-outlined">search</span></span>
+                                <input type="search" @keyup.enter="buscarArbitro" v-model="buscadorArbitroPrincipal"
+                                    class="w-full pl-10 pr-4 py-3 rounded-lg border border-[#e5e7eb]  bg-white  text-[#111218]  focus:ring-[#0d7ff2] focus:border-[#0d7ff2]"
+                                    placeholder="Buscar por DNI...">
                             </div>
                         </div>
                         <!-- Referee Assistant -->
                         <div>
-                            <label class="block text-sm font-semibold text-[#111218]  mb-2">Juez de Línea
-                                / Asistente</label>
+                            <label class="block text-sm font-semibold text-[#111218]  mb-2">Nombre Completo / DNI
+                            </label>
                             <div class="relative">
-                                <div
-                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#5f668c]">
-                                    <span class="material-symbols-outlined">flag</span>
-                                </div>
-                                <select
-                                    class="w-full pl-10 pr-4 py-3 rounded-lg border border-[#e5e7eb]  bg-white  text-[#111218]  appearance-none focus:ring-[#0d7ff2] focus:border-[#0d7ff2]">
-                                    <option value="">Asignar asistente...</option>
-                                    <option value="asst1">Luis Pérez</option>
-                                    <option value="asst2">Ana Martínez</option>
-                                </select>
-                                <div
-                                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-[#5f668c]">
-                                    <span class="material-symbols-outlined">expand_more</span>
-                                </div>
+                                <span
+                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#5f668c]"><span
+                                        class="material-symbols-outlined">sports</span></span>
+                                <input type="text" placeholder="Resultado" disabled="" :value="arbitroPrincipal ?? ''"
+                                    class="w-full pl-10 pr-4 py-3 rounded-lg border border-[#e5e7eb]  bg-white  text-[#111218]  focus:ring-[#0d7ff2] focus:border-[#0d7ff2]">
                             </div>
                         </div>
                     </div>

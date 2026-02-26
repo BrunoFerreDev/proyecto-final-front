@@ -44,8 +44,6 @@ const navigateTo = (idArbitro) => {
                 <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-[#49739c] ">
                     Contacto</th>
                 <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-[#49739c] ">
-                    Exp.</th>
-                <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-[#49739c] ">
                     Estado</th>
                 <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-[#49739c]  text-right">
                     Acciones</th>
@@ -85,15 +83,13 @@ const navigateTo = (idArbitro) => {
                         </div>
                     </div>
                 </td>
+
                 <td class="py-4 px-6">
-                    <span class="text-sm font-medium text-[#0d141c]">12 años</span>
-                </td>
-                <td class="py-4 px-6">
-                    <span
-                        class="inline-flex items-center gap-1.5 rounded-full bg-green-50  px-2 py-1 text-xs font-medium text-green-700 border border-green-100 ">
-                        <span class="size-1.5 rounded-full bg-green-600"></span>
-                        Activo
-                    </span>
+                  <span
+                :class="arbitro.estado === 'ACTIVO' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-red-100 text-red-800 border border-red-200'"
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ">
+                {{ arbitro.estado }}
+              </span>
                 </td>
                 <td class="py-4 px-6 text-right">
                     <div

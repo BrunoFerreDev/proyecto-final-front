@@ -29,7 +29,7 @@ const fetchClub = async () => {
   // TODO: Implementar llamada a API para obtener club
   try {
     const { data } = await apiClient.get(
-      `/club/informacion`, {
+      `/clubes/informacion`, {
       params: {
         idClub: idClub
       }
@@ -45,7 +45,7 @@ const fetchClub = async () => {
 const fetchJugadores = async () => {
   // TODO: Implementar llamada a API para obtener jugadores
   try {
-    const { data } = await apiClient.get(`/club/${idClub}/plantilla`, {
+    const { data } = await apiClient.get(`/clubes/${idClub}/plantilla`, {
       params: {
         page: pagination.value.page,
         size: pagination.value.size,
@@ -61,7 +61,7 @@ const fetchJugadores = async () => {
 };
 const fetchCuerpoTecnico = async (categoria) => {
   try {
-    const { data } = await apiClient.get(`/cuerpo-tecnico`, {
+    const { data } = await apiClient.get(`/cuerpos-tecnicos`, {
       params: {
         idClub: idClub,
         categoria: categoria

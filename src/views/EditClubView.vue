@@ -1,6 +1,5 @@
 <template>
-
-    <form @submit.prevent="verificarGuardado"
+    <form v-if="loading" @submit.prevent="verificarGuardado"
         class="flex flex-col gap-8 p-8 bg-white rounded-xl shadow-sm max-w-7xl mx-auto">
         <section class="flex flex-col gap-6">
             <h3 class="text-[#111218] text-xl font-bold leading-tight border-b border-gray-50 pb-3">
@@ -8,17 +7,17 @@
             </h3>
             <div class="flex flex-col items-center gap-4 text-center">
                 <div class="relative group">
-                    <div
+                    <div v-if="cargandoImg"
                         class="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden border-2 border-dashed border-gray-300 transition-all group-hover:border-[#1f44f9]">
 
-                        <img v-if="imagePreview" :src="imagePreview" class="w-full h-full object-cover"
-                            alt="Escudo del club" />
+                        <img v-if="imagePreview" :src="imagePreview" class=" object-contain" alt="Escudo del club" />
 
                         <div v-else class="text-gray-400 flex flex-col items-center">
                             <span class="material-symbols-outlined !text-4xl">shield</span>
                             <span class="text-[10px] mt-1 font-bold uppercase">Sin Escudo</span>
                         </div>
                     </div>
+                    <span v-else class="material-symbols-outlined !text-4xl animate-spin">donut_large</span>
                 </div>
 
                 <div class="flex flex-col gap-2 w-full max-w-md">
@@ -105,21 +104,24 @@
 import { IconDeviceFloppy } from '@tabler/icons-vue';
 import axios from 'axios';
 import { onMounted, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
-const router = useRoute();
-const idClub = router.params.idClub;
+const router = useRouter();
+const route = useRoute();
+const idClub = route.params.idClub;
 const API_BASE_URL = `http://localhost:8080/api`;
 const club = ref({});
 
 // Variables reactivas para el manejo de la imagen
 const imagePreview = ref(null);
 const selectedFile = ref(null);
-
+const loading = ref(false);
+const cargandoImg = ref(true);
 const fetchClub = async () => {
     // TODO: Implementar llamada a API para obtener club
     try {
         const response = await axios.get(
-            `${API_BASE_URL}/club/informacion`, {
+            `${API_BASE_URL}/clubes/informacion`, {
             params: {
                 idClub: idClub
             },
@@ -131,7 +133,7 @@ const fetchClub = async () => {
         club.value = response.data;
         console.log(response.data);
         imagePreview.value = club.value.escudo;
-
+        loading.value = true;
     } catch (error) {
         console.error(error);
     }
@@ -154,6 +156,7 @@ const handleImageUpload = (event) => {
 
 const guardarClub = async () => {
     try {
+        cargandoImg.value = false;
         // 1. Preparamos el FormData solo para el archivo binario
         const formData = new FormData();
 
@@ -164,7 +167,7 @@ const guardarClub = async () => {
 
         // 2. Construimos la URL con el idClub como RequestParam
         // Agregamos '/actualizar-imagen' que es el valor definido en tu @PutMapping
-        const url = `http://localhost:8080/api/club/actualizar-imagen?idClub=${club.value.idClub}`;
+        const url = `http://localhost:8080/api/clubes/actualizar-imagen?idClub=${club.value.idClub}`;
 
         // 3. Realizamos la petición PUT
         const response = await axios.put(url, formData, {
@@ -180,6 +183,9 @@ const guardarClub = async () => {
 
     } catch (error) {
         console.error("Error al cargar la imagen:", error);
+    } finally {
+        cargandoImg.value = true;
+        location.reload();
     }
 };
 const resetForm = () => {

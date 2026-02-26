@@ -126,7 +126,7 @@ const buscarClubes = async () => {
         return;
     }
     try {
-        const response = await axios.get(`http://localhost:8080/api/club/buscar`, {
+        const response = await axios.get(`http://localhost:8080/api/clubes/buscar`, {
             params: {
                 nombre: inputBusqueda.value
             },
@@ -135,7 +135,7 @@ const buscarClubes = async () => {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
-        clubEncontrado.value = response.data;
+        clubEncontrado.value = response.data.content;
         console.log(clubEncontrado.value);
     } catch (error) {
         console.error('Error al buscar clubes:', error)

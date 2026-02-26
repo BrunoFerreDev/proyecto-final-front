@@ -16,18 +16,47 @@
             <span>Añadir Registro</span>
         </button>
     </div>
-    <!-- <div
-        class="bg-white rounded-xl border border-[#e7edf4] p-4 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+    <div
+        class="bg-white rounded-xl border border-[#e7edf4] p-4 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-start">
 
-        <div class="w-full md:max-w-md relative">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#49739c]">
-                <IconSearch />
+        <Filters @on-search="handleSearch" class="w-full" />
+        <div class="flex flex-col md:flex-row md:items-end md:justify-end w-full gap-2">
+            <div class="flex items-center gap-2">
+                <span class="text-sm font-semibold text-slate-700">Estado</span>
+                <div class="relative">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                        <IconStack />
+                    </span>
+                    <select
+                        class="w-full h-12 pl-11 pr-10 appearance-none rounded-lg border border-slate-200 bg-slate-50  text-slate-800  focus:outline-none focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all cursor-pointer">
+                        <option value="" disabled selected>Todos</option>
+                        <option value="true">Activo</option>
+                        <option value="false">Inactivo</option>
+                    </select>
+                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                        <IconChevronDown />
+                    </span>
+                </div>
             </div>
-            <input
-                class="block w-full pl-10 pr-3 py-2.5 border-none rounded-lg bg-[#f0f4f8] text-[#0d141c] placeholder-[#49739c] focus:ring-2 focus:ring-[#0d7ff2] focus:bg-white transition-all text-sm"
-                placeholder="Buscar por nombre, licencia o email..." type="text" />
+            <div class="flex items-center gap-2">
+                <span class="text-sm font-semibold text-slate-700">Categoria</span>
+                <div class="relative">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                        <IconUser />
+                    </span>
+                    <select
+                        class="w-full h-12 pl-11 pr-10 appearance-none rounded-lg border border-slate-200 bg-slate-50  text-slate-800  focus:outline-none focus:ring-2 focus:ring-[#0d7ff2]/20 focus:border-[#0d7ff2] transition-all cursor-pointer">
+                        <option value="" disabled selected>Todos</option>
+                        <option value="true">Principales</option>
+                        <option value="false">Asistentes</option>
+                    </select>
+                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                        <IconChevronDown />
+                    </span>
+                </div>
+            </div>
         </div>
-    </div> -->
+    </div>
     <div class="bg-white rounded-xl border border-[#e7edf4] overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
             <TableArbitros :arbitros="arbitros" :page="pagination.page" :total-pages="pagination.totalPages"
@@ -40,8 +69,12 @@ import TableArbitros from "../components/tables/TableArbitros.vue";
 import { useRouter } from "vue-router";
 import { onMounted, ref, watch } from "vue";
 import apiClient from "../api/axios";
-import { IconSearch } from "@tabler/icons-vue";
 import { IconPlus } from "@tabler/icons-vue";
+import { IconUser } from "@tabler/icons-vue";
+import { IconChevronDown } from "@tabler/icons-vue";
+import { IconStack } from "@tabler/icons-vue";
+import axios from "axios";
+import Filters from "../components/Filters.vue";
 
 
 const arbitros = ref([]);
@@ -79,10 +112,35 @@ const fetchArbitros = async () => {
         // para evitar conflictos con el watcher o bucles infinitos.
         pagination.value.totalPages = response.data.totalPages;
         pagination.value.totalElements = response.data.totalElements;
+        console.log(arbitros.value);
     } catch (error) {
         console.error("Error fetching arbitros:", error);
     }
 };
+const handleSearch = async (query) => {
+    console.log(query);
+    if (!query.trim()) {
+        fetchArbitros();
+        return;
+    }
+    try {
+        const response = await axios.get(`http://localhost:8080/api/arbitros/buscar-nombre`, {
+            params: {
+                nombre: query
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        arbitros.value = response.data.content;
+        pagination.value.totalPages = response.data.totalPages;
+        pagination.value.totalElements = response.data.totalElements;
+    } catch (error) {
+        console.error('Error al buscar arbitros:', error)
+        arbitros.value = [];
+    }
+}
 
 onMounted(() => {
     fetchArbitros();

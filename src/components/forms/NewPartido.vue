@@ -90,12 +90,11 @@ const props = defineProps({
 const clubes = ref([]);
 const idLocal = ref('');
 const idVisitante = ref('');
-const clubesFilter = ref('');
 const fetchClubesInscriptos = async () => {
     try {
         const response = await axios.get(`http://localhost:8080/api/competencias/traer-clubes`, {
             params: {
-                idComptencia: props.idCompetencia,
+                idCompetencia: props.idCompetencia,
                 size: 0,
                 page: 0
             },

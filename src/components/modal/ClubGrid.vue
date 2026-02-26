@@ -14,7 +14,7 @@
         </div>
 
         <div class="shrink-0"> <div class="w-20 h-20 rounded-full border border-[#516dfb] bg-center bg-cover shadow-sm"
-                 :style="`background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDvOM_L8hX6E9jtR0uFvDiy5_EvWuDTTLTkNlPEdoRbRqc5M7f88msAophB6BTcy91ML1emjZyN71YelrQblkKqZOzw5EHWrnNtnPtsL9pUBjL9sk4AYQiYylbYaL-eQb-Vkbf__7mPfNbKpGbmw0I9lddVe3MNL0jybY-omJrjWdrw9p5X1lyBkpZ_oQ3xcO5X7rEEPNDcWyIQp3Av5zhquXK8LluCc2JV8rsz0GybwgiYcM-WVDmbv33dfLo7EgaTKbKiAUrGycs');`">
+                 :style="`background-image: url('${club.escudo}')`">
             </div>
         </div>
 

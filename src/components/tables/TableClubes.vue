@@ -40,17 +40,14 @@
               <div class="flex flex-col">
                 <span class="text-sm font-bold text-slate-900">{{
                   club.nombre
-                }}</span>
+                  }}</span>
                 <span class="text-xs text-slate-400">ID: {{ club.idClub }}</span>
               </div>
             </td>
             <td class="px-6 py-4">
               <div class="flex items-center gap-2">
-                <div class="size-6 rounded-full bg-slate-200 bg-cover bg-center"
-                  data-alt="Portrait of manager Juan Perez" style="
-                    background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCaPki45_TNOnxsN26zmYRcuAOSwUpC2vD4KWih5i6dVGWTDwztnIsXBpUsiUzqnaqAGBL7U7dkcEby2NugShFSCjq1J2cfzvclaYR9Ldc-UpDNWAsP2UQ0q4hi1OiXOjNA-heRk9cO_Z-jTetA7Rvfh6XiUdEHUUp2PP68v0HFqcOCz_FlRbpWGvlpb5jt-lr3Zy3_SDuQAM-7GpCC52gwLYuwdvZqdMcd6g0OfQx35MIJns89sGYo--YIL1_sxJufAM4ODKcHtns');
-                  "></div>
-                <span class="text-sm text-slate-600">{{ club.localidad.nombre + ", " + club.localidad.provincia }}</span>
+                <span class="text-sm text-slate-600">{{ club.localidad.nombre + ", " + club.localidad.provincia
+                  }}</span>
               </div>
             </td>
             <td class="px-6 py-4">
@@ -62,8 +59,9 @@
             </td>
             <td class="px-6 py-4">
               <span
-                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
-                {{ club.isActivo ? "Activo" : "Inactivo" }}
+                :class="club.estado === 'ACTIVO' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-red-100 text-red-800 border border-red-200'"
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ">
+                {{ club.estado }}
               </span>
             </td>
             <td class="px-6 py-4 text-right">

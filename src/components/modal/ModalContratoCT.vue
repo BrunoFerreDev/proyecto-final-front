@@ -21,7 +21,7 @@
                 <div class="flex items-center gap-4 p-4 rounded-lg bg-[#516dfb]/5 border border-[#516dfb]/10 mb-6">
                     <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16 shadow-sm border border-white"
                         data-alt="Real Madrid C.F. club crest"
-                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBzWX7_46fLCf0JTLmNjhAPFuK41sd_k9pSLuPdjQVU5wYvBD5mxlMT9wDrTCZ_-BAvr5zH3RzfdXA3GsCzyvMnk0e1C4Y_d4OjRcVAVpni2b2jfruzA_XUINz_ksRevimqHknl8-6SIDJRO_4KcmJuoqoRz2Hx41dx1xBz4fL0QZjyTQk4CaH0QR22CCHHo2pLSt5FzCbk63rddOdNlNy2JC3NR_AFLcPmqSdTR2g457rBtOV-8VNCgDFFpDhUGiHs4a7AMqkoe8w");'>
+                        :style="`background-image: url('${club.escudo}')`">
                     </div>
                     <div class="flex flex-col">
                         <p class="text-gray-900  text-lg font-bold leading-tight">{{ club.nombre }}</p>

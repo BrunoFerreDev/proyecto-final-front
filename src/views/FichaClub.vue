@@ -4,7 +4,7 @@
       <div class="flex flex-col md:flex-row gap-8 items-center md:items-start">
         <div
           class="h-40 w-40 bg-slate-50  rounded-2xl border border-[#e5e7eb]  flex items-center justify-center p-6 shadow-inner">
-          <img alt="Escudo del Club" class="w-full h-full object-contain" :src="imgUrl" />
+          <img alt="Escudo del Club" class="w-full h-full object-contain" :src="club.escudo" />
         </div>
         <div class="flex-1 text-center md:text-left">
           <div class="flex flex-col md:flex-row md:items-center gap-4 mb-2">
@@ -198,7 +198,7 @@ const fetchClub = async () => {
   // TODO: Implementar llamada a API para obtener club
   try {
     const { data } = await axios.get(
-      `${API_BASE_URL}/club/informacion`, {
+      `${API_BASE_URL}/clubes/informacion`, {
       params: {
         idClub: idClub
       },
@@ -217,7 +217,7 @@ const fetchClub = async () => {
 };
 const fetchCuerpoTecnico = async () => {
   try {
-    const { data } = await axios.get(`${API_BASE_URL}/cuerpo-tecnico`, {
+    const { data } = await axios.get(`${API_BASE_URL}/cuerpos-tecnicos`, {
       params: {
         idClub: idClub,
         categoria: 'PRIMERA_DIVISION'

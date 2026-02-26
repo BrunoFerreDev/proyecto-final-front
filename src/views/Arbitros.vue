@@ -1,10 +1,12 @@
 <script setup>
 import { IconSearch, IconPlus } from "@tabler/icons-vue";
 import TableArbitros from "../components/tables/TableArbitros.vue";
+import FilterClubes from "../components/FilterClubes.vue";
 import { useRouter } from "vue-router";
 import { onMounted, ref, watch } from "vue";
 import apiClient from "../api/axios";
 import { IconChevronRight } from "@tabler/icons-vue";
+import axios from "axios";
 
 
 const arbitros = ref([]);
@@ -62,6 +64,29 @@ const handlePageChange = (newPage) => {
   // Solo actualizamos el valor, el watcher detectará el cambio y llamará a fetchArbitros
   pagination.value.page = newPage;
 };
+const handleSearch = async (query) => {
+  console.log(query);
+  if (!query.trim()) {
+    fetchArbitros(page.value, size.value);
+    return;
+  }
+  try {
+    const response = await axios.get(`http://localhost:8080/api/arbitros/buscar-nombre`, {
+      params: {
+        nombre: query
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+      arbitros.value = response.data.content;
+  } catch (error) {
+    console.error('Error al buscar arbitros:', error)
+    arbitros.value = [];
+  }
+}
+
 </script>
 <template>
   <main class="flex flex-col items-center py-8 px-4 md:px-10">
@@ -104,18 +129,7 @@ const handlePageChange = (newPage) => {
         </button>
       </div>
       <!-- Toolbar (Search & Filters) -->
-      <div
-        class="bg-white rounded-xl border border-[#e7edf4] p-4 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
-        <!-- Search Input -->
-        <div class="w-full md:max-w-md relative">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#49739c]">
-            <IconSearch />
-          </div>
-          <input
-            class="block w-full pl-10 pr-3 py-2.5 border-none rounded-lg bg-[#f0f4f8] text-[#0d141c] placeholder-[#49739c] focus:ring-2 focus:ring-[#0d7ff2] focus:bg-white transition-all text-sm"
-            placeholder="Buscar por nombre, licencia o email..." type="text" />
-        </div>
-      </div>
+      <FilterClubes @on-search="handleSearch" />
       <!-- Data Table -->
       <div class="bg-white rounded-xl border border-[#e7edf4] overflow-hidden shadow-sm">
         <div class="overflow-x-auto">

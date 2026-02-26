@@ -104,7 +104,6 @@ const crearFixtureAutomatico = async () => {
     }
     if (confirm("¿Estas seguro de crear el fixture automatico?")) {
         try {
-
             const response = await axios.post('http://localhost:8080/api/competencias/crear-fixture', null, {
                 params: {
                     idTorneo: props.idTorneo,

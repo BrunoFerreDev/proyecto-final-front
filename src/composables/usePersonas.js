@@ -17,6 +17,7 @@ export function usePersonas() {
       personas.value = result?.content || [];
       totalElements.value = result?.totalElements || 0;
       totalPages.value = result?.totalPages || 0;
+      console.log(personas.value);
     } catch (err) {
       console.error(err);
     }

@@ -9,7 +9,7 @@
                     <div
                         class="size-20 rounded-full bg-white shadow-sm flex items-center justify-center border-2 border-white p-1 overflow-hidden">
                         <div class="w-full h-full bg-cover bg-center rounded-full" data-alt="Real Madrid Club Crest"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAVhIo8IcWTgG--JMimz6SSzRZWoDl9coyD5WCg75qR52mqN1Ey5SvCNUcCSjq5jkdh5QVrOybScGfj_DNGcoe0vtIljoJEJ1T-ySg7S8pB4h8AEoGhvaKe-rjtJAriuJIA7FCkMXDcHslgmgsvTrlbfWh8Hi5P-rbZR8CgL6OUWk59NOv3pRHhSd4Lk6XCc2MsUtmUz0YyqMclCKAydHoXmvGHJ_zevn6vS5dIx2kUMmORRK_7ZhK-EmrZN71S_Zr48VmLl8pNB7U");'>
+                            :style="`background-image: url('${club.escudo}')`">
                         </div>
                     </div>
                     <div class="flex flex-col">

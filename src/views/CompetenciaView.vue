@@ -187,7 +187,7 @@ const fetchClubesInscriptos = async () => {
     try {
         const response = await axios.get(`http://localhost:8080/api/competencias/traer-clubes`, {
             params: {
-                idComptencia: competencia.value.idCompetencia,
+                idCompetencia: competencia.value.idCompetencia,
                 size: size.value,
                 page: page.value
             },
